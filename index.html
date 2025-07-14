@@ -78,8 +78,14 @@
     .job-title{
       font-weight:bold;
       font-size:11pt;
-      margin-top:18px;
+      margin-top:9px;
       margin-bottom:0;
+    }
+    .section{
+      margin-bottom:14px;
+    }
+    .section:last-of-type + .resume-divider{
+      margin-top:28px; /* extra gap before “Education/Certificates” */
     }
     .company-row{
       display:flex;
@@ -95,7 +101,7 @@
     .job-list li{font-size:10pt;margin-bottom:6px;line-height:1.5;}
 
     .cert-list{margin:0 0 0 22px;}
-    .cert-list li{font-size:10pt;margin-bottom:4px;}
+    .cert-list li{font-size:9.5pt;margin-bottom:4px; font-weight:bold;}
 
     button,input[type="file"]{
       font-size:15px;
@@ -112,6 +118,14 @@
     .download-btn{background:#e8f5e9;border:1px solid #6bbf59;color:#388e3c;}
     .download-btn:hover:enabled{background:#c8e6c9;}
 
+    /* TEMPORARY TEST — shows “space” where the gap should be */
+    .section:last-of-type::after{
+      content: "space";
+      display: block;
+      color: red;
+      margin-top: 28px;
+    }
+
     @media(max-width:700px){
       .container{padding:8px;}
       .resume-preview{padding:10px;}
@@ -120,6 +134,11 @@
       body,.container,.resume-preview{box-shadow:none !important;background:#fff !important;color:#000 !important;}
       .controls{display:none;}
     }
+
+    /* extra bottom space ONLY on the final job section */
+
+
+
   </style>
 </head>
 <body>
@@ -196,41 +215,44 @@
 
     /* ------------ resume renderer ------------ */
     function renderResume(data){
-      preview.innerHTML=`
-        <div class="resume-header">${escapeHtml(data.contact.name)}</div>
-        <div class="resume-contact">
-          ${escapeHtml(data.contact.address)}
-          - <a href="mailto:${escapeHtml(data.contact.email)}" style="color:#222;text-decoration:underline;">
-              ${escapeHtml(data.contact.email)}
-            </a>
-          - ${escapeHtml(data.contact.phone)}
+  preview.innerHTML = `
+    <div class="resume-header">${escapeHtml(data.contact.name)}</div>
+    <div class="resume-contact">
+      ${escapeHtml(data.contact.address)}
+      - <a href="mailto:${escapeHtml(data.contact.email)}" style="color:#222;text-decoration:underline;">
+          ${escapeHtml(data.contact.email)}
+        </a>
+      - ${escapeHtml(data.contact.phone)}
+    </div>
+    <hr class="resume-divider">
+
+    <div class="section-title">Work Experience:</div>
+    ${data.jobs.map(job => `
+      <div class="section">
+        <div class="job-title">${escapeHtml(job.title)}</div>
+        <div class="company-row">
+          <span class="company">${escapeHtml(job.company)}</span>
+          <span class="company-details">
+            - ${escapeHtml(job.location)} (${escapeHtml(job.startDate)}${job.endDate ? ' - ' + escapeHtml(job.endDate) : ''})
+          </span>
         </div>
-        <hr class="resume-divider">
-
-        <div class="section-title">Work Experience:</div>
-        ${data.jobs.map(job=>`
-          <div class="section">
-            <div class="job-title">${escapeHtml(job.title)}</div>
-            <div class="company-row">
-              <span class="company">${escapeHtml(job.company)}</span>
-              <span class="company-details">
-                - ${escapeHtml(job.location)} (${escapeHtml(job.startDate)}${job.endDate?' - '+escapeHtml(job.endDate):''})
-              </span>
-            </div>
-            <br>
-            <ul class="job-list">
-              ${job.duties.map(duty=>`<li>${escapeHtml(duty)}</li>`).join('')}
-            </ul>
-          </div>
-        `).join('')}
-
-        <hr class="resume-divider">
-        <div class="section-title">Education/Certificates:</div>
-        <ul class="cert-list">
-          ${data.certificates.map(cert=>`<li>${escapeHtml(cert.name)}</li>`).join('')}
+        <br>
+        <ul class="job-list">
+          ${job.duties.map(duty => `<li>${escapeHtml(duty)}</li>`).join('')}
         </ul>
-      `;
-    }
+      </div>
+    `).join('')}
+<br><br><p style="color:white;"> bro what is going on</p>
+    <hr class="resume-divider">
+    <br>
+
+    <div class="section-title">Education/Certificates:</div>
+    <ul class="cert-list">
+      ${data.certificates.map(cert => `<li><strong>${escapeHtml(cert.name)}</strong></li>`).join('')}
+    </ul>
+  `;
+}
+
 
     function escapeHtml(text){
       return text
@@ -241,50 +263,86 @@
         .replace(/'/g,'&#039;');
     }
 
-    /* ------------ PDF builder ------------ */
-    function generatePDFandStore(){
-      const previewElem=document.getElementById('resumePreview');
-      downloadPdfBtn.disabled=true;
 
-      /* remove old blob */
-      if(pdfBlobUrl){URL.revokeObjectURL(pdfBlobUrl);pdfBlobUrl=null;}
 
-      /* DROP BORDER JUST FOR CANVAS SNAPSHOT */
-      previewElem.classList.add('no-border');
 
-      html2canvas(previewElem,{scale:2,backgroundColor:'#fff',useCORS:true})
-        .then(canvas=>{
-          /* restore border for on-screen view */
-          previewElem.classList.remove('no-border');
 
-          const imgData=canvas.toDataURL('image/png');
-          const pdf=new window.jspdf.jsPDF({orientation:'portrait',unit:'pt',format:'a4'});
-          const pageWidth=pdf.internal.pageSize.getWidth();
-          const pageHeight=pdf.internal.pageSize.getHeight();
-          const imgWidth=pageWidth-40;
-          const imgHeight=canvas.height*imgWidth/canvas.width;
 
-          /* split across pages if needed */
-          let pageCanvasHeight=canvas.width*(pageHeight-40)/imgWidth;
-          let pageCount=Math.ceil(canvas.height/pageCanvasHeight);
-          for(let i=0;i<pageCount;i++){
-            let pageCanvas=document.createElement('canvas');
-            pageCanvas.width=canvas.width;
-            pageCanvas.height=Math.min(pageCanvasHeight,canvas.height-i*pageCanvasHeight);
 
-            let ctx=pageCanvas.getContext('2d');
-            ctx.drawImage(canvas,0,i*pageCanvasHeight,canvas.width,pageCanvas.height,
-                          0,0,canvas.width,pageCanvas.height);
 
-            let pageImgData=pageCanvas.toDataURL('image/png');
-            if(i>0)pdf.addPage();
-            pdf.addImage(pageImgData,'PNG',20,20,imgWidth,(pageCanvas.height*imgWidth)/canvas.width);
-          }
 
-          pdfBlobUrl=URL.createObjectURL(pdf.output('blob'));
-          downloadPdfBtn.disabled=false;
-        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+/* ------------ PDF builder (JPEG, zero-height safe) ------------ */
+/* ------------ PDF builder (JPEG, keeps <hr> borders) ------------ */
+async function generatePDFandStore () {
+  const previewElem = document.getElementById('resumePreview');
+  downloadPdfBtn.disabled = true;
+
+  /* discard any old blob */
+  if (pdfBlobUrl){ URL.revokeObjectURL(pdfBlobUrl); pdfBlobUrl = null; }
+
+  /* PDF setup */
+  const pdf     = new window.jspdf.jsPDF({ orientation:'portrait', unit:'pt', format:'a4' });
+  const pw      = pdf.internal.pageSize.getWidth();
+  const ph      = pdf.internal.pageSize.getHeight();
+  const marginX = 40;   // side margins
+  const marginY = 30;
+  const usableW = pw - marginX * 2;
+
+  let cursorY = marginY;
+
+  /* snapshot one element */
+  async function snap(el){
+    // -- we do NOT add the no-border class any more
+    const canvas = await html2canvas(el, { scale:2, backgroundColor:'#fff', useCORS:true });
+    if (!canvas.width || !canvas.height) return null;   // skip empties
+    const jpeg   = canvas.toDataURL('image/jpeg',0.92);
+    const drawH  = canvas.height * (usableW / canvas.width);
+    return { jpeg, drawH };
+  }
+
+  /* walk children in paint order */
+  const blocks = Array.from(previewElem.children).filter(n => n.nodeType === 1);
+
+  for (const el of blocks){
+    const res = await snap(el);
+    if (!res) continue;
+    const { jpeg, drawH } = res;
+
+    if (cursorY + drawH > ph - marginY){
+      pdf.addPage();
+      cursorY = marginY;
     }
+
+    pdf.addImage(jpeg, 'JPEG', marginX, cursorY, usableW, drawH);
+    cursorY += drawH + 8;
+  }
+
+  pdfBlobUrl = URL.createObjectURL(pdf.output('blob'));
+  downloadPdfBtn.disabled = false;
+}
+
   </script>
 </body>
 </html>
