@@ -167,7 +167,7 @@
   <div class="container">
     <div class="controls">
       <input type="file" id="jsonFile" accept="application/json">
-      <button id="generatePdfBtn" disabled>Generate PDF</button>
+      <button id="downloadPdfBtn" disabled>Download PDF</button>
       <button id="downloadJsonBtn" class="download-btn" disabled>Download Resume JSON</button>
     </div>
     <div id="resumePreview" class="resume-preview">
@@ -178,9 +178,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
     let resumeData = null;
+    let pdfBlobUrl = null;
     const fileInput = document.getElementById('jsonFile');
     const preview = document.getElementById('resumePreview');
-    const pdfBtn = document.getElementById('generatePdfBtn');
+    const downloadPdfBtn = document.getElementById('downloadPdfBtn');
     const downloadJsonBtn = document.getElementById('downloadJsonBtn');
 
     fileInput.addEventListener('change', function(e) {
@@ -191,19 +192,15 @@
         try {
           resumeData = JSON.parse(evt.target.result);
           renderResume(resumeData);
-          pdfBtn.disabled = false;
           downloadJsonBtn.disabled = false;
+          generatePDFandStore();
         } catch (err) {
           preview.innerHTML = '<div style="color:red;">Invalid JSON file.</div>';
-          pdfBtn.disabled = true;
           downloadJsonBtn.disabled = true;
+          downloadPdfBtn.disabled = true;
         }
       };
       reader.readAsText(file);
-    });
-
-    pdfBtn.addEventListener('click', function() {
-      generatePDF();
     });
 
     downloadJsonBtn.addEventListener('click', function() {
@@ -221,6 +218,19 @@
       }, 0);
     });
 
+    downloadPdfBtn.addEventListener('click', function() {
+      if (pdfBlobUrl) {
+        const a = document.createElement('a');
+        a.href = pdfBlobUrl;
+        a.download = 'Adam_Chaabane_Resume.pdf';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+        }, 0);
+      }
+    });
+
     function renderResume(data) {
       preview.innerHTML = `
         <div class="resume-header">${escapeHtml(data.contact.name)}</div>
@@ -236,6 +246,7 @@
               <span class="company">${escapeHtml(job.company)}</span>
               <span class="company-details">– ${escapeHtml(job.location)} (${escapeHtml(job.startDate)}${job.endDate ? ' – ' + escapeHtml(job.endDate) : ''})</span>
             </div>
+            <br>
             <ul class="job-list">
               ${job.duties.map(duty => `<li>${escapeHtml(duty)}</li>`).join('')}
             </ul>
@@ -258,9 +269,15 @@
         .replace(/'/g, "&#039;");
     }
 
-    function generatePDF() {
+    // Multi-page PDF generation
+    function generatePDFandStore() {
       const previewElem = document.getElementById('resumePreview');
-      html2canvas(previewElem, { scale: 2, backgroundColor: '#fff' }).then(canvas => {
+      downloadPdfBtn.disabled = true;
+      if (pdfBlobUrl) {
+        URL.revokeObjectURL(pdfBlobUrl);
+        pdfBlobUrl = null;
+      }
+      html2canvas(previewElem, { scale: 2, backgroundColor: '#fff', useCORS: true }).then(canvas => {
         const imgData = canvas.toDataURL('image/png');
         const pdf = new window.jspdf.jsPDF({
           orientation: 'portrait',
@@ -268,10 +285,31 @@
           format: 'a4'
         });
         const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
         const imgWidth = pageWidth - 40;
         const imgHeight = canvas.height * imgWidth / canvas.width;
-        pdf.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
-        pdf.save('Adam_Chaabane_Resume.pdf');
+        let position = 20;
+        let remainingHeight = imgHeight;
+        let pageCanvasHeight = canvas.width * (pageHeight - 40) / imgWidth;
+        let pageCount = Math.ceil(canvas.height / pageCanvasHeight);
+        for (let i = 0; i < pageCount; i++) {
+          let pageCanvas = document.createElement('canvas');
+          pageCanvas.width = canvas.width;
+          pageCanvas.height = Math.min(pageCanvasHeight, canvas.height - i * pageCanvasHeight);
+          let ctx = pageCanvas.getContext('2d');
+          ctx.drawImage(
+            canvas,
+            0, i * pageCanvasHeight,
+            canvas.width, pageCanvas.height,
+            0, 0,
+            canvas.width, pageCanvas.height
+          );
+          let pageImgData = pageCanvas.toDataURL('image/png');
+          if (i > 0) pdf.addPage();
+          pdf.addImage(pageImgData, 'PNG', 20, 20, imgWidth, (pageCanvas.height * imgWidth) / canvas.width);
+        }
+        pdfBlobUrl = URL.createObjectURL(pdf.output('blob'));
+        downloadPdfBtn.disabled = false;
       });
     }
   </script>
