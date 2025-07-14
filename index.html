@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume PDF Generator</title>
+  <link href="https://fonts.googleapis.com/css?family=Arial:400,700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f7f9fa;
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+    .container {
+      max-width: 900px;
+      margin: 48px auto;
+      padding: 32px 32px 40px 32px;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      border-radius: 14px;
+    }
+    .controls {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+      align-items: center;
+      justify-content: center;
+    }
+    .resume-preview {
+      background: #fff;
+      color: #222;
+      padding: 40px 48px 48px 48px;
+      border: 1.5px solid #bbb;
+      border-radius: 8px;
+      min-height: 1100px;
+      box-sizing: border-box;
+      width: 100%;
+      font-size: 13px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .resume-header {
+      text-align: center;
+      font-size: 13pt;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: bold;
+      margin-bottom: 2px;
+      letter-spacing: 0.5px;
+    }
+    .resume-contact {
+      text-align: center;
+      font-size: 10pt;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    .resume-divider {
+      border: none;
+      border-top: 2px solid #222;
+      margin: 10px 0 28px 0;
+      width: 100%;
+    }
+    .section-title {
+      font-size: 14pt;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: underline;
+      margin: 32px 0 18px 0;
+      letter-spacing: 0.2px;
+    }
+    .job-title {
+      font-weight: bold;
+      font-size: 11pt;
+      font-family: Arial, Helvetica, sans-serif;
+      margin-top: 18px;
+      margin-bottom: 0px;
+    }
+    .company-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+    .company {
+      font-weight: bold;
+      font-size: 11pt;
+      font-family: Arial, Helvetica, sans-serif;
+      font-style: normal;
+    }
+    .company-details {
+      font-size: 9pt;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: normal;
+      font-style: normal;
+      color: #222;
+    }
+    .job-list {
+      margin-top: 0;
+      margin-bottom: 0;
+      padding-left: 22px;
+    }
+    .job-list li {
+      font-size: 10pt;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: normal;
+      margin-bottom: 6px;
+      line-height: 1.5;
+    }
+    .cert-list {
+      margin-top: 0;
+      margin-bottom: 0;
+      padding-left: 22px;
+    }
+    .cert-list li {
+      font-size: 10pt;
+      font-family: Arial, Helvetica, sans-serif;
+      margin-bottom: 4px;
+    }
+    .section {
+      margin-bottom: 18px;
+    }
+    button, input[type="file"] {
+      font-size: 15px;
+      padding: 7px 18px;
+      border-radius: 5px;
+      border: 1px solid #888;
+      background: #f5f5f5;
+      cursor: pointer;
+      transition: background 0.15s, box-shadow 0.15s;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+    button:disabled {
+      background: #e0e0e0;
+      color: #aaa;
+      cursor: not-allowed;
+    }
+    button:hover:enabled {
+      background: #e3e9f2;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .download-btn {
+      background: #e8f5e9;
+      border: 1px solid #6bbf59;
+      color: #388e3c;
+    }
+    .download-btn:hover:enabled {
+      background: #c8e6c9;
+    }
+    @media (max-width: 700px) {
+      .container { padding: 8px; }
+      .resume-preview { padding: 10px; }
+    }
+    @media print {
+      body, .container, .resume-preview {
+        box-shadow: none !important;
+        background: #fff !important;
+        color: #000 !important;
+      }
+      .controls { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="controls">
+      <input type="file" id="jsonFile" accept="application/json">
+      <button id="generatePdfBtn" disabled>Generate PDF</button>
+      <button id="downloadJsonBtn" class="download-btn" disabled>Download Resume JSON</button>
+    </div>
+    <div id="resumePreview" class="resume-preview">
+      <div style="text-align:center;color:#888;">Import a JSON file to preview your resume here.</div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    let resumeData = null;
+    const fileInput = document.getElementById('jsonFile');
+    const preview = document.getElementById('resumePreview');
+    const pdfBtn = document.getElementById('generatePdfBtn');
+    const downloadJsonBtn = document.getElementById('downloadJsonBtn');
+
+    fileInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          resumeData = JSON.parse(evt.target.result);
+          renderResume(resumeData);
+          pdfBtn.disabled = false;
+          downloadJsonBtn.disabled = false;
+        } catch (err) {
+          preview.innerHTML = '<div style="color:red;">Invalid JSON file.</div>';
+          pdfBtn.disabled = true;
+          downloadJsonBtn.disabled = true;
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    pdfBtn.addEventListener('click', function() {
+      generatePDF();
+    });
+
+    downloadJsonBtn.addEventListener('click', function() {
+      if (!resumeData) return;
+      const blob = new Blob([JSON.stringify(resumeData, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'resume-data.json';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 0);
+    });
+
+    function renderResume(data) {
+      preview.innerHTML = `
+        <div class="resume-header">${escapeHtml(data.contact.name)}</div>
+        <div class="resume-contact">
+          ${escapeHtml(data.contact.address)} – <a href="mailto:${escapeHtml(data.contact.email)}" style="color:#222;text-decoration:underline;">${escapeHtml(data.contact.email)}</a> – ${escapeHtml(data.contact.phone)}
+        </div>
+        <hr class="resume-divider">
+        <div class="section-title">Work Experience:</div>
+        ${data.jobs.map(job => `
+          <div class="section">
+            <div class="job-title">${escapeHtml(job.title)}</div>
+            <div class="company-row">
+              <span class="company">${escapeHtml(job.company)}</span>
+              <span class="company-details">– ${escapeHtml(job.location)} (${escapeHtml(job.startDate)}${job.endDate ? ' – ' + escapeHtml(job.endDate) : ''})</span>
+            </div>
+            <ul class="job-list">
+              ${job.duties.map(duty => `<li>${escapeHtml(duty)}</li>`).join('')}
+            </ul>
+          </div>
+        `).join('')}
+        <hr class="resume-divider">
+        <div class="section-title">Education/Certificates:</div>
+        <ul class="cert-list">
+          ${data.certificates.map(cert => `<li>${escapeHtml(cert.name)}</li>`).join('')}
+        </ul>
+      `;
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function generatePDF() {
+      const previewElem = document.getElementById('resumePreview');
+      html2canvas(previewElem, { scale: 2, backgroundColor: '#fff' }).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new window.jspdf.jsPDF({
+          orientation: 'portrait',
+          unit: 'pt',
+          format: 'a4'
+        });
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const imgWidth = pageWidth - 40;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        pdf.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
+        pdf.save('Adam_Chaabane_Resume.pdf');
+      });
+    }
+  </script>
+</body>
+</html> 
