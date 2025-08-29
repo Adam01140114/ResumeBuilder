@@ -735,7 +735,7 @@
           </div>
         </div>
         
-        <div id="resumePreview" class="resume-preview">
+    <div id="resumePreview" class="resume-preview">
           <div class="empty-state">
             <i class="fas fa-file-alt"></i>
             <h3>Ready to build your resume?</h3>
@@ -844,10 +844,10 @@
 
       try {
         resumeData = JSON.parse(jsonText);
-        renderResume(resumeData);
+          renderResume(resumeData);
         updatePreviewStatus('loaded', 'Data loaded successfully');
         downloadJsonBtn.disabled = false;
-        generatePDFandStore();
+          generatePDFandStore();
         closeJsonModal();
       } catch (err) {
         showError('Invalid JSON format. Please check your data.');
@@ -954,49 +954,49 @@
         return dateB - dateA; // Descending order (newest first)
       });
 
-      preview.innerHTML = `
+  preview.innerHTML = `
         <div class="resume-header" data-editable="contact.name">${escapeHtml(data.contact.name)}</div>
-        <div class="resume-contact">
+    <div class="resume-contact">
           <span data-editable="contact.address">${escapeHtml(data.contact.address)}</span>
           - <a href="mailto:${escapeHtml(data.contact.email)}" style="color:#4b5563;text-decoration:underline;" data-editable="contact.email">
-              ${escapeHtml(data.contact.email)}
-            </a>
+          ${escapeHtml(data.contact.email)}
+        </a>
           - <span data-editable="contact.phone">${escapeHtml(data.contact.phone)}</span>
-        </div>
-        <hr class="resume-divider">
+    </div>
+    <hr class="resume-divider">
 
         <div class="section-title">Work Experience</div>
         ${sortedJobs.map((job, jobIndex) => `
           <div class="section ${jobIndex === 0 ? 'first-job-section' : ''} ${jobIndex === sortedJobs.length - 1 ? 'last-job-section' : ''}">
             <div class="job-title" data-editable="jobs.${jobIndex}.title">${escapeHtml(job.title)}</div>
-            <div class="company-row">
+        <div class="company-row">
               <span class="company" data-editable="jobs.${jobIndex}.company">${escapeHtml(job.company)}</span>
-              <span class="company-details">
+          <span class="company-details">
                 - <span data-editable="jobs.${jobIndex}.location">${escapeHtml(job.location)}</span> 
                 (<span data-editable="jobs.${jobIndex}.startDate">${escapeHtml(job.startDate)}</span>${job.endDate ? ' - <span data-editable="jobs.' + jobIndex + '.endDate">' + escapeHtml(job.endDate) + '</span>' : ''})
-              </span>
-            </div>
-            <ul class="job-list">
+          </span>
+        </div>
+        <ul class="job-list">
               ${job.duties.map((duty, dutyIndex) => `
                 <li data-editable="jobs.${jobIndex}.duties.${dutyIndex}" class="editable-bullet">
                   ${escapeHtml(duty)}
                 </li>
               `).join('')}
-            </ul>
-          </div>
-        `).join('')}
+        </ul>
+      </div>
+    `).join('')}
 
-        <hr class="resume-divider">
+    <hr class="resume-divider">
 
         <div class="section-title">Education/Certificates</div>
-        <ul class="cert-list">
+    <ul class="cert-list">
           ${data.certificates.map((cert, certIndex) => `
             <li data-editable="certificates.${certIndex}.name" class="editable-bullet">
               ${escapeHtml(cert.name)}
             </li>
           `).join('')}
-        </ul>
-      `;
+    </ul>
+  `;
 
       // Add click event listeners for editable elements
       addEditListeners();
@@ -1156,9 +1156,9 @@
       const png = canvas.toDataURL('image/png');
       pdf.addImage(png, 'PNG', 0, 0, pageWidthPt, pageHeightPt, undefined, 'FAST');
 
-      pdfBlobUrl = URL.createObjectURL(pdf.output('blob'));
-      downloadPdfBtn.disabled = false;
-    }
+  pdfBlobUrl = URL.createObjectURL(pdf.output('blob'));
+  downloadPdfBtn.disabled = false;
+}
 
     // Settings functionality
     function initializeSettings() {
