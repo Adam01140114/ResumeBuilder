@@ -3,346 +3,1010 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resume PDF Generator</title>
+  <title>Resume Builder Pro</title>
 
-  <!-- Google font -->
-  <link href="https://fonts.googleapis.com/css?family=Arial:400,700&display=swap" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    body{
-      font-family:Arial,Helvetica,sans-serif;
-      background:#f7f9fa;
-      margin:0;
-      padding:0;
-      color:#222;
-    }
-    .container{
-      max-width:900px;
-      margin:48px auto;
-      padding:32px 32px 40px 32px;
-      background:#fff;
-      box-shadow:0 4px 24px rgba(0,0,0,0.10);
-      border-radius:14px;
-    }
-    .controls{
-      display:flex;
-      gap:16px;
-      margin-bottom:32px;
-      align-items:center;
-      justify-content:center;
-    }
-    /* ---------- preview pane ---------- */
-    .resume-preview{
-      background:#fff;
-      color:#222;
-      padding:40px 48px 48px 48px;
-      border:1.5px solid #bbb;         /* visible on screen */
-      border-radius:8px;
-      min-height:1100px;
-      box-sizing:border-box;
-      width:100%;
-      font-size:13px;
-      box-shadow:0 2px 8px rgba(0,0,0,0.04);
-    }
-    /* border removed only while exporting */
-    .no-border{border:none !important;border-radius:0 !important;box-shadow:none !important;}
-
-    /* ---------- heading / sections ---------- */
-    .resume-header{
-      text-align:center;
-      font-size:13pt;
-      font-weight:bold;
-      margin-bottom:2px;
-      letter-spacing:0.5px;
-    }
-    .resume-contact{
-      text-align:center;
-      font-size:10pt;
-      font-weight:bold;
-      margin-bottom:8px;
-    }
-    .resume-divider{
-      border:none;
-      border-top:2px solid #222;
-      margin:10px 0 28px 0;
-      width:100%;
-    }
-    .section-title{
-      font-size:14pt;
-      font-weight:bold;
-      text-align:center;
-      text-decoration:underline;
-      margin:32px 0 18px 0;
-      letter-spacing:0.2px;
-    }
-    .job-title{
-      font-weight:bold;
-      font-size:11pt;
-      margin-top:9px;
-      margin-bottom:0;
-    }
-    .section{
-      margin-bottom:14px;
-    }
-    .section:last-of-type + .resume-divider{
-      margin-top:28px; /* extra gap before “Education/Certificates” */
-    }
-    .company-row{
-      display:flex;
-      flex-wrap:wrap;
-      align-items:baseline;
-      gap:6px;
-      margin-bottom:2px;
-    }
-    .company{font-weight:bold;font-size:11pt;}
-    .company-details{font-size:9pt;color:#222;}
-
-    .job-list{margin:0 0 0 22px;}
-    .job-list li{font-size:10pt;margin-bottom:6px;line-height:1.5;}
-
-    .cert-list{margin:0 0 0 22px;}
-    .cert-list li{font-size:9.5pt;margin-bottom:4px; font-weight:bold;}
-
-    button,input[type="file"]{
-      font-size:15px;
-      padding:7px 18px;
-      border-radius:5px;
-      border:1px solid #888;
-      background:#f5f5f5;
-      cursor:pointer;
-      transition:background 0.15s,box-shadow 0.15s;
-      box-shadow:0 1px 2px rgba(0,0,0,0.03);
-    }
-    button:disabled{background:#e0e0e0;color:#aaa;cursor:not-allowed;}
-    button:hover:enabled{background:#e3e9f2;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
-    .download-btn{background:#e8f5e9;border:1px solid #6bbf59;color:#388e3c;}
-    .download-btn:hover:enabled{background:#c8e6c9;}
-
-    /* TEMPORARY TEST — shows “space” where the gap should be */
-    .section:last-of-type::after{
-      content: "space";
-      display: block;
-      color: red;
-      margin-top: 28px;
+    :root {
+      --primary-color: #6366f1;
+      --primary-hover: #4f46e5;
+      --secondary-color: #10b981;
+      --secondary-hover: #059669;
+      --background: #0f172a;
+      --surface: #1e293b;
+      --surface-light: #334155;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #64748b;
+      --border: #334155;
+      --border-light: #475569;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      --radius: 12px;
+      --radius-lg: 16px;
     }
 
-    @media(max-width:700px){
-      .container{padding:8px;}
-      .resume-preview{padding:10px;}
-    }
-    @media print{
-      body,.container,.resume-preview{box-shadow:none !important;background:#fff !important;color:#000 !important;}
-      .controls{display:none;}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    /* extra bottom space ONLY on the final job section */
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--background);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+      animation: fadeInDown 0.8s ease-out;
+    }
 
+    .header h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+
+    .header p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      font-weight: 400;
+    }
+
+    /* Main Content */
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+      flex: 1;
+    }
+
+    /* Controls Panel */
+    .controls-panel {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      height: fit-content;
+      animation: fadeInLeft 0.8s ease-out 0.2s both;
+    }
+
+    .controls-panel h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: var(--text-primary);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: var(--radius);
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      width: 100%;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .btn-primary {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    .btn-secondary {
+      background: var(--secondary-color);
+      color: white;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--secondary-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    /* JSON Input Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+      animation: slideInUp 0.3s ease-out;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-header h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: var(--radius);
+      transition: all 0.2s ease;
+    }
+
+    .close-btn:hover {
+      background: var(--surface-light);
+      color: var(--text-primary);
+    }
+
+    .json-input {
+      width: 100%;
+      min-height: 300px;
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      color: var(--text-primary);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      resize: vertical;
+      transition: border-color 0.2s ease;
+    }
+
+    .json-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .modal-actions .btn {
+      margin-bottom: 0;
+      flex: 1;
+    }
+
+    /* Resume Preview */
+    .preview-container {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      animation: fadeInRight 0.8s ease-out 0.4s both;
+    }
+
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .preview-header h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .preview-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .status-empty {
+      background: rgba(100, 116, 139, 0.2);
+      color: var(--text-muted);
+    }
+
+    .status-loaded {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--secondary-color);
+    }
+
+    .status-error {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+    }
+
+    .resume-preview {
+      background: white;
+      color: #1f2937;
+      padding: 3rem;
+      border-radius: var(--radius);
+      min-height: 800px;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+      font-size: 14px;
+      line-height: 1.6;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .resume-preview::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 400px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .empty-state h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    .empty-state p {
+      font-size: 0.95rem;
+      max-width: 300px;
+    }
+
+    /* Resume Styling */
+    .resume-header {
+      text-align: center;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+      color: #1f2937;
+    }
+
+    .resume-contact {
+      text-align: center;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 12px;
+      color: #4b5563;
+    }
+
+    .resume-divider {
+      border: none;
+      border-top: 2px solid #1f2937;
+      margin: 16px 0 32px 0;
+      width: 100%;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      text-align: center;
+      text-decoration: underline;
+      margin: 40px 0 24px 0;
+      letter-spacing: 0.2px;
+      color: #1f2937;
+    }
+
+    .job-title {
+      font-weight: 700;
+      font-size: 16px;
+      margin-top: 12px;
+      margin-bottom: 4px;
+      color: #1f2937;
+    }
+
+    .section {
+      margin-bottom: 20px;
+      padding-top: var(--job-padding-top, 10px);
+    }
+    
+    .section:last-of-type {
+      padding-bottom: var(--job-padding-bottom, 10px);
+    }
+
+    .company-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .company {
+      font-weight: 600;
+      font-size: 14px;
+      color: #374151;
+    }
+
+    .company-details {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .job-list {
+      margin: 0 0 0 24px;
+    }
+
+    .job-list li {
+      font-size: 12px;
+      margin-bottom: 8px;
+      line-height: 1.6;
+      color: #374151;
+    }
+
+    .cert-list {
+      margin: 0 0 0 24px;
+    }
+
+    .cert-list li {
+      font-size: 13px;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeInRight {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .main-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      
+      .controls-panel {
+        order: 2;
+      }
+      
+      .preview-container {
+        order: 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+      
+      .modal {
+        padding: 1.5rem;
+        width: 95%;
+      }
+      
+      .resume-preview {
+        padding: 2rem;
+      }
+    }
+
+    @media print {
+      body, .container, .resume-preview {
+        box-shadow: none !important;
+        background: white !important;
+        color: black !important;
+      }
+      .controls-panel, .modal-overlay {
+        display: none !important;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="controls">
-      <input type="file" id="jsonFile" accept="application/json">
-      <button id="downloadPdfBtn" disabled>Download PDF</button>
-      <button id="downloadJsonBtn" class="download-btn" disabled>Download Resume JSON</button>
+    <!-- Header -->
+    <div class="header">
+      <h1>Resume Builder Pro</h1>
+      <p>Create professional resumes with ease</p>
     </div>
 
-    <!-- preview -->
-    <div id="resumePreview" class="resume-preview">
-      <div style="text-align:center;color:#888;">Import a JSON file to preview your resume here.</div>
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Controls Panel -->
+      <div class="controls-panel">
+        <h2>Controls</h2>
+        <button class="btn btn-primary" id="importJsonBtn">
+          <i class="fas fa-upload"></i>
+          Import JSON Data
+        </button>
+        <button class="btn btn-secondary" id="downloadPdfBtn" disabled>
+          <i class="fas fa-file-pdf"></i>
+          Download PDF
+        </button>
+        <button class="btn btn-secondary" id="downloadJsonBtn" disabled>
+          <i class="fas fa-download"></i>
+          Download JSON
+        </button>
+      </div>
+
+      <!-- Preview Container -->
+      <div class="preview-container">
+        <div class="preview-header">
+          <h2>Resume Preview</h2>
+          <div class="preview-status status-empty" id="previewStatus">
+            <i class="fas fa-info-circle"></i>
+            No data loaded
+          </div>
+        </div>
+        
+        <div id="resumePreview" class="resume-preview">
+          <div class="empty-state">
+            <i class="fas fa-file-alt"></i>
+            <h3>Ready to build your resume?</h3>
+            <p>Click "Import JSON Data" to get started with your resume information.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- libs -->
+  <!-- JSON Input Modal -->
+  <div class="modal-overlay" id="jsonModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Import Resume Data</h3>
+        <button class="close-btn" id="closeModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div>
+        <label for="jsonInput" style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-weight: 500;">
+          Paste your JSON data below:
+        </label>
+        <textarea 
+          id="jsonInput" 
+          class="json-input" 
+          placeholder='{
+  "contact": {
+    "name": "Your Name",
+    "email": "your.email@example.com",
+    "phone": "(555) 123-4567",
+    "address": "City, State"
+  },
+  "jobs": [
+    {
+      "title": "Job Title",
+      "company": "Company Name",
+      "location": "Location",
+      "startDate": "Jan 2023",
+      "endDate": "Present",
+      "duties": ["Responsibility 1", "Responsibility 2"]
+    }
+  ],
+  "certificates": [
+    {"name": "Certificate Name"}
+  ]
+}'
+        ></textarea>
+      </div>
+      
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="cancelImport">Cancel</button>
+        <button class="btn btn-primary" id="confirmImport">Import Data</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <script>
-    let resumeData=null;
-    let pdfBlobUrl=null;
+    let resumeData = null;
+    let pdfBlobUrl = null;
 
-    /* elements */
-    const fileInput=document.getElementById('jsonFile');
-    const preview=document.getElementById('resumePreview');
-    const downloadPdfBtn=document.getElementById('downloadPdfBtn');
-    const downloadJsonBtn=document.getElementById('downloadJsonBtn');
+    // Elements
+    const importJsonBtn = document.getElementById('importJsonBtn');
+    const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+    const downloadJsonBtn = document.getElementById('downloadJsonBtn');
+    const preview = document.getElementById('resumePreview');
+    const previewStatus = document.getElementById('previewStatus');
+    const jsonModal = document.getElementById('jsonModal');
+    const jsonInput = document.getElementById('jsonInput');
+    const closeModal = document.getElementById('closeModal');
+    const cancelImport = document.getElementById('cancelImport');
+    const confirmImport = document.getElementById('confirmImport');
 
-    /* ------------ file load ------------ */
-    fileInput.addEventListener('change',e=>{
-      const file=e.target.files[0];
-      if(!file)return;
-      const reader=new FileReader();
-      reader.onload=evt=>{
-        try{
-          resumeData=JSON.parse(evt.target.result);
-          renderResume(resumeData);
-          downloadJsonBtn.disabled=false;
-          generatePDFandStore();
-        }catch(err){
-          preview.innerHTML='<div style="color:red;">Invalid JSON file.</div>';
-          downloadJsonBtn.disabled=true;
-          downloadPdfBtn.disabled=true;
-        }
-      };
-      reader.readAsText(file);
+    // Modal Controls
+    importJsonBtn.addEventListener('click', () => {
+      jsonModal.classList.add('active');
+      jsonInput.focus();
     });
 
-    /* ------------ JSON download ------------ */
-    downloadJsonBtn.addEventListener('click',()=>{
-      if(!resumeData)return;
-      const blob=new Blob([JSON.stringify(resumeData,null,2)],{type:'application/json'});
-      const url=URL.createObjectURL(blob);
-      const a=document.createElement('a');
-      a.href=url;
-      a.download='resume-data.json';
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},0);
+    closeModal.addEventListener('click', closeJsonModal);
+    cancelImport.addEventListener('click', closeJsonModal);
+
+    jsonModal.addEventListener('click', (e) => {
+      if (e.target === jsonModal) {
+        closeJsonModal();
+      }
     });
 
-    /* ------------ PDF download ------------ */
-    downloadPdfBtn.addEventListener('click',()=>{
-      if(!pdfBlobUrl)return;
-      const a=document.createElement('a');
-      a.href=pdfBlobUrl;
-      a.download='Adam_Chaabane_Resume.pdf';
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(()=>{document.body.removeChild(a);},0);
+    function closeJsonModal() {
+      jsonModal.classList.remove('active');
+      jsonInput.value = '';
+    }
+
+    // Import JSON Data
+    confirmImport.addEventListener('click', () => {
+      const jsonText = jsonInput.value.trim();
+      if (!jsonText) {
+        showError('Please enter JSON data');
+        return;
+      }
+
+      try {
+        resumeData = JSON.parse(jsonText);
+        renderResume(resumeData);
+        updatePreviewStatus('loaded', 'Data loaded successfully');
+        downloadJsonBtn.disabled = false;
+        generatePDFandStore();
+        closeJsonModal();
+      } catch (err) {
+        showError('Invalid JSON format. Please check your data.');
+        console.error('JSON Parse Error:', err);
+      }
     });
 
-    /* ------------ resume renderer ------------ */
-    function renderResume(data){
-  preview.innerHTML = `
-    <div class="resume-header">${escapeHtml(data.contact.name)}</div>
-    <div class="resume-contact">
-      ${escapeHtml(data.contact.address)}
-      - <a href="mailto:${escapeHtml(data.contact.email)}" style="color:#222;text-decoration:underline;">
-          ${escapeHtml(data.contact.email)}
-        </a>
-      - ${escapeHtml(data.contact.phone)}
-    </div>
-    <hr class="resume-divider">
-
-    <div class="section-title">Work Experience:</div>
-    ${data.jobs.map(job => `
-      <div class="section">
-        <div class="job-title">${escapeHtml(job.title)}</div>
-        <div class="company-row">
-          <span class="company">${escapeHtml(job.company)}</span>
-          <span class="company-details">
-            - ${escapeHtml(job.location)} (${escapeHtml(job.startDate)}${job.endDate ? ' - ' + escapeHtml(job.endDate) : ''})
-          </span>
+    function showError(message) {
+      updatePreviewStatus('error', message);
+      preview.innerHTML = `
+        <div class="empty-state">
+          <i class="fas fa-exclamation-triangle"></i>
+          <h3>Error</h3>
+          <p>${message}</p>
         </div>
-        <br>
-        <ul class="job-list">
-          ${job.duties.map(duty => `<li>${escapeHtml(duty)}</li>`).join('')}
+      `;
+      downloadJsonBtn.disabled = true;
+      downloadPdfBtn.disabled = true;
+    }
+
+    function updatePreviewStatus(type, message) {
+      previewStatus.className = `preview-status status-${type}`;
+      previewStatus.innerHTML = `
+        <i class="fas fa-${type === 'loaded' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : 'info-circle'}"></i>
+        ${message}
+      `;
+    }
+
+    // JSON Download
+    downloadJsonBtn.addEventListener('click', () => {
+      if (!resumeData) return;
+      const blob = new Blob([JSON.stringify(resumeData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'resume-data.json';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 0);
+    });
+
+    // PDF Download
+    downloadPdfBtn.addEventListener('click', () => {
+      if (!pdfBlobUrl) return;
+      const a = document.createElement('a');
+      a.href = pdfBlobUrl;
+      a.download = 'resume.pdf';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+      }, 0);
+    });
+
+    // Date parsing helper function
+    function parseDate(dateString) {
+      if (!dateString) return new Date(0);
+      
+      // Handle "Present" or current job
+      if (dateString.toLowerCase() === 'present') {
+        return new Date();
+      }
+      
+      // Handle various date formats
+      const months = {
+        'jan': 0, 'january': 0, 'feb': 1, 'february': 1, 'mar': 2, 'march': 2,
+        'apr': 3, 'april': 3, 'may': 4, 'jun': 5, 'june': 5, 'jul': 6, 'july': 6,
+        'aug': 7, 'august': 7, 'sep': 8, 'september': 8, 'oct': 9, 'october': 9,
+        'nov': 10, 'november': 10, 'dec': 11, 'december': 11
+      };
+      
+      // Try to parse common formats
+      const parts = dateString.toLowerCase().trim().split(/\s+/);
+      
+      if (parts.length >= 2) {
+        const month = months[parts[0]];
+        const year = parseInt(parts[1]);
+        
+        if (month !== undefined && !isNaN(year)) {
+          return new Date(year, month, 1);
+        }
+      }
+      
+      // Try direct date parsing
+      const parsed = new Date(dateString);
+      if (!isNaN(parsed.getTime())) {
+        return parsed;
+      }
+      
+      // Fallback to current date if parsing fails
+      console.warn(`Could not parse date: ${dateString}, using current date`);
+      return new Date();
+    }
+
+    // Resume Renderer
+    function renderResume(data) {
+      // Sort jobs by start date (newest first)
+      const sortedJobs = [...data.jobs].sort((a, b) => {
+        const dateA = parseDate(a.startDate);
+        const dateB = parseDate(b.startDate);
+        return dateB - dateA; // Descending order (newest first)
+      });
+
+      preview.innerHTML = `
+        <div class="resume-header" data-editable="contact.name">${escapeHtml(data.contact.name)}</div>
+        <div class="resume-contact">
+          <span data-editable="contact.address">${escapeHtml(data.contact.address)}</span>
+          - <a href="mailto:${escapeHtml(data.contact.email)}" style="color:#4b5563;text-decoration:underline;" data-editable="contact.email">
+              ${escapeHtml(data.contact.email)}
+            </a>
+          - <span data-editable="contact.phone">${escapeHtml(data.contact.phone)}</span>
+        </div>
+        <hr class="resume-divider">
+
+        <div class="section-title">Work Experience</div>
+        ${sortedJobs.map((job, jobIndex) => `
+          <div class="section">
+            <div class="job-title" data-editable="jobs.${jobIndex}.title">${escapeHtml(job.title)}</div>
+            <div class="company-row">
+              <span class="company" data-editable="jobs.${jobIndex}.company">${escapeHtml(job.company)}</span>
+              <span class="company-details">
+                - <span data-editable="jobs.${jobIndex}.location">${escapeHtml(job.location)}</span> 
+                (<span data-editable="jobs.${jobIndex}.startDate">${escapeHtml(job.startDate)}</span>${job.endDate ? ' - <span data-editable="jobs.' + jobIndex + '.endDate">' + escapeHtml(job.endDate) + '</span>' : ''})
+              </span>
+            </div>
+            <ul class="job-list">
+              ${job.duties.map((duty, dutyIndex) => `
+                <li data-editable="jobs.${jobIndex}.duties.${dutyIndex}" class="editable-bullet">
+                  ${escapeHtml(duty)}
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+        `).join('')}
+
+        <hr class="resume-divider">
+
+        <div class="section-title">Education/Certificates</div>
+        <ul class="cert-list">
+          ${data.certificates.map((cert, certIndex) => `
+            <li data-editable="certificates.${certIndex}.name" class="editable-bullet">
+              ${escapeHtml(cert.name)}
+            </li>
+          `).join('')}
         </ul>
-      </div>
-    `).join('')}
-<br><br><p style="color:white;"> bro what is going on</p>
-    <hr class="resume-divider">
-    <br>
+      `;
 
-    <div class="section-title">Education/Certificates:</div>
-    <ul class="cert-list">
-      ${data.certificates.map(cert => `<li><strong>${escapeHtml(cert.name)}</strong></li>`).join('')}
-    </ul>
-  `;
-}
+      // Add click event listeners for editable elements
+      addEditListeners();
+    }
 
+    // Add event listeners for editable elements
+    function addEditListeners() {
+      const editableElements = preview.querySelectorAll('[data-editable]');
+      
+      editableElements.forEach(element => {
+        element.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          const fieldPath = this.getAttribute('data-editable');
+          const currentValue = this.textContent.trim();
+          
+          // Create input field
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.value = currentValue;
+          input.className = 'inline-edit-input';
+          input.style.cssText = `
+            width: 100%;
+            padding: 4px 8px;
+            border: 2px solid var(--primary-color);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: inherit;
+            background: white;
+            color: #1f2937;
+            outline: none;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
+          `;
+          
+          // Replace element content with input
+          const originalContent = this.innerHTML;
+          this.innerHTML = '';
+          this.appendChild(input);
+          input.focus();
+          input.select();
+          
+          // Handle save on Enter or blur
+          const saveEdit = () => {
+            const newValue = input.value.trim();
+            if (newValue !== currentValue) {
+              updateResumeData(fieldPath, newValue);
+              renderResume(resumeData);
+            } else {
+              this.innerHTML = originalContent;
+            }
+          };
+          
+          const cancelEdit = () => {
+            this.innerHTML = originalContent;
+          };
+          
+          input.addEventListener('blur', saveEdit);
+          input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              saveEdit();
+            } else if (e.key === 'Escape') {
+              e.preventDefault();
+              cancelEdit();
+            }
+          });
+        });
+        
+        // Add hover effect
+        element.style.cursor = 'pointer';
+        element.addEventListener('mouseenter', function() {
+          this.style.backgroundColor = 'rgba(99, 102, 241, 0.1)';
+          this.style.borderRadius = '4px';
+          this.style.padding = '2px 4px';
+          this.style.margin = '0 -4px';
+        });
+        
+        element.addEventListener('mouseleave', function() {
+          this.style.backgroundColor = '';
+          this.style.borderRadius = '';
+          this.style.padding = '';
+          this.style.margin = '';
+        });
+      });
+    }
 
-    function escapeHtml(text){
+    // Update resume data at specific path
+    function updateResumeData(path, value) {
+      const pathParts = path.split('.');
+      let current = resumeData;
+      
+      // Navigate to the parent object
+      for (let i = 0; i < pathParts.length - 1; i++) {
+        current = current[pathParts[i]];
+      }
+      
+      // Update the value
+      current[pathParts[pathParts.length - 1]] = value;
+      
+      // Re-generate PDF after update
+      generatePDFandStore();
+    }
+
+    function escapeHtml(text) {
       return text
-        .replace(/&/g,'&amp;')
-        .replace(/</g,'&lt;')
-        .replace(/>/g,'&gt;')
-        .replace(/"/g,'&quot;')
-        .replace(/'/g,'&#039;');
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
     }
 
+    // PDF Generation
+    async function generatePDFandStore() {
+      const previewElem = document.getElementById('resumePreview');
+      downloadPdfBtn.disabled = true;
 
+      // Discard any old blob
+      if (pdfBlobUrl) {
+        URL.revokeObjectURL(pdfBlobUrl);
+        pdfBlobUrl = null;
+      }
 
+      // PDF setup
+      const pdf = new window.jspdf.jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
+      const pw = pdf.internal.pageSize.getWidth();
+      const ph = pdf.internal.pageSize.getHeight();
+      const marginX = 40;
+      const marginY = 30;
+      const usableW = pw - marginX * 2;
 
+      let cursorY = marginY;
 
+      // Snapshot one element
+      async function snap(el) {
+        const canvas = await html2canvas(el, { 
+          scale: 2, 
+          backgroundColor: '#fff', 
+          useCORS: true 
+        });
+        if (!canvas.width || !canvas.height) return null;
+        const jpeg = canvas.toDataURL('image/jpeg', 0.92);
+        const drawH = canvas.height * (usableW / canvas.width);
+        return { jpeg, drawH };
+      }
 
+      // Walk children in paint order
+      const blocks = Array.from(previewElem.children).filter(n => n.nodeType === 1);
 
+      for (const el of blocks) {
+        const res = await snap(el);
+        if (!res) continue;
+        const { jpeg, drawH } = res;
 
+        if (cursorY + drawH > ph - marginY) {
+          pdf.addPage();
+          cursorY = marginY;
+        }
 
+        pdf.addImage(jpeg, 'JPEG', marginX, cursorY, usableW, drawH);
+        cursorY += drawH + 8;
+      }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-/* ------------ PDF builder (JPEG, zero-height safe) ------------ */
-/* ------------ PDF builder (JPEG, keeps <hr> borders) ------------ */
-async function generatePDFandStore () {
-  const previewElem = document.getElementById('resumePreview');
-  downloadPdfBtn.disabled = true;
-
-  /* discard any old blob */
-  if (pdfBlobUrl){ URL.revokeObjectURL(pdfBlobUrl); pdfBlobUrl = null; }
-
-  /* PDF setup */
-  const pdf     = new window.jspdf.jsPDF({ orientation:'portrait', unit:'pt', format:'a4' });
-  const pw      = pdf.internal.pageSize.getWidth();
-  const ph      = pdf.internal.pageSize.getHeight();
-  const marginX = 40;   // side margins
-  const marginY = 30;
-  const usableW = pw - marginX * 2;
-
-  let cursorY = marginY;
-
-  /* snapshot one element */
-  async function snap(el){
-    // -- we do NOT add the no-border class any more
-    const canvas = await html2canvas(el, { scale:2, backgroundColor:'#fff', useCORS:true });
-    if (!canvas.width || !canvas.height) return null;   // skip empties
-    const jpeg   = canvas.toDataURL('image/jpeg',0.92);
-    const drawH  = canvas.height * (usableW / canvas.width);
-    return { jpeg, drawH };
-  }
-
-  /* walk children in paint order */
-  const blocks = Array.from(previewElem.children).filter(n => n.nodeType === 1);
-
-  for (const el of blocks){
-    const res = await snap(el);
-    if (!res) continue;
-    const { jpeg, drawH } = res;
-
-    if (cursorY + drawH > ph - marginY){
-      pdf.addPage();
-      cursorY = marginY;
+      pdfBlobUrl = URL.createObjectURL(pdf.output('blob'));
+      downloadPdfBtn.disabled = false;
     }
 
-    pdf.addImage(jpeg, 'JPEG', marginX, cursorY, usableW, drawH);
-    cursorY += drawH + 8;
-  }
-
-  pdfBlobUrl = URL.createObjectURL(pdf.output('blob'));
-  downloadPdfBtn.disabled = false;
-}
-
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && jsonModal.classList.contains('active')) {
+        closeJsonModal();
+      }
+    });
   </script>
 </body>
 </html>
