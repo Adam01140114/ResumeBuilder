@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Offline PDF OCR - Frontend Only</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #141a2e;
+      --accent: #6ea8fe;
+      --ok: #30d158;
+      --warn: #ffd60a;
+      --text: #e8ecf1;
+      --muted: #9badc5;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 20% -10%, #1b2446 0%, var(--bg) 40%), var(--bg);
+      color: var(--text);
+    }
+    header { padding: 28px 20px 10px; text-align: center; }
+    h1 { margin: 0; font-weight: 700; font-size: 26px; letter-spacing: 0.3px; }
+    p.lead { margin: 6px 0 0; color: var(--muted); font-size: 14px; }
+
+    main { max-width: 1000px; margin: 24px auto; padding: 16px; }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+    .row { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    @media (min-width: 980px) { .row { grid-template-columns: 1.1fr 0.9fr; } }
+
+    .controls { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .controls label { font-size: 13px; color: var(--muted); }
+    .controls input[type="file"], .controls select {
+      width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15);
+      background: #0e1530; color: var(--text);
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+      padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15);
+      background: #0e1530; color: var(--text); font-weight: 600; font-size: 14px;
+    }
+    .btn.primary { background: linear-gradient(180deg, #2b63ff, #1941c8); border-color: rgba(0,0,0,0.15); }
+    .btn[disabled] { opacity: 0.6; cursor: not-allowed; }
+
+    .progress { width: 100%; height: 12px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+    .progress > div { height: 100%; width: 0%; background: linear-gradient(90deg, #6ea8fe, #30d158); transition: width 0.2s ease; }
+    .status { font-size: 12px; color: var(--muted); margin-top: 6px; min-height: 16px; }
+
+    .previewWrap { background: #0e1530; border: 1px dashed rgba(255,255,255,0.12); border-radius: 10px; padding: 10px; }
+    canvas { width: 100%; height: auto; background: #111; display: block; border-radius: 8px; }
+
+    footer { text-align: center; color: var(--muted); font-size: 12px; margin: 18px 0 30px; }
+    code.kbd { background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.12); }
+
+    .tests { display: grid; gap: 8px; grid-template-columns: 1fr 1fr; margin-top: 10px; }
+    @media (max-width: 640px) { .tests { grid-template-columns: 1fr; } }
+    .log { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 12px; background: #0c1430; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 10px; white-space: pre-wrap; color: #d8e1ff; min-height: 80px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Browser PDF OCR - no server</h1>
+    <p class="lead">Drop in a PDF, run OCR in the browser, get back a searchable PDF with a hidden text layer.</p>
+  </header>
+
+  <main>
+    <div class="card">
+      <div class="row">
+        <section>
+          <div class="controls">
+            <label>PDF input</label>
+            <input id="fileInput" type="file" accept="application/pdf" />
+
+            <label>OCR language</label>
+            <select id="lang">
+              <option value="eng" selected>English (eng)</option>
+            </select>
+
+            <label>Render scale (higher is sharper and slower)</label>
+            <select id="scale">
+              <option value="1.5">1.5</option>
+              <option value="2" selected>2.0</option>
+              <option value="2.5">2.5</option>
+              <option value="3">3.0</option>
+            </select>
+
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:4px;">
+              <button id="runBtn" class="btn primary">Run OCR and build searchable PDF</button>
+              <button id="cancelBtn" class="btn" disabled>Cancel</button>
+              <a id="downloadLink" class="btn" style="display:none;" download>Download OCR PDF</a>
+            </div>
+
+            <div class="progress" style="margin-top:8px;">
+              <div id="bar"></div>
+            </div>
+            <div id="status" class="status"></div>
+
+            <div class="tests">
+              <button id="btnCheckLibs" class="btn">Self test: check libraries</button>
+              <button id="btnSample" class="btn">Load sample 1 page PDF</button>
+              <button id="btnTestOCR" class="btn">OCR engine test</button>
+              <button id="btnFullPipeline" class="btn">Full pipeline test</button>
+              <button id="btnCrispTest" class="btn">Crispness test (vector background)</button>
+            </div>
+            <div id="testLog" class="log" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <section>
+          <div class="previewWrap">
+            <canvas id="preview"></canvas>
+          </div>
+          <div class="status" style="margin-top:8px;">Preview shows the current page as processed.</div>
+        </section>
+      </div>
+    </div>
+
+    <footer>
+      Everything runs locally in your browser. Great for small and medium PDFs. For very large files, lower the scale.
+      Tip: Hold <code class="kbd">Alt</code> while clicking the download button to pick a folder.
+    </footer>
+  </main>
+
+  <!-- Tesseract.js -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <!-- pdf-lib -->
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+  <script>
+  (function(){
+    const $ = (id) => document.getElementById(id);
+    const fileInput = $("fileInput");
+    const runBtn = $("runBtn");
+    const cancelBtn = $("cancelBtn");
+    const downloadLink = $("downloadLink");
+    const bar = $("bar");
+    const statusEl = $("status");
+    const preview = $("preview");
+    const btnCheckLibs = $("btnCheckLibs");
+    const btnSample = $("btnSample");
+    const btnTestOCR = $("btnTestOCR");
+    const btnFullPipeline = $("btnFullPipeline");
+    const btnCrispTest = $("btnCrispTest");
+    const testLog = $("testLog");
+
+    let cancelFlag = false;
+
+    function log(line){ testLog.textContent += (testLog.textContent ? "\n" : "") + line; }
+    function clearLog(){ testLog.textContent = ""; }
+
+    cancelBtn.addEventListener('click', () => { cancelFlag = true; setStatus('Canceled by user.'); });
+
+    function setProgress(pct) { bar.style.width = `${Math.max(0, Math.min(100, pct))}%`; }
+    function setStatus(txt) { statusEl.textContent = txt; }
+
+    async function loadScript(src){
+      return new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = src; s.onload = () => resolve(); s.onerror = () => reject(new Error('Failed to load ' + src));
+        document.head.appendChild(s);
+      });
+    }
+
+    async function ensurePdfJs(){
+      if (window.pdfjsLib) {
+        try { window.pdfjsLib.GlobalWorkerOptions.workerSrc ||= 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; } catch(e) {}
+        return window.pdfjsLib;
+      }
+      const candidates = [
+        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js',
+        'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js'
+      ];
+      let lastErr = null;
+      for (const url of candidates){
+        try {
+          await loadScript(url);
+          if (window.pdfjsLib) {
+            const v = (window.pdfjsLib && window.pdfjsLib.version) || '';
+            if (v.startsWith('3.')) {
+              window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            } else {
+              window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+            }
+            return window.pdfjsLib;
+          }
+        } catch(e){ lastErr = e; }
+      }
+      throw lastErr || new Error('pdf.js failed to load');
+    }
+
+    async function arrayBufferFromFile(file) {
+      return new Promise((resolve, reject) => {
+        const fr = new FileReader();
+        fr.onerror = () => reject(fr.error);
+        fr.onload = () => resolve(fr.result);
+        fr.readAsArrayBuffer(file);
+      });
+    }
+
+    function dataURLFromCanvas(canvas) { return canvas.toDataURL('image/png'); }
+
+    async function renderPdfPageToCanvas(pdf, pageNum, ocrScale) {
+      const page = await pdf.getPage(pageNum);
+      // viewport at scale 1 maps to PDF points
+      const viewportPts = page.getViewport({ scale: 1 });
+      const viewport = page.getViewport({ scale: ocrScale });
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = Math.floor(viewport.width);
+      canvas.height = Math.floor(viewport.height);
+      await page.render({ canvasContext: ctx, viewport }).promise;
+      preview.width = canvas.width; preview.height = canvas.height;
+      preview.getContext('2d').drawImage(canvas, 0, 0);
+      return { canvas, pageWidthPts: viewportPts.width, pageHeightPts: viewportPts.height };
+    }
+
+    function wordsFromTesseract(result) {
+      return (result && result.data && Array.isArray(result.data.words)) ? result.data.words : [];
+    }
+
+    function drawHiddenTextLayer(pageOut, words, canvasWpx, canvasHpx, pageWpts, pageHpts, font) {
+      const scaleX = pageWpts / canvasWpx;
+      const scaleY = pageHpts / canvasHpx;
+      for (const w of words) {
+        if (!w || !w.text) continue;
+        const b = w.bbox || w.bbox0 || w.boundingBox || {};
+        const x0px = (b.x0 ?? b.left ?? 0);
+        const y1px = (b.y1 ?? b.bottom ?? ((b.y0 ?? b.top ?? 0) + 10));
+        const heightPx = Math.max(1, (b.y1 ?? b.bottom ?? 0) - (b.y0 ?? b.top ?? 0));
+        const fontSizePts = Math.max(6, Math.min(48, heightPx * scaleY));
+        const xPts = x0px * scaleX;
+        const yPts = pageHpts - y1px * scaleY; // convert to PDF coords
+        pageOut.drawText(w.text, { x: xPts, y: yPts, size: fontSizePts, font, color: PDFLib.rgb(0,0,0), opacity: 0.01 });
+      }
+    }
+
+    async function ocrPdf(file, lang, scale) {
+      cancelFlag = false;
+      setProgress(0); setStatus('Loading PDF...');
+      downloadLink.style.display = 'none'; downloadLink.href = '';
+
+      const pdfjsLib = await ensurePdfJs();
+
+      const srcBytes = await arrayBufferFromFile(file);
+      const srcDoc = await PDFLib.PDFDocument.load(srcBytes);
+      const readerPdf = await pdfjsLib.getDocument({ data: srcBytes }).promise; // for rasterizing to OCR only
+      const pageCount = readerPdf.numPages;
+
+      setStatus(`Pages detected: ${pageCount}`);
+
+      const outDoc = await PDFLib.PDFDocument.create();
+      const helv = await outDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+
+      // Copy all pages as vector backgrounds to keep crispness
+      const copied = await outDoc.copyPages(srcDoc, Array.from({length: pageCount}, (_,i)=>i));
+
+      for (let i = 1; i <= pageCount; i++) {
+        if (cancelFlag) break;
+        setStatus(`Rendering page ${i} of ${pageCount} for OCR...`);
+        const { canvas, pageWidthPts, pageHeightPts } = await renderPdfPageToCanvas(readerPdf, i, scale);
+        const pageOut = outDoc.addPage(copied[i-1]); // keeps original vector content
+
+        setStatus(`Running OCR on page ${i}...`);
+        const result = await Tesseract.recognize(canvas, lang, { logger: m => {} });
+        const words = wordsFromTesseract(result);
+
+        drawHiddenTextLayer(pageOut, words, canvas.width, canvas.height, pageWidthPts, pageHeightPts, helv);
+
+        setProgress(Math.round((i / pageCount) * 100));
+        setStatus(`Page ${i} finished. ${words.length} words indexed.`);
+
+        canvas.width = 0; canvas.height = 0;
+      }
+
+      if (cancelFlag) {
+        setStatus('Process canceled.');
+        return null;
+      }
+
+      setStatus('Packaging searchable PDF...');
+      const outBytes = await outDoc.save();
+      setProgress(100);
+      setStatus('Done. Click Download to save the OCR PDF.');
+      return new Blob([outBytes], { type: 'application/pdf' });
+    }
+
+    runBtn.addEventListener('click', async () => {
+      const file = fileInput.files && fileInput.files[0];
+      if (!file) { setStatus('Pick a PDF first.'); return; }
+      runBtn.disabled = true; cancelBtn.disabled = false; fileInput.disabled = true; downloadLink.style.display = 'none';
+      try {
+        const lang = $("lang").value;
+        const scale = parseFloat($("scale").value);
+        const blob = await ocrPdf(file, lang, scale);
+        if (blob) {
+          const url = URL.createObjectURL(blob);
+          downloadLink.href = url;
+          const name = file.name.replace(/\.pdf$/i, '') + '-ocr.pdf';
+          downloadLink.download = name;
+          downloadLink.style.display = 'inline-flex';
+        }
+      } catch (err) {
+        console.error(err);
+        setStatus('Error: ' + (err && err.message ? err.message : String(err)));
+      } finally {
+        runBtn.disabled = false; cancelBtn.disabled = true; fileInput.disabled = false; cancelFlag = false;
+      }
+    });
+
+    btnCheckLibs.addEventListener('click', async () => {
+      clearLog();
+      log('Running self test...');
+      try {
+        log('Checking pdf-lib global... ' + (!!window.PDFLib));
+        log('Checking Tesseract global... ' + (!!window.Tesseract));
+        const pdfjsLib = await ensurePdfJs();
+        log('Loaded pdf.js version: ' + (pdfjsLib.version || 'unknown'));
+        const tmpDoc = await PDFLib.PDFDocument.create();
+        const page = tmpDoc.addPage([300, 200]);
+        const font = await tmpDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+        page.drawText('pdf.js load test', { x: 20, y: 100, size: 18, font });
+        const bytes = await tmpDoc.save();
+        const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
+        log('pdf.js opened pages: ' + pdf.numPages);
+        log('Self test passed');
+      } catch (e) {
+        log('Self test failed: ' + (e && e.message ? e.message : String(e)));
+      }
+    });
+
+    btnSample.addEventListener('click', async () => {
+      clearLog();
+      try {
+        const tmpDoc = await PDFLib.PDFDocument.create();
+        const page = tmpDoc.addPage([600, 400]);
+        const font = await tmpDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+        page.drawText('Sample PDF for OCR', { x: 40, y: 260, size: 28, font });
+        page.drawText('This line should be recognized by OCR.', { x: 40, y: 220, size: 18, font: await tmpDoc.embedFont(PDFLib.StandardFonts.Helvetica) });
+        const bytes = await tmpDoc.save();
+        const blob = new Blob([bytes], { type: 'application/pdf' });
+        const file = new File([blob], 'sample.pdf', { type: 'application/pdf' });
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        fileInput.files = dt.files;
+        log('Loaded sample PDF into the file picker. Click Run OCR.');
+      } catch (e) {
+        log('Could not create sample PDF: ' + (e && e.message ? e.message : String(e)));
+      }
+    });
+
+    btnTestOCR.addEventListener('click', async () => {
+      clearLog();
+      try {
+        const c = document.createElement('canvas');
+        c.width = 500; c.height = 160;
+        const ctx = c.getContext('2d');
+        ctx.fillStyle = '#fff'; ctx.fillRect(0,0,c.width,c.height);
+        ctx.fillStyle = '#000';
+        ctx.font = 'bold 48px Arial';
+        ctx.fillText('HELLO OCR 123', 20, 80);
+        ctx.font = '28px Arial';
+        ctx.fillText('second line', 20, 120);
+        const res = await Tesseract.recognize(c, 'eng');
+        const text = (res && res.data && res.data.text) ? res.data.text.trim() : '';
+        log('OCR text:\n' + text);
+        log('Words detected: ' + (res && res.data && res.data.words ? res.data.words.length : 0));
+        log('OCR engine test passed if you see HELLO OCR 123');
+      } catch (e) {
+        log('OCR engine test failed: ' + (e && e.message ? e.message : String(e)));
+      }
+    });
+
+    btnFullPipeline.addEventListener('click', async () => {
+      clearLog();
+      try {
+        const d = await PDFLib.PDFDocument.create();
+        const helv = await d.embedFont(PDFLib.StandardFonts.Helvetica);
+        const p1 = d.addPage([612, 792]);
+        p1.drawText('Full pipeline test - page 1', { x: 50, y: 720, size: 24, font: helv });
+        p1.drawText('This page will be rasterized for OCR but kept vector in output.', { x: 50, y: 680, size: 14, font: helv });
+        const p2 = d.addPage([612, 792]);
+        p2.drawText('Full pipeline test - page 2', { x: 50, y: 720, size: 24, font: helv });
+        p2.drawText('More text here for the OCR pass.', { x: 50, y: 680, size: 14, font: helv });
+        const bytes = await d.save();
+        const blob = new Blob([bytes], { type: 'application/pdf' });
+        const file = new File([blob], 'pipeline-two-pages.pdf', { type: 'application/pdf' });
+        const dt = new DataTransfer(); dt.items.add(file); fileInput.files = dt.files;
+        log('Two page sample loaded. Running OCR now...');
+        const out = await ocrPdf(file, $("lang").value, parseFloat($("scale").value));
+        if (out) {
+          const url = URL.createObjectURL(out);
+          downloadLink.href = url; downloadLink.download = 'pipeline-two-pages-ocr.pdf';
+          downloadLink.style.display = 'inline-flex';
+          log('Full pipeline test produced an OCR PDF with vector pages preserved.');
+        } else {
+          log('Full pipeline test canceled or failed to produce output.');
+        }
+      } catch (e) {
+        log('Full pipeline test failed: ' + (e && e.message ? e.message : String(e)));
+      }
+    });
+
+    btnCrispTest.addEventListener('click', async () => {
+      clearLog();
+      try {
+        const d = await PDFLib.PDFDocument.create();
+        const helv = await d.embedFont(PDFLib.StandardFonts.Helvetica);
+        const p = d.addPage([612, 300]);
+        // Vector background shapes that should stay perfectly crisp
+        for(let x=0;x<612;x+=6){ p.drawLine({ start: {x, y:20}, end:{x:612-x, y:280}, thickness: 0.5, color: PDFLib.rgb(0.1,0.1,0.1)}); }
+        p.drawText('CRISP VECTOR TEST', { x: 40, y: 250, size: 22, font: helv });
+        p.drawText('Small text should remain sharp after OCR', { x: 40, y: 225, size: 10, font: helv });
+        const bytes = await d.save();
+        const blob = new Blob([bytes], { type: 'application/pdf' });
+        const file = new File([blob], 'crisp-vector.pdf', { type: 'application/pdf' });
+        const dt = new DataTransfer(); dt.items.add(file); fileInput.files = dt.files;
+        log('Crispness test loaded. Run OCR then zoom in to verify vector sharpness.');
+      } catch(e){
+        log('Crispness test failed: ' + (e && e.message ? e.message : String(e)));
+      }
+    });
+  })();
+  </script>
+</body>
+</html>

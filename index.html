@@ -229,6 +229,33 @@
       display: inline-block;
     }
 
+    /* OCR Progress Styles */
+    .progress-container {
+      margin-top: 1rem;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--surface-light);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .progress-text {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      text-align: center;
+    }
+
     /* JSON Input Modal */
     .modal-overlay {
       position: fixed;
@@ -656,6 +683,10 @@
           <i class="fas fa-file-pdf"></i>
           Download PDF
         </button>
+        <button class="btn btn-secondary" id="downloadOcrPdfBtn" disabled>
+          <i class="fas fa-search"></i>
+          Download OCR PDF
+        </button>
         <button class="btn btn-secondary" id="downloadJsonBtn" disabled>
           <i class="fas fa-download"></i>
           Download JSON
@@ -721,6 +752,17 @@
             <label for="jobPaddingBottom">Last Job Bottom Padding (px)</label>
             <input type="range" id="jobPaddingBottom" min="0" max="30" value="10" class="setting-slider">
             <span class="setting-value" id="jobPaddingBottomValue">10px</span>
+          </div>
+        </div>
+        
+        <!-- OCR Progress Section -->
+        <div class="settings-section" id="ocrProgressSection" style="display: none;">
+          <h3>OCR Processing</h3>
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div class="progress-fill" id="ocrProgressFill"></div>
+            </div>
+            <div class="progress-text" id="ocrProgressText">Processing...</div>
           </div>
         </div>
       </div>
@@ -797,6 +839,9 @@
   <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- OCR Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 
   <script>
     let resumeData = null;
@@ -805,12 +850,16 @@
     // Elements
     const importJsonBtn = document.getElementById('importJsonBtn');
     const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+    const downloadOcrPdfBtn = document.getElementById('downloadOcrPdfBtn');
     const downloadJsonBtn = document.getElementById('downloadJsonBtn');
     const preview = document.getElementById('resumePreview');
     const previewStatus = document.getElementById('previewStatus');
     const jsonModal = document.getElementById('jsonModal');
     const jsonInput = document.getElementById('jsonInput');
     const closeModal = document.getElementById('closeModal');
+    const ocrProgressSection = document.getElementById('ocrProgressSection');
+    const ocrProgressFill = document.getElementById('ocrProgressFill');
+    const ocrProgressText = document.getElementById('ocrProgressText');
     const cancelImport = document.getElementById('cancelImport');
     const confirmImport = document.getElementById('confirmImport');
 
@@ -847,7 +896,7 @@
           renderResume(resumeData);
         updatePreviewStatus('loaded', 'Data loaded successfully');
         downloadJsonBtn.disabled = false;
-          generatePDFandStore();
+        generatePDFandStore();
         closeJsonModal();
       } catch (err) {
         showError('Invalid JSON format. Please check your data.');
@@ -866,6 +915,7 @@
       `;
       downloadJsonBtn.disabled = true;
       downloadPdfBtn.disabled = true;
+      downloadOcrPdfBtn.disabled = true;
     }
 
     function updatePreviewStatus(type, message) {
@@ -903,6 +953,46 @@
       setTimeout(() => {
         document.body.removeChild(a);
       }, 0);
+    });
+
+    // OCR PDF Download
+    downloadOcrPdfBtn.addEventListener('click', async () => {
+      if (!pdfBlobUrl) return;
+      
+      try {
+        downloadOcrPdfBtn.disabled = true;
+        ocrProgressSection.style.display = 'block';
+        
+        // Fetch the PDF blob
+        const response = await fetch(pdfBlobUrl);
+        const pdfBlob = await response.blob();
+        
+        // Convert blob to array buffer
+        const arrayBuffer = await pdfBlob.arrayBuffer();
+        
+        // Process with OCR
+        const ocrPdfBlob = await processPdfWithOCR(arrayBuffer);
+        
+        // Download the OCR PDF
+        const url = URL.createObjectURL(ocrPdfBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'resume-ocr.pdf';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }, 0);
+        
+      } catch (error) {
+        console.error('OCR processing failed:', error);
+        alert('OCR processing failed. Please try again.');
+      } finally {
+        downloadOcrPdfBtn.disabled = false;
+        ocrProgressSection.style.display = 'none';
+        ocrProgressFill.style.width = '0%';
+      }
     });
 
     // Date parsing helper function
@@ -1158,6 +1248,118 @@
 
   pdfBlobUrl = URL.createObjectURL(pdf.output('blob'));
   downloadPdfBtn.disabled = false;
+  downloadOcrPdfBtn.disabled = false;
+}
+
+// OCR Processing Functions
+async function processPdfWithOCR(pdfArrayBuffer) {
+  const scale = 2.0; // Using your preferred scale
+  const lang = 'eng';
+  
+  try {
+    // Load PDF with pdf-lib
+    const srcDoc = await PDFLib.PDFDocument.load(pdfArrayBuffer);
+    const pageCount = srcDoc.getPageCount();
+    
+    // Create output document
+    const outDoc = await PDFLib.PDFDocument.create();
+    const helv = await outDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+    
+    // Copy all pages as vector backgrounds
+    const copied = await outDoc.copyPages(srcDoc, Array.from({length: pageCount}, (_,i)=>i));
+    
+    // Load PDF.js for rendering
+    await ensurePdfJs();
+    const readerPdf = await window.pdfjsLib.getDocument({ data: pdfArrayBuffer }).promise;
+    
+    for (let i = 1; i <= pageCount; i++) {
+      // Update progress
+      const progress = (i / pageCount) * 100;
+      ocrProgressFill.style.width = `${progress}%`;
+      ocrProgressText.textContent = `Processing page ${i} of ${pageCount}...`;
+      
+      // Render page to canvas for OCR
+      const { canvas, pageWidthPts, pageHeightPts } = await renderPdfPageToCanvas(readerPdf, i, scale);
+      const pageOut = outDoc.addPage(copied[i-1]);
+      
+      // Run OCR on the canvas
+      ocrProgressText.textContent = `Running OCR on page ${i}...`;
+      const result = await Tesseract.recognize(canvas, lang, { logger: m => {} });
+      const words = wordsFromTesseract(result);
+      
+      // Add hidden text layer
+      drawHiddenTextLayer(pageOut, words, canvas.width, canvas.height, pageWidthPts, pageHeightPts, helv);
+      
+      // Clean up canvas
+      canvas.width = 0;
+      canvas.height = 0;
+    }
+    
+    ocrProgressText.textContent = 'Packaging OCR PDF...';
+    const outBytes = await outDoc.save();
+    ocrProgressFill.style.width = '100%';
+    ocrProgressText.textContent = 'OCR processing complete!';
+    
+    return new Blob([outBytes], { type: 'application/pdf' });
+    
+  } catch (error) {
+    console.error('OCR processing error:', error);
+    throw error;
+  }
+}
+
+async function ensurePdfJs() {
+  if (window.pdfjsLib) {
+    try { 
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc ||= 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; 
+    } catch(e) {}
+    return window.pdfjsLib;
+  }
+  
+  // Load pdf.js dynamically
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+  document.head.appendChild(script);
+  
+  return new Promise((resolve, reject) => {
+    script.onload = () => {
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      resolve(window.pdfjsLib);
+    };
+    script.onerror = reject;
+  });
+}
+
+async function renderPdfPageToCanvas(pdf, pageNum, ocrScale) {
+  const page = await pdf.getPage(pageNum);
+  const viewportPts = page.getViewport({ scale: 1 });
+  const viewport = page.getViewport({ scale: ocrScale });
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = Math.floor(viewport.width);
+  canvas.height = Math.floor(viewport.height);
+  await page.render({ canvasContext: ctx, viewport }).promise;
+  return { canvas, pageWidthPts: viewportPts.width, pageHeightPts: viewportPts.height };
+}
+
+function wordsFromTesseract(result) {
+  return (result && result.data && Array.isArray(result.data.words)) ? result.data.words : [];
+}
+
+function drawHiddenTextLayer(pageOut, words, canvasWpx, canvasHpx, pageWpts, pageHpts, font) {
+  const scaleX = pageWpts / canvasWpx;
+  const scaleY = pageHpts / canvasHpx;
+  for (const w of words) {
+    if (!w || !w.text) continue;
+    const b = w.bbox || w.bbox0 || w.boundingBox || {};
+    const x0px = (b.x0 ?? b.left ?? 0);
+    const y1px = (b.y1 ?? b.bottom ?? ((b.y0 ?? b.top ?? 0) + 10));
+    const heightPx = Math.max(1, (b.y1 ?? b.bottom ?? 0) - (b.y0 ?? b.top ?? 0));
+    const fontSizePts = Math.max(6, Math.min(48, heightPx * scaleY));
+    const xPts = x0px * scaleX;
+    const yPts = pageHpts - y1px * scaleY; // convert to PDF coords
+    pageOut.drawText(w.text, { x: xPts, y: yPts, size: fontSizePts, font, color: PDFLib.rgb(0,0,0), opacity: 0.01 });
+  }
 }
 
     // Settings functionality
