@@ -151,6 +151,84 @@
       transform: none !important;
     }
 
+    /* Settings Section */
+    .settings-section {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .settings-section h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+
+    .setting-group {
+      margin-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .setting-group label {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 0.25rem;
+    }
+
+    .setting-slider {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--surface-light);
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+      cursor: pointer;
+    }
+
+    .setting-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--primary-color);
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: all 0.2s ease;
+    }
+
+    .setting-slider::-webkit-slider-thumb:hover {
+      background: var(--primary-hover);
+      transform: scale(1.1);
+    }
+
+    .setting-slider::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--primary-color);
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .setting-value {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      text-align: center;
+      background: rgba(99, 102, 241, 0.1);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      min-width: 50px;
+      display: inline-block;
+    }
+
     /* JSON Input Modal */
     .modal-overlay {
       position: fixed;
@@ -296,7 +374,7 @@
     .resume-preview {
       background: white;
       color: #1f2937;
-      padding: 3rem;
+      padding: var(--name-top-padding, 1rem) 3rem 3rem 3rem;
       border-radius: var(--radius);
       min-height: 800px;
       box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -314,6 +392,15 @@
       right: 0;
       height: 4px;
       background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    }
+    
+    /* Clean export: remove visual chrome during PDF render */
+    .resume-preview.export-clean {
+      box-shadow: none !important;
+      border-radius: 0 !important;
+    }
+    .resume-preview.export-clean::before {
+      display: none !important;
     }
 
     .empty-state {
@@ -347,7 +434,7 @@
     /* Resume Styling */
     .resume-header {
       text-align: center;
-      font-size: 24px;
+      font-size: var(--name-size, 24px);
       font-weight: 700;
       margin-bottom: 4px;
       letter-spacing: 0.5px;
@@ -356,7 +443,7 @@
 
     .resume-contact {
       text-align: center;
-      font-size: 14px;
+      font-size: var(--contact-size, 14px);
       font-weight: 500;
       margin-bottom: 12px;
       color: #4b5563;
@@ -365,7 +452,7 @@
     .resume-divider {
       border: none;
       border-top: 2px solid #1f2937;
-      margin: 16px 0 32px 0;
+      margin: 8px 0 12px 0;
       width: 100%;
     }
 
@@ -374,14 +461,22 @@
       font-weight: 700;
       text-align: center;
       text-decoration: underline;
-      margin: 40px 0 24px 0;
+      margin: 0 0 20px 0;
       letter-spacing: 0.2px;
       color: #1f2937;
+    }
+    
+    .resume-preview .resume-divider + .section-title {
+      margin-top: 0;
+    }
+    
+    .resume-preview .section-title:first-of-type {
+      margin-top: 0;
     }
 
     .job-title {
       font-weight: 700;
-      font-size: 16px;
+      font-size: var(--job-title-size, 16px);
       margin-top: 12px;
       margin-bottom: 4px;
       color: #1f2937;
@@ -392,9 +487,15 @@
       padding-top: var(--job-padding-top, 10px);
     }
     
-    .section:last-of-type {
+    .first-job-section {
+      padding-top: 3px !important;
+    }
+    
+    .last-job-section {
       padding-bottom: var(--job-padding-bottom, 10px);
     }
+    
+
 
     .company-row {
       display: flex;
@@ -406,12 +507,12 @@
 
     .company {
       font-weight: 600;
-      font-size: 14px;
+      font-size: var(--company-size, 14px);
       color: #374151;
     }
 
     .company-details {
-      font-size: 12px;
+      font-size: var(--company-details-size, 12px);
       color: #6b7280;
     }
 
@@ -420,7 +521,7 @@
     }
 
     .job-list li {
-      font-size: 12px;
+      font-size: var(--bullet-size, 12px);
       margin-bottom: 8px;
       line-height: 1.6;
       color: #374151;
@@ -559,6 +660,69 @@
           <i class="fas fa-download"></i>
           Download JSON
         </button>
+        
+        <!-- Settings Section -->
+        <div class="settings-section">
+          <h3>Font Sizes</h3>
+          
+          <div class="setting-group">
+            <label for="nameSize">Name Font Size (px)</label>
+            <input type="range" id="nameSize" min="18" max="36" value="24" class="setting-slider">
+            <span class="setting-value" id="nameSizeValue">24px</span>
+          </div>
+          
+          <div class="setting-group">
+            <label for="contactSize">Contact Info Font Size (px)</label>
+            <input type="range" id="contactSize" min="10" max="20" value="14" class="setting-slider">
+            <span class="setting-value" id="contactSizeValue">14px</span>
+          </div>
+          
+          <div class="setting-group">
+            <label for="jobTitleSize">Job Title Font Size (px)</label>
+            <input type="range" id="jobTitleSize" min="12" max="24" value="16" class="setting-slider">
+            <span class="setting-value" id="jobTitleSizeValue">16px</span>
+          </div>
+          
+          <div class="setting-group">
+            <label for="companySize">Company Name Font Size (px)</label>
+            <input type="range" id="companySize" min="10" max="20" value="14" class="setting-slider">
+            <span class="setting-value" id="companySizeValue">14px</span>
+          </div>
+          
+          <div class="setting-group">
+            <label for="companyDetailsSize">Company Details Font Size (px)</label>
+            <input type="range" id="companyDetailsSize" min="8" max="16" value="12" class="setting-slider">
+            <span class="setting-value" id="companyDetailsSizeValue">12px</span>
+          </div>
+          
+          <div class="setting-group">
+            <label for="bulletSize">Bullet Points Font Size (px)</label>
+            <input type="range" id="bulletSize" min="8" max="16" value="12" class="setting-slider">
+            <span class="setting-value" id="bulletSizeValue">12px</span>
+          </div>
+        </div>
+        
+        <div class="settings-section">
+          <h3>Spacing & Padding</h3>
+          
+          <div class="setting-group">
+            <label for="nameTopPadding">Name Top Padding (px)</label>
+            <input type="range" id="nameTopPadding" min="0" max="50" value="16" class="setting-slider">
+            <span class="setting-value" id="nameTopPaddingValue">16px</span>
+          </div>
+          
+          <div class="setting-group">
+            <label for="jobPaddingTop">Job Entry Top Padding (px)</label>
+            <input type="range" id="jobPaddingTop" min="0" max="30" value="10" class="setting-slider">
+            <span class="setting-value" id="jobPaddingTopValue">10px</span>
+          </div>
+          
+          <div class="setting-group">
+            <label for="jobPaddingBottom">Last Job Bottom Padding (px)</label>
+            <input type="range" id="jobPaddingBottom" min="0" max="30" value="10" class="setting-slider">
+            <span class="setting-value" id="jobPaddingBottomValue">10px</span>
+          </div>
+        </div>
       </div>
 
       <!-- Preview Container -->
@@ -803,7 +967,7 @@
 
         <div class="section-title">Work Experience</div>
         ${sortedJobs.map((job, jobIndex) => `
-          <div class="section">
+          <div class="section ${jobIndex === 0 ? 'first-job-section' : ''} ${jobIndex === sortedJobs.length - 1 ? 'last-job-section' : ''}">
             <div class="job-title" data-editable="jobs.${jobIndex}.title">${escapeHtml(job.title)}</div>
             <div class="company-row">
               <span class="company" data-editable="jobs.${jobIndex}.company">${escapeHtml(job.company)}</span>
@@ -946,60 +1110,96 @@
         .replace(/'/g, '&#039;');
     }
 
-    // PDF Generation
+    // High-DPI, edge-to-edge PDF with no extra chrome
     async function generatePDFandStore() {
       const previewElem = document.getElementById('resumePreview');
+      const { jsPDF } = window.jspdf;
+
       downloadPdfBtn.disabled = true;
+      if (pdfBlobUrl) { URL.revokeObjectURL(pdfBlobUrl); pdfBlobUrl = null; }
 
-      // Discard any old blob
-      if (pdfBlobUrl) {
-        URL.revokeObjectURL(pdfBlobUrl);
-        pdfBlobUrl = null;
-      }
+      // Read computed padding to keep preview and PDF aligned
+      const cssPadRaw = getComputedStyle(document.documentElement)
+        .getPropertyValue('--name-top-padding').trim();
+      const nameTopPadding = parseInt(cssPadRaw || '0', 10) || 0;
 
-      // PDF setup
-      const pdf = new window.jspdf.jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
-      const pw = pdf.internal.pageSize.getWidth();
-      const ph = pdf.internal.pageSize.getHeight();
-      const marginX = 40;
-      const marginY = 30;
-      const usableW = pw - marginX * 2;
+      // Enable clean export to drop shadows, radius, top bar if desired
+      previewElem.classList.add('export-clean');
 
-      let cursorY = marginY;
+      // Target 300 DPI
+      const DPI = 300;
+      const PX_PER_PT = DPI / 72;
 
-      // Snapshot one element
-      async function snap(el) {
-        const canvas = await html2canvas(el, { 
-          scale: 2, 
-          backgroundColor: '#fff', 
-          useCORS: true 
-        });
-        if (!canvas.width || !canvas.height) return null;
-        const jpeg = canvas.toDataURL('image/jpeg', 0.92);
-        const drawH = canvas.height * (usableW / canvas.width);
-        return { jpeg, drawH };
-      }
+      // Scale so the canvas width is 300-DPI equivalent of current CSS width
+      const elemCssWidthPx = previewElem.clientWidth || previewElem.getBoundingClientRect().width;
+      const targetPxWidth = Math.max(1, Math.round(elemCssWidthPx * (DPI / 96))); // approximate CSS px to 300-DPI
+      const scale = Math.max(1, targetPxWidth / elemCssWidthPx);
 
-      // Walk children in paint order
-      const blocks = Array.from(previewElem.children).filter(n => n.nodeType === 1);
+      const canvas = await html2canvas(previewElem, {
+        scale,
+        backgroundColor: '#fff',
+        useCORS: true,
+        logging: false,
+        letterRendering: true
+      });
 
-      for (const el of blocks) {
-        const res = await snap(el);
-        if (!res) continue;
-        const { jpeg, drawH } = res;
+      // Disable clean export after capture
+      previewElem.classList.remove('export-clean');
 
-        if (cursorY + drawH > ph - marginY) {
-          pdf.addPage();
-          cursorY = marginY;
-        }
+      // Page size exactly matches the rendered canvas, no margins
+      const pageWidthPt  = canvas.width  / PX_PER_PT;
+      const pageHeightPt = canvas.height / PX_PER_PT;
 
-        pdf.addImage(jpeg, 'JPEG', marginX, cursorY, usableW, drawH);
-        cursorY += drawH + 8;
-      }
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: [pageWidthPt, pageHeightPt], compress: false });
+
+      // PNG is lossless
+      const png = canvas.toDataURL('image/png');
+      pdf.addImage(png, 'PNG', 0, 0, pageWidthPt, pageHeightPt, undefined, 'FAST');
 
       pdfBlobUrl = URL.createObjectURL(pdf.output('blob'));
       downloadPdfBtn.disabled = false;
     }
+
+    // Settings functionality
+    function initializeSettings() {
+      const settings = [
+        { id: 'nameSize', cssVar: '--name-size', suffix: 'px' },
+        { id: 'contactSize', cssVar: '--contact-size', suffix: 'px' },
+        { id: 'nameTopPadding', cssVar: '--name-top-padding', suffix: 'px' },
+        { id: 'jobTitleSize', cssVar: '--job-title-size', suffix: 'px' },
+        { id: 'companySize', cssVar: '--company-size', suffix: 'px' },
+        { id: 'companyDetailsSize', cssVar: '--company-details-size', suffix: 'px' },
+        { id: 'bulletSize', cssVar: '--bullet-size', suffix: 'px' },
+        { id: 'jobPaddingTop', cssVar: '--job-padding-top', suffix: 'px' },
+        { id: 'jobPaddingBottom', cssVar: '--job-padding-bottom', suffix: 'px' }
+      ];
+
+      settings.forEach(setting => {
+        const slider = document.getElementById(setting.id);
+        const valueDisplay = document.getElementById(setting.id + 'Value');
+        
+        if (slider && valueDisplay) {
+          // Update display value
+          valueDisplay.textContent = slider.value + setting.suffix;
+          
+          // Handle slider change
+          slider.addEventListener('input', function() {
+            const value = this.value + setting.suffix;
+            valueDisplay.textContent = value;
+            document.documentElement.style.setProperty(setting.cssVar, value);
+            
+            // Re-render resume if data is loaded
+            if (resumeData) {
+              renderResume(resumeData);
+              generatePDFandStore();
+            }
+          });
+        }
+      });
+    }
+
+    // Initialize settings when page loads
+    document.addEventListener('DOMContentLoaded', initializeSettings);
 
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
