@@ -1,0 +1,101 @@
+\documentclass[10.5pt,a4paper]{article}
+
+% --- Basics ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in,top=0.33in,bottom=0.33in]{geometry}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{tabularx}
+\usepackage{array}
+
+% --- Colors ---
+\definecolor{accent}{HTML}{0A66C2}
+\definecolor{lightgray}{gray}{0.6}
+\hypersetup{colorlinks=true, urlcolor=accent}
+
+% --- Spacing / lists ---
+\setlength{\parindent}{0pt}
+\linespread{1.08}
+\setlist[itemize]{leftmargin=1.5em,label=•,itemsep=3pt,topsep=2pt}
+
+% --- Unified section heading (used for ALL sections) ---
+\newcommand{\sectiontitle}[1]{%
+  \vspace{10pt}% top breathing room
+  {\large\bfseries\textcolor{accent}{#1}}\par
+  \vspace{2pt}\textcolor{accent}{\rule{\textwidth}{0.6pt}}\vspace{4pt}%
+}
+
+% --- Role block ---
+\newcommand{\roleblock}[4]{% title, company, location, dates
+  {\textbf{#1}}\par
+  {\itshape #2 -- #3\ (#4)}\par\vspace{4pt}
+}
+
+% --- Header ---
+\pagenumbering{gobble}
+\begin{document}
+\begin{center}
+{\Huge \bfseries Adam Chaabane}\par
+\vspace{4pt}
+\href{mailto:adam@rdr-gp.com}{adam@rdr-gp.com} \,|\, 831-760-6958 \,|\, Salinas, CA
+\end{center}
+\vspace{4pt}
+
+% =========================
+% WORK EXPERIENCE  (now identical style to Education)
+% =========================
+\sectiontitle{Work Experience}
+
+\roleblock{Senior Data Engineer \& Full-Stack Web Developer}
+          {RDR Group}{Salinas, CA}{June 2024 -- Current}
+\begin{itemize}
+  \item Developed secure, scalable applications managing government data; ensured GDPR/CCPA compliance.
+  \item Designed and optimized relational databases for performance, security, and integrity.
+  \item Integrated APIs and microservices (on-prem + cloud); used Excel exports for prototyping.
+  \item Automated data flows enabling large dataset analysis prior to advanced processing.
+  \item Built dashboards (Power BI, Tableau, SAP Crystal Reports) for real-time decision support.
+  \item Delivered custom Python/JavaScript/HTML apps with seamless Excel reporting integration.
+  \item Partnered with clients to gather requirements; shipped GUIs that improved adoption.
+\end{itemize}
+
+\vspace{8pt}
+
+\roleblock{Senior Departmental Information Systems Coordinator}
+          {Monterey County Probation Dept.}{Salinas, CA}{Nov 2023 -- Jun 2024}
+\begin{itemize}
+  \item Managed on-prem and cloud databases ensuring reliability, compliance, and continuity.
+  \item Authored SQL scripts for Adult/Juvenile divisions supporting reporting and records requests.
+  \item Built Power BI dashboards surfacing KPIs in real time across departments.
+  \item Supported mission-critical systems (e.g., inmate door control, contingency planning).
+  \item Trained staff and improved adoption; optimized integrations across on-prem/cloud platforms.
+\end{itemize}
+
+% =========================
+% SKILLS  (now identical style to Education)
+% =========================
+\sectiontitle{Skills}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
+\textbf{Languages:} Python, JavaScript, SQL/PLSQL & \textbf{Databases:} Oracle, relational schema design \\
+\textbf{Data/BI:} Power BI, Tableau, SAP Crystal Reports & \textbf{Integration:} REST APIs, microservices, cloud/on-prem \\
+\textbf{Security:} GDPR/CCPA, PII best practices & \textbf{Tools:} Git, Excel automation, requirements capture \\
+\end{tabularx}
+
+% =========================
+% EDUCATION  (reference style that others now match)
+% =========================
+\sectiontitle{Education \& Certifications}
+\begin{itemize}
+  \item B.S. Computer Science — University of Santa Cruz (\textit{Expected May 2024})
+  \item CLETS Certification
+  \item Crystal Reports for SAP Business One (Udemy)
+  \item SQL Query for SAP Business One (Udemy)
+  \item Water Distribution Operator Grade 2
+  \item Water Treatment Operator Grade 2
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Local LaTeX → PDF (Overleaf-style)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --bg:#0b1220; --panel:#0f172a; --ink:#e6f0ff; --muted:#9fb5d1; --accent:#0A66C2; --border:#1e293b;
+      --ok:#22c55e; --bad:#ef4444;
+    }
+    @media (prefers-color-scheme: light){
+      :root{ --bg:#f8fafc; --panel:#ffffff; --ink:#0b1220; --muted:#475569; --border:#e5e7eb; }
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:
+        radial-gradient(1200px 800px at 30% -10%, rgba(10,102,194,.08) 0%, rgba(0,0,0,0) 45%) no-repeat,
+        var(--bg);
+      color:var(--ink);
+      font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+    }
+    header{
+      display:flex; align-items:center; gap:12px; padding:12px 14px;
+      border-bottom:1px solid var(--border); background:var(--panel);
+      position:sticky; top:0; z-index:10;
+    }
+    header h1{margin:0; font-size:16px; letter-spacing:.2px}
+    .sp{flex:1}
+    .btn{border:1px solid var(--border); background:transparent; color:var(--ink);
+      padding:8px 12px; border-radius:10px; cursor:pointer; font-weight:600}
+    .btn.primary{background:var(--accent); border-color:var(--accent); color:#fff}
+    .grid{display:grid; grid-template-columns:minmax(340px, 1fr) minmax(420px, 1fr); gap:14px; padding:14px; height:calc(100% - 54px)}
+    .card{border:1px solid var(--border); background:var(--panel); border-radius:16px; overflow:hidden; display:flex; flex-direction:column; min-height:0}
+    .card h2{margin:0; padding:10px 12px; font-size:13px; color:var(--muted); text-transform:uppercase; border-bottom:1px solid var(--border)}
+    textarea{
+      flex:1; min-height:0; width:100%; border:0; outline:none; resize:none; padding:12px;
+      background:transparent; color:var(--ink);
+      font:13px/1.35 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      tab-size:2;
+    }
+    .toolbar{display:flex; gap:8px; align-items:center; padding:10px; border-top:1px solid var(--border)}
+    .status{margin-left:auto; color:var(--muted)}
+    .error{color:var(--bad); white-space:pre-wrap; font-family:ui-monospace,monospace}
+    iframe{width:100%; height:100%; border:0; background:#fff}
+    @media (max-width:980px){ .grid{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>LaTeX → PDF (local compiler)</h1>
+    <div class="sp"></div>
+    <button class="btn primary" id="compile">Compile</button>
+    <button class="btn" id="download">Download .tex</button>
+    <button class="btn" id="print">Print / Save PDF</button>
+    <label><input type="checkbox" id="autobuild" checked> Auto-compile</label>
+  </header>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Source (.tex)</h2>
+      <textarea id="src"></textarea>
+      <div class="toolbar">
+        <span class="status" id="status">idle</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>PDF Preview</h2>
+      <iframe id="pdf"></iframe>
+      <div class="toolbar">
+        <div class="error" id="err"></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const srcEl   = document.getElementById('src');
+    const pdfEl   = document.getElementById('pdf');
+    const status  = document.getElementById('status');
+    const errEl   = document.getElementById('err');
+    const autob   = document.getElementById('autobuild');
+    const KEY     = 'latex_local_pdf_src_v1';
+
+    const DEFAULT_TEX = `\\documentclass[10.5pt,a4paper]{article}
+\\usepackage[utf8]{inputenc}
+\\usepackage[T1]{fontenc}
+\\usepackage[margin=1in,top=0.33in,bottom=0.33in]{geometry}
+\\usepackage{helvet}
+\\renewcommand{\\familydefault}{\\sfdefault}
+\\usepackage{microtype}
+\\usepackage{enumitem}
+\\usepackage{xcolor}
+\\usepackage[hidelinks]{hyperref}
+\\usepackage{tabularx}
+\\usepackage{array}
+\\definecolor{accent}{HTML}{0A66C2}
+\\definecolor{lightgray}{gray}{0.6}
+\\setlength{\\parindent}{0pt}
+\\linespread{1.08}
+\\setlist[itemize]{leftmargin=1.5em,label=•,itemsep=3pt,topsep=2pt}
+\\newcommand{\\sectiontitle}[1]{\\vspace{10pt}{\\large\\bfseries\\textcolor{accent}{#1}}\\par\\vspace{2pt}\\textcolor{accent}{\\rule{\\textwidth}{0.6pt}}\\vspace{4pt}}
+\\newcommand{\\roleblock}[4]{{\\textbf{#1}}\\par{\\itshape #2 -- #3\\ (#4)}\\par\\vspace{4pt}}
+\\pagenumbering{gobble}
+\\begin{document}
+\\begin{center}
+{\\Huge \\bfseries Adam Chaabane}\\\\
+\\href{mailto:adam@rdr-gp.com}{adam@rdr-gp.com} \\;|\\; 831-760-6958 \\;|\\; Salinas, CA
+\\end{center}
+\\vspace{4pt}
+\\sectiontitle{Work Experience}
+\\roleblock{Senior Data Engineer \\& Full-Stack Web Developer}{RDR Group}{Salinas, CA}{June 2024 -- Current}
+\\begin{itemize}
+  \\item Developed secure, scalable applications managing government data; ensured GDPR/CCPA compliance.
+  \\item Designed and optimized relational databases for performance, security, and integrity.
+\\end{itemize}
+\\sectiontitle{Skills}
+\\begin{tabularx}{\\textwidth}{@{}>{\\raggedright\\arraybackslash}X >{\\raggedright\\arraybackslash}X@{}}
+\\textbf{Languages:} Python, JavaScript, SQL/PLSQL & \\textbf{Databases:} Oracle, relational schema design \\\\
+\\textbf{Data/BI:} Power BI, Tableau, SAP Crystal Reports & \\textbf{Integration:} REST APIs, microservices, cloud/on-prem \\\\
+\\end{tabularx}
+\\sectiontitle{Education \\& Certifications}
+\\begin{itemize}
+  \\item B.S. Computer Science — University of Santa Cruz (\\textit{Expected May 2024})
+\\end{itemize}
+\\end{document}`;
+
+    srcEl.value = localStorage.getItem(KEY) || DEFAULT_TEX;
+
+    async function compile() {
+      status.textContent = 'compiling…';
+      errEl.textContent = '';
+      try {
+        const res = await fetch('/compile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tex: srcEl.value })
+        });
+
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          errEl.textContent = (data && (data.log || data.error)) ? (data.log || data.error) : `HTTP ${res.status}`;
+          status.textContent = 'error';
+          return;
+        }
+
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        pdfEl.src = url;
+        status.textContent = 'compiled ✓';
+        localStorage.setItem(KEY, srcEl.value);
+      } catch (e) {
+        status.textContent = 'error';
+        errEl.textContent = String(e);
+      }
+    }
+
+    document.getElementById('compile').onclick = compile;
+    document.getElementById('download').onclick = () => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([srcEl.value], { type: 'text/x-tex' }));
+      a.download = 'document.tex';
+      a.click();
+    };
+    document.getElementById('print').onclick = () => {
+      const win = pdfEl.contentWindow;
+      if (win) win.focus(), win.print();
+    };
+
+    let t;
+    srcEl.addEventListener('input', () => {
+      if (!autob.checked) return;
+      clearTimeout(t);
+      t = setTimeout(compile, 300);
+    });
+
+    // initial compile on load
+    window.addEventListener('load', compile);
+  </script>
+</body>
+</html>
