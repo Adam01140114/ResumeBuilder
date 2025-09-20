@@ -1391,6 +1391,13 @@
             <label for="personalPhone">Phone Number</label>
             <input type="tel" id="personalPhone" placeholder="Enter your phone number">
           </div>
+          
+          <div class="form-group">
+            <button type="button" class="btn btn-primary" id="savePersonalInfoBtn">
+              <i class="fas fa-save"></i>
+              Save Personal Info
+            </button>
+          </div>
         </div>
         
         <!-- Current Resume Section -->
@@ -1783,6 +1790,7 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
     const personalAddress = document.getElementById('personalAddress');
     const personalEmail = document.getElementById('personalEmail');
     const personalPhone = document.getElementById('personalPhone');
+    const savePersonalInfoBtn = document.getElementById('savePersonalInfoBtn');
 
     // Job Description Elements
     const generateResumeBtn = document.getElementById('generateResumeBtn');
@@ -3025,9 +3033,10 @@ function drawHiddenTextLayer(pageOut, words, canvasWpx, canvasHpx, pageWpts, pag
       userInfo.style.display = 'flex';
       userEmail.textContent = user.email;
       
-      // Load user's resume and job titles
+      // Load user's resume, job titles, and personal info
       loadUserResume();
       loadJobTitlesFromFirebase();
+      loadPersonalInfoFromFirebase();
       
       // Hide auth modal
       hideAuthModal();
@@ -3167,6 +3176,14 @@ function drawHiddenTextLayer(pageOut, words, canvasWpx, canvasHpx, pageWpts, pag
           input.addEventListener('input', updatePersonalInfo);
         }
       });
+      
+      // Add explicit save button listener
+      if (savePersonalInfoBtn) {
+        savePersonalInfoBtn.addEventListener('click', async () => {
+          console.log('Save Personal Info button clicked');
+          await savePersonalInfoToFirebase();
+        });
+      }
     }
 
     function updatePersonalInfo() {
@@ -3177,9 +3194,98 @@ function drawHiddenTextLayer(pageOut, words, canvasWpx, canvasHpx, pageWpts, pag
         resumeData.contact.email = personalEmail.value;
         resumeData.contact.phone = personalPhone.value;
         
+        // Save to Firebase immediately
+        savePersonalInfoToFirebase();
+        
         // Re-render resume
         renderResume(resumeData);
         generatePDFandStore();
+      }
+    }
+
+    // Save personal info to Firebase in real-time
+    async function savePersonalInfoToFirebase() {
+      console.log('=== SAVING PERSONAL INFO TO FIREBASE ===');
+      console.log('Current user:', currentUser ? currentUser.uid : 'No user');
+      console.log('Resume data exists:', !!resumeData);
+      
+      if (!currentUser) {
+        console.error('No authenticated user - cannot save to Firebase');
+        alert('Please sign in to save personal information');
+        return;
+      }
+      
+      try {
+        const personalInfo = {
+          name: personalName ? personalName.value : '',
+          address: personalAddress ? personalAddress.value : '',
+          email: personalEmail ? personalEmail.value : '',
+          phone: personalPhone ? personalPhone.value : ''
+        };
+        
+        console.log('Personal info to save:', personalInfo);
+        
+        // Save to Firebase Storage as JSON
+        const personalInfoJson = JSON.stringify(personalInfo, null, 2);
+        const personalInfoBlob = new Blob([personalInfoJson], { type: 'application/json' });
+        
+        console.log('JSON size:', personalInfoJson.length, 'characters');
+        console.log('Blob size:', personalInfoBlob.size, 'bytes');
+        
+        const personalInfoRef = ref(storage, `users/${currentUser.uid}/personal-info.json`);
+        console.log('Firebase Storage path:', `users/${currentUser.uid}/personal-info.json`);
+        
+        await uploadBytes(personalInfoRef, personalInfoBlob);
+        console.log('✅ Personal info saved to Firebase successfully!');
+        
+        // Show success message
+        if (savePersonalInfoBtn) {
+          const originalText = savePersonalInfoBtn.innerHTML;
+          savePersonalInfoBtn.innerHTML = '<i class="fas fa-check"></i> Saved!';
+          savePersonalInfoBtn.style.backgroundColor = '#22c55e';
+          setTimeout(() => {
+            savePersonalInfoBtn.innerHTML = originalText;
+            savePersonalInfoBtn.style.backgroundColor = '';
+          }, 2000);
+        }
+        
+      } catch (error) {
+        console.error('❌ Error saving personal info to Firebase:', error);
+        alert('Failed to save personal information: ' + error.message);
+      }
+    }
+
+    // Load personal info from Firebase
+    async function loadPersonalInfoFromFirebase() {
+      if (!currentUser) return;
+      
+      try {
+        const personalInfoRef = ref(storage, `users/${currentUser.uid}/personal-info.json`);
+        const downloadURL = await getDownloadURL(personalInfoRef);
+        
+        const response = await fetch(downloadURL);
+        const personalInfo = await response.json();
+        
+        // Update form fields with loaded data
+        if (personalName) personalName.value = personalInfo.name || '';
+        if (personalAddress) personalAddress.value = personalInfo.address || '';
+        if (personalEmail) personalEmail.value = personalInfo.email || '';
+        if (personalPhone) personalPhone.value = personalInfo.phone || '';
+        
+        // Update resume data if it exists
+        if (resumeData) {
+          resumeData.contact.name = personalInfo.name || '';
+          resumeData.contact.address = personalInfo.address || '';
+          resumeData.contact.email = personalInfo.email || '';
+          resumeData.contact.phone = personalInfo.phone || '';
+          
+          // Re-render resume with updated personal info
+          renderResume(resumeData);
+        }
+        
+        console.log('Personal info loaded from Firebase');
+      } catch (error) {
+        console.log('No personal info found in Firebase (this is normal for new users)');
       }
     }
 
@@ -4260,6 +4366,8 @@ If no job information is found, return an empty array [].`
 - **MANDATORY: The jobs array must contain ALL jobs provided in the user data, not just a subset**
 
 ## OPTIMIZATION RULES (REWRITE THESE):
+- Write a professional summary that is 2-3 sentences long and mentions ALL job titles from the user's work history
+- Show career progression by referencing each role in the summary
 - Rewrite job duties/responsibilities to highlight relevant technologies and outcomes
 - Optimize skills section using keywords from job description
 - Use strong action verbs ("Led," "Developed," "Integrated," "Implemented")
@@ -4379,10 +4487,35 @@ IMPORTANT: Return ONLY valid JSON. Do not include any text, explanations, or for
         // Extract JSON from the response (in case there's extra text)
         const jsonMatch = generatedContent.match(/\{[\s\S]*\}/);
         if (!jsonMatch) {
+          console.error('AI Response:', generatedContent);
           throw new Error('No valid JSON found in AI response');
         }
         
-        const resumeJson = JSON.parse(jsonMatch[0]);
+        let resumeJson;
+        try {
+          resumeJson = JSON.parse(jsonMatch[0]);
+        } catch (parseError) {
+          console.error('JSON Parse Error:', parseError);
+          console.error('Raw JSON:', jsonMatch[0]);
+          throw new Error('Failed to parse AI response as JSON');
+        }
+        
+        // Ensure required fields exist with defaults
+        if (!resumeJson.contact) {
+          resumeJson.contact = {
+            name: personalInfo.name,
+            address: personalInfo.address,
+            email: personalInfo.email,
+            phone: personalInfo.phone
+          };
+        }
+        
+        if (!resumeJson.jobs) resumeJson.jobs = [];
+        if (!resumeJson.skills) resumeJson.skills = {};
+        if (!resumeJson.education) resumeJson.education = [];
+        if (!resumeJson.certificates) resumeJson.certificates = [];
+        if (!resumeJson.summary) resumeJson.summary = "Experienced professional with strong technical skills and proven track record of success.";
+        
         return resumeJson;
       } catch (error) {
         console.error('AI generation error:', error);

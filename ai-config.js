@@ -21,6 +21,7 @@ Return ONLY a valid JSON object in this exact format:
     "email": "email@example.com",
     "phone": "(555) 123-4567"
   },
+  "summary": "Professional summary highlighting key qualifications and experience relevant to the job description. Must be 2-3 sentences long and mention ALL job titles from the user's work history. Should demonstrate career progression and relevant expertise.",
   "jobs": [
     {
       "title": "Job Title",
@@ -35,9 +36,12 @@ Return ONLY a valid JSON object in this exact format:
     "Technical Skills": ["Skill 1", "Skill 2", "Skill 3"],
     "Soft Skills": ["Skill 1", "Skill 2", "Skill 3"]
   },
+  "education": [
+    "Degree in Relevant Field from University Name (Year)"
+  ],
   "certificates": [
-    {"name": "Relevant Certificate 1"},
-    {"name": "Relevant Certificate 2"}
+    "Relevant Certificate 1",
+    "Relevant Certificate 2"
   ]
 }
 
