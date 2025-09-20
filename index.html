@@ -3220,23 +3220,18 @@ function drawHiddenTextLayer(pageOut, words, canvasWpx, canvasHpx, pageWpts, pag
           name: personalName ? personalName.value : '',
           address: personalAddress ? personalAddress.value : '',
           email: personalEmail ? personalEmail.value : '',
-          phone: personalPhone ? personalPhone.value : ''
+          phone: personalPhone ? personalPhone.value : '',
+          lastUpdated: new Date().toISOString()
         };
         
         console.log('Personal info to save:', personalInfo);
         
-        // Save to Firebase Storage as JSON
-        const personalInfoJson = JSON.stringify(personalInfo, null, 2);
-        const personalInfoBlob = new Blob([personalInfoJson], { type: 'application/json' });
+        // Save to Firestore instead of Storage to avoid CORS issues
+        const personalInfoRef = doc(db, 'users', currentUser.uid, 'personalInfo', 'data');
+        console.log('Firestore path: users/', currentUser.uid, '/personalInfo/data');
         
-        console.log('JSON size:', personalInfoJson.length, 'characters');
-        console.log('Blob size:', personalInfoBlob.size, 'bytes');
-        
-        const personalInfoRef = ref(storage, `users/${currentUser.uid}/personal-info.json`);
-        console.log('Firebase Storage path:', `users/${currentUser.uid}/personal-info.json`);
-        
-        await uploadBytes(personalInfoRef, personalInfoBlob);
-        console.log('✅ Personal info saved to Firebase successfully!');
+        await setDoc(personalInfoRef, personalInfo);
+        console.log('✅ Personal info saved to Firestore successfully!');
         
         // Show success message
         if (savePersonalInfoBtn) {
@@ -3257,20 +3252,46 @@ function drawHiddenTextLayer(pageOut, words, canvasWpx, canvasHpx, pageWpts, pag
 
     // Load personal info from Firebase
     async function loadPersonalInfoFromFirebase() {
-      if (!currentUser) return;
+      if (!currentUser) {
+        console.log('No authenticated user - cannot load personal info');
+        return;
+      }
+      
+      console.log('=== LOADING PERSONAL INFO FROM FIREBASE ===');
+      console.log('User ID:', currentUser.uid);
       
       try {
-        const personalInfoRef = ref(storage, `users/${currentUser.uid}/personal-info.json`);
-        const downloadURL = await getDownloadURL(personalInfoRef);
+        // Load from Firestore instead of Storage to avoid CORS issues
+        const personalInfoRef = doc(db, 'users', currentUser.uid, 'personalInfo', 'data');
+        console.log('Firestore path: users/', currentUser.uid, '/personalInfo/data');
         
-        const response = await fetch(downloadURL);
-        const personalInfo = await response.json();
+        const personalInfoDoc = await getDoc(personalInfoRef);
+        
+        if (!personalInfoDoc.exists()) {
+          console.log('No personal info document found in Firestore');
+          return;
+        }
+        
+        const personalInfo = personalInfoDoc.data();
+        console.log('Personal info loaded from Firestore:', personalInfo);
         
         // Update form fields with loaded data
-        if (personalName) personalName.value = personalInfo.name || '';
-        if (personalAddress) personalAddress.value = personalInfo.address || '';
-        if (personalEmail) personalEmail.value = personalInfo.email || '';
-        if (personalPhone) personalPhone.value = personalInfo.phone || '';
+        if (personalName) {
+          personalName.value = personalInfo.name || '';
+          console.log('Updated personalName field:', personalName.value);
+        }
+        if (personalAddress) {
+          personalAddress.value = personalInfo.address || '';
+          console.log('Updated personalAddress field:', personalAddress.value);
+        }
+        if (personalEmail) {
+          personalEmail.value = personalInfo.email || '';
+          console.log('Updated personalEmail field:', personalEmail.value);
+        }
+        if (personalPhone) {
+          personalPhone.value = personalInfo.phone || '';
+          console.log('Updated personalPhone field:', personalPhone.value);
+        }
         
         // Update resume data if it exists
         if (resumeData) {
@@ -3283,9 +3304,21 @@ function drawHiddenTextLayer(pageOut, words, canvasWpx, canvasHpx, pageWpts, pag
           renderResume(resumeData);
         }
         
-        console.log('Personal info loaded from Firebase');
+        console.log('✅ Personal info loaded from Firestore successfully!');
+        
+        // Show success message on save button if it exists
+        if (savePersonalInfoBtn) {
+          const originalText = savePersonalInfoBtn.innerHTML;
+          savePersonalInfoBtn.innerHTML = '<i class="fas fa-check"></i> Loaded!';
+          savePersonalInfoBtn.style.backgroundColor = '#22c55e';
+          setTimeout(() => {
+            savePersonalInfoBtn.innerHTML = originalText;
+            savePersonalInfoBtn.style.backgroundColor = '';
+          }, 2000);
+        }
+        
       } catch (error) {
-        console.log('No personal info found in Firebase (this is normal for new users)');
+        console.log('No personal info found in Firestore (this is normal for new users):', error.message);
       }
     }
 

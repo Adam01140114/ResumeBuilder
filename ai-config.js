@@ -1,6 +1,6 @@
 // AI Resume Generator Configuration
 const AI_CONFIG = {
-    apiKey: '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',
+    apiKey: process.env.OPENAI_API_KEY || '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',
     model: 'gpt-4', // Using GPT-4 for better resume generation
     maxTokens: 2000,
     temperature: 0.7,
