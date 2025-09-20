@@ -1694,8 +1694,7 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
   <!-- OCR Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-  <!-- AI Configuration -->
-  <script src="ai-config.js"></script>
+  <!-- AI Configuration will be loaded dynamically from server -->
   
   
   <!-- Firebase SDK -->
@@ -1739,6 +1738,37 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
     window.getDoc = getDoc;
     window.updateDoc = updateDoc;
     window.doc = doc;
+  </script>
+
+  <!-- Load AI Configuration from Server -->
+  <script>
+    // Global AI_CONFIG variable
+    let AI_CONFIG = null;
+    
+    // Load AI configuration from server
+    async function loadAIConfig() {
+      try {
+        const response = await fetch('/api/ai-config');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        AI_CONFIG = await response.json();
+        console.log('AI Configuration loaded from server:', AI_CONFIG);
+      } catch (error) {
+        console.error('Failed to load AI configuration:', error);
+        // Fallback configuration
+        AI_CONFIG = {
+          apiKey: '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',
+          model: 'gpt-4',
+          maxTokens: 2000,
+          temperature: 0.7
+        };
+        console.log('Using fallback AI configuration');
+      }
+    }
+    
+    // Load AI config when page loads
+    loadAIConfig();
   </script>
 
   <script>

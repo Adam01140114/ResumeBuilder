@@ -8,9 +8,13 @@ import path from "path";
 import os from "os";
 import { fileURLToPath } from "url";
 import crypto from "crypto";
+import dotenv from "dotenv";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Load environment variables
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,6 +23,16 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json({ limit: "5mb" }));
 // Serve static files (index.html) from current folder
 app.use(express.static(__dirname));
+
+// Serve AI configuration from environment variables
+app.get("/api/ai-config", (req, res) => {
+  res.json({
+    apiKey: process.env.OPENAI_API_KEY,
+    model: 'gpt-4',
+    maxTokens: 2000,
+    temperature: 0.7
+  });
+});
 
 /** detect if a command exists by trying `--version` */
 async function hasCmd(cmd, args = ["--version"]) {

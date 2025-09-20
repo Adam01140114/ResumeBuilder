@@ -34,5 +34,9 @@ if (Test-Path ".gitignore") {
     Write-Host "⚠️  No .gitignore file found. Consider creating one and adding .env to it." -ForegroundColor Yellow
 }
 
+Write-Host "`n📦 Installing required dependencies..." -ForegroundColor Blue
+npm install
+
 Write-Host "`n🚀 Environment setup complete!" -ForegroundColor Green
 Write-Host "You can now run your application with environment variables loaded." -ForegroundColor Cyan
+Write-Host "To start the server, run: npm start" -ForegroundColor Yellow
