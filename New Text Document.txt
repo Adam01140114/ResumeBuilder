@@ -21,7 +21,7 @@
 % --- Spacing / lists ---
 \setlength{\parindent}{0pt}
 \linespread{1.08}
-\setlist[itemize]{leftmargin=1.5em,label=•,itemsep=3pt,topsep=2pt}
+\setlist[itemize]{leftmargin=1.5em,label=\textbullet,itemsep=3pt,topsep=2pt}
 
 % --- Unified section heading (used for ALL sections) ---
 \newcommand{\sectiontitle}[1]{%
@@ -40,62 +40,106 @@
 \pagenumbering{gobble}
 \begin{document}
 \begin{center}
-{\Huge \bfseries Adam Chaabane}\par
+{\Huge \bfseries Michael Rodriguez}\par
 \vspace{4pt}
-\href{mailto:adam@rdr-gp.com}{adam@rdr-gp.com} \,|\, 831-760-6958 \,|\, Salinas, CA
+\href{mailto:michael.rodriguez@techcorp.com}{michael.rodriguez@techcorp.com} \,\,|\,\, (512) 555-0123 \,\,|\,\, Austin, TX
 \end{center}
 \vspace{4pt}
 
 % =========================
-% WORK EXPERIENCE  (now identical style to Education)
+% PROFESSIONAL SUMMARY
+% =========================
+\sectiontitle{Professional Summary}
+\vspace{4pt}
+Innovative Product Manager with 6+ years of experience driving digital transformation and leading cross-functional teams. Expert in agile methodologies, user research, and data-driven decision making. Proven track record of launching successful products that increased user engagement by 40\% and revenue by 25\%.
+
+\vspace{10pt}
+% =========================
+% WORK EXPERIENCE
 % =========================
 \sectiontitle{Work Experience}
 
-\roleblock{Senior Data Engineer \& Full-Stack Web Developer}
-          {RDR Group}{Salinas, CA}{June 2024 -- Current}
+\roleblock{Senior Product Manager}
+          {TechFlow Solutions}{Austin, TX}{March 2022 -- Present}
 \begin{itemize}
-  \item Developed secure, scalable applications managing government data; ensured GDPR/CCPA compliance.
-  \item Designed and optimized relational databases for performance, security, and integrity.
-  \item Integrated APIs and microservices (on-prem + cloud); used Excel exports for prototyping.
-  \item Automated data flows enabling large dataset analysis prior to advanced processing.
-  \item Built dashboards (Power BI, Tableau, SAP Crystal Reports) for real-time decision support.
-  \item Delivered custom Python/JavaScript/HTML apps with seamless Excel reporting integration.
-  \item Partnered with clients to gather requirements; shipped GUIs that improved adoption.
+  \item Led product strategy for mobile applications serving 500K+ active users.
+  \item Collaborated with engineering teams to deliver 15+ feature releases per quarter.
+  \item Conducted user research and A/B testing, resulting in 35\% improvement in conversion rates.
+  \item Managed \$2M annual product budget and coordinated with 3 external vendor partnerships.
+  \item Presented product roadmaps to C-level executives and board members.
+  \item Implemented agile methodologies across 4 product teams, reducing delivery time by 30\%.
 \end{itemize}
 
 \vspace{8pt}
 
-\roleblock{Senior Departmental Information Systems Coordinator}
-          {Monterey County Probation Dept.}{Salinas, CA}{Nov 2023 -- Jun 2024}
+\roleblock{Product Manager}
+          {Digital Innovations Inc.}{Dallas, TX}{January 2020 -- February 2022}
 \begin{itemize}
-  \item Managed on-prem and cloud databases ensuring reliability, compliance, and continuity.
-  \item Authored SQL scripts for Adult/Juvenile divisions supporting reporting and records requests.
-  \item Built Power BI dashboards surfacing KPIs in real time across departments.
-  \item Supported mission-critical systems (e.g., inmate door control, contingency planning).
-  \item Trained staff and improved adoption; optimized integrations across on-prem/cloud platforms.
+  \item Owned product lifecycle for e-commerce platform with \$50M+ annual revenue.
+  \item Defined product requirements and user stories for 8-person development team.
+  \item Analyzed market trends and competitive landscape to inform product decisions.
+  \item Launched new payment integration feature, increasing checkout completion by 22\%.
+  \item Worked closely with UX designers to improve user experience and accessibility.
+  \item Managed product backlog and prioritized features based on business impact.
 \end{itemize}
 
+\vspace{8pt}
+
+\roleblock{Associate Product Manager}
+          {StartupHub}{Houston, TX}{June 2018 -- December 2019}
+\begin{itemize}
+  \item Supported product development for SaaS platform with 10K+ enterprise customers.
+  \item Created detailed product specifications and technical documentation.
+  \item Coordinated with marketing team to develop go-to-market strategies.
+  \item Conducted customer interviews and surveys to gather product feedback.
+  \item Assisted in data analysis and reporting for product performance metrics.
+  \item Participated in sprint planning and daily standup meetings.
+\end{itemize}
+
+\vspace{8pt}
+
+\roleblock{Business Analyst}
+          {DataCorp Analytics}{San Antonio, TX}{August 2016 -- May 2018}
+\begin{itemize}
+  \item Analyzed business processes and identified opportunities for improvement.
+  \item Created detailed requirements documentation for software development projects.
+  \item Worked with stakeholders to define project scope and deliverables.
+  \item Developed data models and reports using SQL and Tableau.
+  \item Supported implementation of new CRM system affecting 200+ users.
+  \item Trained end users on new systems and provided ongoing support.
+\end{itemize}
+
+\vspace{10pt}
 % =========================
-% SKILLS  (now identical style to Education)
+% SKILLS
 % =========================
 \sectiontitle{Skills}
-\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
-\textbf{Languages:} Python, JavaScript, SQL/PLSQL & \textbf{Databases:} Oracle, relational schema design \\
-\textbf{Data/BI:} Power BI, Tableau, SAP Crystal Reports & \textbf{Integration:} REST APIs, microservices, cloud/on-prem \\
-\textbf{Security:} GDPR/CCPA, PII best practices & \textbf{Tools:} Git, Excel automation, requirements capture \\
+\begin{tabularx}{\textwidth}{@{} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X @{}}
+\textbf{Product Management:} Agile/Scrum Methodologies, Product Roadmapping, User Research, A/B Testing, Stakeholder Management, Requirements Gathering
+&
+\textbf{Technical Skills:} SQL, Tableau, Jira, Confluence, Figma, Google Analytics, Mixpanel
+\\[4pt]
+
+\vspace{5pt}
+\textbf{Soft Skills:} Leadership, Strategic Thinking, Communication, Problem Solving, Cross-functional Collaboration, Presentation Skills
+&
+% (leave right column empty for this row, or add more tools)
+\\
 \end{tabularx}
 
+\vspace{10pt}
 % =========================
-% EDUCATION  (reference style that others now match)
+% EDUCATION \& CERTIFICATIONS
 % =========================
 \sectiontitle{Education \& Certifications}
 \begin{itemize}
-  \item B.S. Computer Science — University of Santa Cruz (\textit{Expected May 2024})
-  \item CLETS Certification
-  \item Crystal Reports for SAP Business One (Udemy)
-  \item SQL Query for SAP Business One (Udemy)
-  \item Water Distribution Operator Grade 2
-  \item Water Treatment Operator Grade 2
+  \item Master of Business Administration (MBA) in Technology Management — University of Texas at Austin (2018)
+  \item Bachelor of Science in Computer Science — Texas A\&M University (2016)
+  \item Certified Scrum Product Owner (CSPO)
+  \item Google Analytics Certified
+  \item Product Management Certificate — Northwestern University
+  \item AWS Cloud Practitioner
+  \item Certified Associate in Project Management (CAPM)
 \end{itemize}
 
 \end{document}

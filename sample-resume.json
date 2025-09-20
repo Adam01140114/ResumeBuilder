@@ -1,79 +1,109 @@
 {
   "contact": {
-    "name": "Sarah Johnson",
-    "address": "San Francisco, CA",
-    "email": "sarah.johnson@email.com",
-    "phone": "(555) 123-4567"
+    "name": "Michael Rodriguez",
+    "address": "Austin, TX",
+    "email": "michael.rodriguez@techcorp.com",
+    "phone": "(512) 555-0123"
   },
-  "summary": "Experienced Software Engineer with 5+ years of expertise in full-stack development, cloud architecture, and team leadership. Proven track record of delivering scalable solutions and leading cross-functional teams to achieve business objectives.",
+  "summary": "Innovative Product Manager with 6+ years of experience driving digital transformation and leading cross-functional teams. Expert in agile methodologies, user research, and data-driven decision making. Proven track record of launching successful products that increased user engagement by 40% and revenue by 25%.",
   "jobs": [
     {
-      "title": "Senior Software Engineer",
-      "company": "TechCorp Solutions",
-      "location": "San Francisco, CA",
-      "startDate": "January 2022",
+      "title": "Senior Product Manager",
+      "company": "TechFlow Solutions",
+      "location": "Austin, TX",
+      "startDate": "March 2022",
       "endDate": "Present",
       "duties": [
-        "Led development of microservices architecture serving 1M+ daily users",
-        "Implemented CI/CD pipelines reducing deployment time by 60%",
-        "Mentored 3 junior developers and conducted code reviews",
-        "Optimized database queries resulting in 40% faster response times"
+        "Led product strategy for mobile applications serving 500K+ active users",
+        "Collaborated with engineering teams to deliver 15+ feature releases per quarter",
+        "Conducted user research and A/B testing, resulting in 35% improvement in conversion rates",
+        "Managed $2M annual product budget and coordinated with 3 external vendor partnerships",
+        "Presented product roadmaps to C-level executives and board members",
+        "Implemented agile methodologies across 4 product teams, reducing delivery time by 30%"
       ]
     },
     {
-      "title": "Software Engineer",
-      "company": "StartupXYZ",
-      "location": "San Francisco, CA",
-      "startDate": "June 2020",
-      "endDate": "December 2021",
+      "title": "Product Manager",
+      "company": "Digital Innovations Inc.",
+      "location": "Dallas, TX",
+      "startDate": "January 2020",
+      "endDate": "February 2022",
       "duties": [
-        "Developed React-based frontend applications with TypeScript",
-        "Built RESTful APIs using Node.js and Express",
-        "Collaborated with product team to define technical requirements",
-        "Implemented automated testing increasing code coverage to 85%"
+        "Owned product lifecycle for e-commerce platform with $50M+ annual revenue",
+        "Defined product requirements and user stories for 8-person development team",
+        "Analyzed market trends and competitive landscape to inform product decisions",
+        "Launched new payment integration feature, increasing checkout completion by 22%",
+        "Worked closely with UX designers to improve user experience and accessibility",
+        "Managed product backlog and prioritized features based on business impact"
       ]
     },
     {
-      "title": "Junior Developer",
-      "company": "WebDev Agency",
-      "location": "Oakland, CA",
-      "startDate": "August 2019",
-      "endDate": "May 2020",
+      "title": "Associate Product Manager",
+      "company": "StartupHub",
+      "location": "Houston, TX",
+      "startDate": "June 2018",
+      "endDate": "December 2019",
       "duties": [
-        "Created responsive websites using HTML, CSS, and JavaScript",
-        "Worked with WordPress and custom PHP development",
-        "Assisted in client consultations and project planning",
-        "Maintained and updated existing client websites"
+        "Supported product development for SaaS platform with 10K+ enterprise customers",
+        "Created detailed product specifications and technical documentation",
+        "Coordinated with marketing team to develop go-to-market strategies",
+        "Conducted customer interviews and surveys to gather product feedback",
+        "Assisted in data analysis and reporting for product performance metrics",
+        "Participated in sprint planning and daily standup meetings"
+      ]
+    },
+    {
+      "title": "Business Analyst",
+      "company": "DataCorp Analytics",
+      "location": "San Antonio, TX",
+      "startDate": "August 2016",
+      "endDate": "May 2018",
+      "duties": [
+        "Analyzed business processes and identified opportunities for improvement",
+        "Created detailed requirements documentation for software development projects",
+        "Worked with stakeholders to define project scope and deliverables",
+        "Developed data models and reports using SQL and Tableau",
+        "Supported implementation of new CRM system affecting 200+ users",
+        "Trained end users on new systems and provided ongoing support"
       ]
     }
   ],
   "skills": {
+    "Product Management": [
+      "Agile/Scrum Methodologies",
+      "Product Roadmapping",
+      "User Research",
+      "A/B Testing",
+      "Stakeholder Management",
+      "Requirements Gathering"
+    ],
     "Technical Skills": [
-      "JavaScript",
-      "TypeScript",
-      "React",
-      "Node.js",
-      "Python",
-      "AWS",
-      "Docker",
-      "PostgreSQL",
-      "MongoDB",
-      "Git"
+      "SQL",
+      "Tableau",
+      "Jira",
+      "Confluence",
+      "Figma",
+      "Google Analytics",
+      "Mixpanel"
     ],
     "Soft Skills": [
-      "Team Leadership",
-      "Problem Solving",
+      "Leadership",
+      "Strategic Thinking",
       "Communication",
-      "Project Management",
-      "Mentoring"
+      "Problem Solving",
+      "Cross-functional Collaboration",
+      "Presentation Skills"
     ]
   },
   "education": [
-    "Bachelor of Science in Computer Science from University of California, Berkeley (2019)"
+    "Master of Business Administration (MBA) in Technology Management from University of Texas at Austin (2018)",
+    "Bachelor of Science in Computer Science from Texas A&M University (2016)"
   ],
   "certificates": [
-    "AWS Certified Solutions Architect",
-    "Google Cloud Professional Developer",
-    "Certified Scrum Master (CSM)"
+    "Certified Scrum Product Owner (CSPO)",
+    "Google Analytics Certified",
+    "Product Management Certificate - Northwestern University",
+    "AWS Cloud Practitioner",
+    "Certified Associate in Project Management (CAPM)"
   ]
 }
