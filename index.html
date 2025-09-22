@@ -352,6 +352,193 @@
       box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
     }
 
+    /* Grade Modal Textarea Styling */
+    #gradeJobDescription {
+      width: 100%;
+      min-height: 200px;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.25rem;
+      color: #1e293b;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      resize: vertical;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    #gradeJobDescription::placeholder {
+      color: #64748b;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    #gradeJobDescription:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1), 0 4px 12px rgba(0, 0, 0, 0.1);
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      transform: translateY(-1px);
+    }
+
+    #gradeJobDescription:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Grade Modal Body Enhancement */
+    .modal-body p {
+      color: #64748b;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+
+    /* Grade Modal Header Enhancement */
+    #gradeModal .modal-header {
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      border-radius: 12px 12px 0 0;
+      padding: 1.5rem 2rem;
+      margin: -1.5rem -2rem 0 -2rem;
+      position: relative;
+    }
+
+    #gradeModal .modal-header h3 {
+      color: #ffffff;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    #gradeModal .modal-header h3::before {
+      content: "⭐";
+      font-size: 1.25rem;
+    }
+
+    #gradeModal .modal-header .close-btn {
+      color: #94a3b8;
+      font-size: 1.5rem;
+      transition: all 0.2s ease;
+    }
+
+    #gradeModal .modal-header .close-btn:hover {
+      color: #ffffff;
+      transform: scale(1.1);
+    }
+
+    /* Grade Modal Container Enhancement */
+    #gradeModal .modal {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+      border: 1px solid #e2e8f0;
+    }
+
+    /* Grade Modal Body Spacing */
+    #gradeModal .modal-body {
+      padding: 2rem;
+    }
+
+    /* Grade Modal Button Enhancements */
+    #gradeModal .btn-accent {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      border: none;
+      color: #ffffff;
+      font-weight: 600;
+      padding: 0.875rem 1.5rem;
+      border-radius: 8px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    #gradeModal .btn-accent:hover {
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
+    }
+
+    #gradeModal .btn-accent:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    }
+
+    #gradeModal .btn-secondary {
+      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+      border: 1px solid #cbd5e1;
+      color: #475569;
+      font-weight: 500;
+      padding: 0.875rem 1.5rem;
+      border-radius: 8px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    #gradeModal .btn-secondary:hover {
+      background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    #gradeModal .btn-secondary:active {
+      transform: translateY(0);
+    }
+
+    /* Grade Modal Animation */
+    #gradeModal.modal-overlay {
+      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    #gradeModal .modal {
+      animation: modalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Textarea Character Counter */
+    #gradeJobDescription {
+      position: relative;
+    }
+
+    #gradeJobDescription::after {
+      content: attr(data-count) " characters";
+      position: absolute;
+      bottom: 0.75rem;
+      right: 1rem;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    #gradeJobDescription:focus::after {
+      opacity: 1;
+    }
+
     .modal-actions {
       display: flex;
       gap: 1rem;
@@ -1482,13 +1669,13 @@
           <i class="fas fa-file-pdf"></i>
           Download PDF
         </button>
-        <button class="btn btn-accent" id="gradeResumeBtn" disabled style="display: none;">
-          <i class="fas fa-star"></i>
-          Grade Me
-        </button>
         <button class="btn btn-secondary" id="downloadJsonBtn" disabled style="display: none;">
           <i class="fas fa-download"></i>
           Download JSON
+        </button>
+        <button class="btn btn-accent" id="gradeResumeBtn" disabled style="display: none;">
+          <i class="fas fa-star"></i>
+          Grade Me
         </button>
         <button class="btn btn-primary" id="importJsonBtn">
           <i class="fas fa-upload"></i>
@@ -1513,6 +1700,14 @@
               <input type="checkbox" id="showSkillsCheckbox" checked>
               <span class="checkmark"></span>
               Show Skills in Resume
+            </label>
+          </div>
+          
+          <div class="setting-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="showSummaryCheckbox" checked>
+              <span class="checkmark"></span>
+              Show Professional Summary
             </label>
           </div>
         </div>
@@ -2110,6 +2305,7 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
     const gradeResumeBtn = document.getElementById('gradeResumeBtn');
     const ocrLoadingBar = document.getElementById('ocrLoadingBar');
     const showSkillsCheckbox = document.getElementById('showSkillsCheckbox');
+    const showSummaryCheckbox = document.getElementById('showSummaryCheckbox');
     const preview = document.getElementById('resumePreview');
     const previewStatus = document.getElementById('previewStatus');
     const jsonModal = document.getElementById('jsonModal');
@@ -2248,6 +2444,12 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
       }
     });
 
+    // Character counter for grade job description
+    gradeJobDescription.addEventListener('input', () => {
+      const count = gradeJobDescription.value.length;
+      gradeJobDescription.setAttribute('data-count', count);
+    });
+
     gradeResultsModal.addEventListener('click', (e) => {
       if (e.target === gradeResultsModal) {
         closeGradeResultsModalFunc();
@@ -2276,6 +2478,11 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
 
     // Skills checkbox listener
     showSkillsCheckbox.addEventListener('change', () => {
+      renderResume();
+    });
+    
+    // Summary checkbox listener
+    showSummaryCheckbox.addEventListener('change', () => {
       renderResume();
     });
 
@@ -2510,7 +2717,7 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
     </div>
     <hr class="resume-divider">
 
-        ${data.summary ? `
+        ${data.summary && showSummaryCheckbox.checked ? `
         <div class="section-title">Professional Summary</div>
         <div class="summary-section">
           <p data-editable="summary">${escapeHtml(data.summary)}</p>
@@ -2792,7 +2999,7 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
         return education.map(edu => {
           // Replace "from" with em dash for better formatting
           const formattedEdu = edu.replace(/\s+from\s+/g, ' — ');
-          return `  \\item ${escapeLatex(formattedEdu)}`;
+          return `  \\educationentry{${escapeLatex(formattedEdu)}}`;
         }).join('\n');
       };
 
@@ -2800,7 +3007,7 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
         if (!certificates || !Array.isArray(certificates)) return '';
         return certificates.map(cert => {
           const certName = typeof cert === 'string' ? cert : cert.name || '';
-          return `  \\item ${escapeLatex(certName)}`;
+          return `  \\educationentry{${escapeLatex(certName)}}`;
         }).join('\n');
       };
 
@@ -2810,7 +3017,7 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
 % --- Basics ---
 \\usepackage[utf8]{inputenc}
 \\usepackage[T1]{fontenc}
-\\usepackage[margin=1in,top=0.33in,bottom=0.33in]{geometry}
+\\usepackage[margin=1in,top=0.57in,bottom=0.57in]{geometry}
 \\usepackage{helvet}
 \\renewcommand{\\familydefault}{\\sfdefault}
 \\usepackage{microtype}
@@ -2819,6 +3026,7 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
 \\usepackage[hidelinks]{hyperref}
 \\usepackage{tabularx}
 \\usepackage{array}
+\\usepackage{needspace}
 
 % --- Colors ---
 \\definecolor{accent}{HTML}{0A66C2}
@@ -2829,6 +3037,21 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
 \\setlength{\\parindent}{0pt}
 \\linespread{1.08}
 \\setlist[itemize]{leftmargin=1.5em,label=\\textbullet,itemsep=3pt,topsep=2pt}
+
+% --- Page break control ---
+\\raggedbottom
+\\widowpenalty=10000
+\\clubpenalty=10000
+\\interlinepenalty=10000
+\\brokenpenalty=10000
+\\predisplaypenalty=10000
+\\postdisplaypenalty=10000
+
+% --- Custom commands for better page break control ---
+\\newcommand{\\educationentry}[1]{%
+  \\nopagebreak[3]%
+  \\item #1%
+}
 
 % --- Unified section heading (used for ALL sections) ---
 \\newcommand{\\sectiontitle}[1]{%
@@ -2854,7 +3077,7 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
 \\vspace{4pt}`;
 
       // Professional Summary
-      if (data.summary) {
+      if (data.summary && showSummaryCheckbox.checked) {
         latex += `\n\n% =========================\n% PROFESSIONAL SUMMARY\n% =========================\n\\sectiontitle{Professional Summary}\n\\vspace{4pt}\n${escapeLatex(data.summary)}\n`;
       }
 
@@ -2862,17 +3085,35 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
       if (data.jobs && data.jobs.length > 0) {
         latex += `\n\n\\vspace{10pt} % <-- add space here\n% =========================\n% WORK EXPERIENCE\n% =========================\n\\sectiontitle{Work Experience}\n`;
         
-        data.jobs.forEach(job => {
+        data.jobs.forEach((job, index) => {
           const location = job.location || 'Location';
           const dates = `${formatDate(job.startDate)} -- ${formatDate(job.endDate)}`;
           
-          latex += `\n\\roleblock{${escapeLatex(job.title)}}\n          {${escapeLatex(job.company)}}{${escapeLatex(location)}}{${escapeLatex(dates)}}\n`;
+          // Calculate space needed for this job entry
+          const dutyCount = job.duties ? job.duties.length : 0;
+          const estimatedLines = 4 + dutyCount; // Job title + company + dates + duties + spacing
+          const spaceNeeded = `${Math.max(estimatedLines * 1.5, 8)}em`; // More aggressive spacing
+          
+          // Use needspace to prevent page breaks
+          latex += `\n\\needspace{${spaceNeeded}}\n`;
+          latex += `\\nopagebreak[4]\n`; // Strong penalty against page breaks
+          latex += `\\vspace{6pt}\n`; // Add space before job entry
+          
+          // Use samepage environment to keep job entry together
+          latex += `\\begin{samepage}\n`;
+          latex += `\\roleblock{${escapeLatex(job.title)}}\n          {${escapeLatex(job.company)}}{${escapeLatex(location)}}{${escapeLatex(dates)}}\n`;
           
           if (job.duties && job.duties.length > 0) {
             latex += `\\begin{itemize}\n${formatJobDuties(job.duties)}\n\\end{itemize}\n`;
           }
           
-          latex += `\n\\vspace{8pt}\n`;
+          latex += `\\end{samepage}\n`;
+          latex += `\\vspace{8pt}\n`; // Add space after job entry
+          
+          // Add page break protection between jobs
+          if (index < data.jobs.length - 1) {
+            latex += `\\nopagebreak[3]\n`;
+          }
         });
       }
 
@@ -2908,7 +3149,16 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
 
       // Education & Certificates (combined section)
       if ((data.education && data.education.length > 0) || (data.certificates && data.certificates.length > 0)) {
-        latex += `\n\n\\vspace{10pt} % <-- add space here\n% =========================\n% EDUCATION & CERTIFICATIONS\n% =========================\n\\sectiontitle{Education \\& Certifications}\n\\begin{itemize}\n`;
+        // Calculate space needed for education section
+        const eduCount = (data.education ? data.education.length : 0) + (data.certificates ? data.certificates.length : 0);
+        const spaceNeeded = `${Math.max(eduCount * 1.5 + 4, 6)}em`; // More aggressive spacing
+        
+        // Use needspace and page break prevention for education section
+        latex += `\n\n\\needspace{${spaceNeeded}}\n`;
+        latex += `\\nopagebreak[4]\n`; // Strong penalty against page breaks
+        latex += `\\vspace{10pt} % <-- add space here\n% =========================\n% EDUCATION & CERTIFICATIONS\n% =========================\n\\sectiontitle{Education \\& Certifications}\n`;
+        latex += `\\begin{samepage}\n`;
+        latex += `\\begin{itemize}\n`;
         
         // Add education items
         if (data.education && data.education.length > 0) {
@@ -2921,6 +3171,7 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
         }
         
         latex += `\\end{itemize}\n`;
+        latex += `\\end{samepage}\n`;
       }
 
       latex += `\n\\end{document}`;
@@ -3249,7 +3500,7 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
       }
 
       // Professional Summary
-      if (data.summary) {
+      if (data.summary && showSummaryCheckbox.checked) {
         addSectionHeader('PROFESSIONAL SUMMARY');
         addText(data.summary, 11);
         currentY += 10;
@@ -5184,7 +5435,7 @@ Return ONLY a valid JSON object in this exact format:
     }
     // IMPORTANT: Include ALL jobs from user's history, not just a subset
   ],
-  "summary": "EXACTLY 3 sentences describing the candidate's experience and career progression, mentioning ALL job titles from their work history",
+  "summary": "EXACTLY 3 sentences describing the candidate's experience and career progression, mentioning ALL job titles from their work history. It is very important that you include no more than 3 sentences max. ",
   "skills": {
     "Technical Skills": ["Skill 1", "Skill 2", "Skill 3"],
     "Soft Skills": ["Skill 1", "Skill 2", "Skill 3"]
@@ -5482,7 +5733,7 @@ Provide your response in this EXACT JSON format:
       }
 
       // Professional Summary
-      if (data.summary) {
+      if (data.summary && showSummaryCheckbox.checked) {
         resumeText += `PROFESSIONAL SUMMARY:\n${data.summary}\n\n`;
       }
 
