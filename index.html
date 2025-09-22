@@ -147,6 +147,17 @@
       box-shadow: var(--shadow);
     }
 
+    .btn-accent {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: white;
+    }
+
+    .btn-accent:hover:not(:disabled) {
+      background: linear-gradient(135deg, #d97706, #b45309);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
     .btn:disabled {
       opacity: 0.5;
       cursor: not-allowed;
@@ -350,6 +361,179 @@
     .modal-actions .btn {
       margin-bottom: 0;
       flex: 1;
+    }
+
+    /* Grading Modal Styles */
+    .grade-results-modal {
+      max-width: 800px;
+    }
+
+    .grade-score {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .score-circle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #10b981, #059669);
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .score-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .score-label {
+      font-size: 1rem;
+      color: white;
+      margin-left: 0.25rem;
+    }
+
+    .score-description {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .grade-feedback {
+      background: var(--background);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .grade-feedback h4 {
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+
+    .grade-feedback ul {
+      margin: 0;
+      padding-left: 1.5rem;
+    }
+
+    .grade-feedback li {
+      margin-bottom: 0.5rem;
+      line-height: 1.5;
+    }
+
+    .grade-feedback .strengths {
+      color: #10b981;
+    }
+
+    .grade-feedback .improvements {
+      color: #f59e0b;
+    }
+
+    /* Job Edit Modal Styles */
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text-primary);
+      font-size: 1rem;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Format Settings Collapsible Styles */
+    .format-settings-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .expand-btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      width: fit-content;
+      align-self: flex-start;
+    }
+
+    .expand-btn:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .expand-btn i {
+      transition: transform 0.2s ease;
+    }
+
+    .expand-btn.expanded i {
+      transform: rotate(180deg);
+    }
+
+    .format-settings-content {
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+      margin-top: 1rem;
+    }
+
+    .settings-subsection {
+      margin-bottom: 2rem;
+    }
+
+    .settings-subsection:last-child {
+      margin-bottom: 0;
+    }
+
+    .settings-subsection h4 {
+      color: var(--text-primary);
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
     }
 
     /* Authentication Modal Styles */
@@ -595,8 +779,29 @@
     .job-title-header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
       margin-bottom: 0.5rem;
+    }
+
+    .edit-job-btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 0.5rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: background-color 0.2s ease;
+    }
+
+    .edit-job-btn:hover {
+      background: var(--primary-hover);
+    }
+
+    .job-location {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
     }
 
     .job-title-name {
@@ -1033,6 +1238,18 @@
       margin-top: 0;
     }
 
+    .summary-section {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .summary-section p {
+      margin: 0;
+      line-height: 1.5;
+      font-size: 14px;
+      color: #374151;
+    }
+
     .job-title {
       font-weight: 700;
       font-size: var(--job-title-size, 16px);
@@ -1261,15 +1478,24 @@
           <i class="fas fa-magic"></i>
           Enter Job Description
         </button>
+        <button class="btn btn-secondary" id="downloadPdfBtn" disabled style="display: none;">
+          <i class="fas fa-file-pdf"></i>
+          Download PDF
+        </button>
+        <button class="btn btn-accent" id="gradeResumeBtn" disabled style="display: none;">
+          <i class="fas fa-star"></i>
+          Grade Me
+        </button>
+        <button class="btn btn-secondary" id="downloadJsonBtn" disabled style="display: none;">
+          <i class="fas fa-download"></i>
+          Download JSON
+        </button>
         <button class="btn btn-primary" id="importJsonBtn">
           <i class="fas fa-upload"></i>
           Import JSON Data
         </button>
-        <button class="btn btn-secondary" id="downloadPdfBtn" disabled>
-          <i class="fas fa-file-pdf"></i>
-          Download PDF
-        </button>
-        <button class="btn btn-secondary" id="downloadOcrPdfBtn" disabled>
+        <!-- Hidden OCR PDF button - functionality preserved -->
+        <button class="btn btn-secondary" id="downloadOcrPdfBtn" disabled style="display: none;">
           <i class="fas fa-search"></i>
           Download OCR PDF
         </button>
@@ -1277,10 +1503,6 @@
           <div class="loading-bar-fill"></div>
           <span class="loading-bar-text">Processing OCR...</span>
         </div>
-        <button class="btn btn-secondary" id="downloadJsonBtn" disabled>
-          <i class="fas fa-download"></i>
-          Download JSON
-        </button>
         
         <!-- Settings Section -->
         <div class="settings-section">
@@ -1295,65 +1517,78 @@
           </div>
         </div>
         
+        <!-- Format Settings (Collapsible) -->
         <div class="settings-section">
-          <h3>Font Sizes</h3>
-          
-          <div class="setting-group">
-            <label for="nameSize">Name Font Size (px)</label>
-            <input type="range" id="nameSize" min="18" max="36" value="24" class="setting-slider">
-            <span class="setting-value" id="nameSizeValue">24px</span>
+          <div class="format-settings-header">
+            <h3>Format Settings</h3>
+            <button class="expand-btn" id="formatSettingsToggle">
+              <i class="fas fa-chevron-down"></i>
+              <span>Expand Menu</span>
+            </button>
           </div>
           
-          <div class="setting-group">
-            <label for="contactSize">Contact Info Font Size (px)</label>
-            <input type="range" id="contactSize" min="10" max="20" value="14" class="setting-slider">
-            <span class="setting-value" id="contactSizeValue">14px</span>
-          </div>
-          
-          <div class="setting-group">
-            <label for="jobTitleSize">Job Title Font Size (px)</label>
-            <input type="range" id="jobTitleSize" min="12" max="24" value="16" class="setting-slider">
-            <span class="setting-value" id="jobTitleSizeValue">16px</span>
-          </div>
-          
-          <div class="setting-group">
-            <label for="companySize">Company Name Font Size (px)</label>
-            <input type="range" id="companySize" min="10" max="20" value="14" class="setting-slider">
-            <span class="setting-value" id="companySizeValue">14px</span>
-          </div>
-          
-          <div class="setting-group">
-            <label for="companyDetailsSize">Company Details Font Size (px)</label>
-            <input type="range" id="companyDetailsSize" min="8" max="16" value="12" class="setting-slider">
-            <span class="setting-value" id="companyDetailsSizeValue">12px</span>
-          </div>
-          
-          <div class="setting-group">
-            <label for="bulletSize">Bullet Points Font Size (px)</label>
-            <input type="range" id="bulletSize" min="8" max="16" value="12" class="setting-slider">
-            <span class="setting-value" id="bulletSizeValue">12px</span>
-          </div>
-        </div>
-        
-        <div class="settings-section">
-          <h3>Spacing & Padding</h3>
-          
-          <div class="setting-group">
-            <label for="nameTopPadding">Name Top Padding (px)</label>
-            <input type="range" id="nameTopPadding" min="0" max="50" value="16" class="setting-slider">
-            <span class="setting-value" id="nameTopPaddingValue">16px</span>
-          </div>
-          
-          <div class="setting-group">
-            <label for="jobPaddingTop">Job Entry Top Padding (px)</label>
-            <input type="range" id="jobPaddingTop" min="0" max="30" value="10" class="setting-slider">
-            <span class="setting-value" id="jobPaddingTopValue">10px</span>
-          </div>
-          
-          <div class="setting-group">
-            <label for="jobPaddingBottom">Last Job Bottom Padding (px)</label>
-            <input type="range" id="jobPaddingBottom" min="0" max="30" value="10" class="setting-slider">
-            <span class="setting-value" id="jobPaddingBottomValue">10px</span>
+          <div class="format-settings-content" id="formatSettingsContent" style="display: none;">
+            <div class="settings-subsection">
+              <h4>Font Sizes</h4>
+              
+              <div class="setting-group">
+                <label for="nameSize">Name Font Size (px)</label>
+                <input type="range" id="nameSize" min="18" max="36" value="24" class="setting-slider">
+                <span class="setting-value" id="nameSizeValue">24px</span>
+              </div>
+              
+              <div class="setting-group">
+                <label for="contactSize">Contact Info Font Size (px)</label>
+                <input type="range" id="contactSize" min="10" max="20" value="14" class="setting-slider">
+                <span class="setting-value" id="contactSizeValue">14px</span>
+              </div>
+              
+              <div class="setting-group">
+                <label for="jobTitleSize">Job Title Font Size (px)</label>
+                <input type="range" id="jobTitleSize" min="12" max="24" value="16" class="setting-slider">
+                <span class="setting-value" id="jobTitleSizeValue">16px</span>
+              </div>
+              
+              <div class="setting-group">
+                <label for="companySize">Company Name Font Size (px)</label>
+                <input type="range" id="companySize" min="10" max="20" value="14" class="setting-slider">
+                <span class="setting-value" id="companySizeValue">14px</span>
+              </div>
+              
+              <div class="setting-group">
+                <label for="companyDetailsSize">Company Details Font Size (px)</label>
+                <input type="range" id="companyDetailsSize" min="8" max="16" value="12" class="setting-slider">
+                <span class="setting-value" id="companyDetailsSizeValue">12px</span>
+              </div>
+              
+              <div class="setting-group">
+                <label for="bulletSize">Bullet Points Font Size (px)</label>
+                <input type="range" id="bulletSize" min="8" max="16" value="12" class="setting-slider">
+                <span class="setting-value" id="bulletSizeValue">12px</span>
+              </div>
+            </div>
+            
+            <div class="settings-subsection">
+              <h4>Spacing & Padding</h4>
+              
+              <div class="setting-group">
+                <label for="nameTopPadding">Name Top Padding (px)</label>
+                <input type="range" id="nameTopPadding" min="0" max="50" value="16" class="setting-slider">
+                <span class="setting-value" id="nameTopPaddingValue">16px</span>
+              </div>
+              
+              <div class="setting-group">
+                <label for="jobPaddingTop">Job Entry Top Padding (px)</label>
+                <input type="range" id="jobPaddingTop" min="0" max="30" value="10" class="setting-slider">
+                <span class="setting-value" id="jobPaddingTopValue">10px</span>
+              </div>
+              
+              <div class="setting-group">
+                <label for="jobPaddingBottom">Last Job Bottom Padding (px)</label>
+                <input type="range" id="jobPaddingBottom" min="0" max="30" value="10" class="setting-slider">
+                <span class="setting-value" id="jobPaddingBottomValue">10px</span>
+              </div>
+            </div>
           </div>
         </div>
         
@@ -1635,9 +1870,97 @@
         </div>
       </div>
     </div>
-        </div>
+  </div>
 
-        <!-- Job Description Modal -->
+  <!-- Resume Grading Modal -->
+  <div class="modal-overlay" id="gradeModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Grade My Resume</h3>
+        <button class="close-btn" id="closeGradeModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Enter the job description you're applying for to get a detailed assessment of how well your resume matches the requirements.</p>
+        <textarea 
+          id="gradeJobDescription" 
+          placeholder="Paste the job description here..."
+          rows="8"
+        ></textarea>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" id="cancelGrade">Cancel</button>
+          <button class="btn btn-accent" id="startGrading">
+            <i class="fas fa-star"></i>
+            Grade My Resume
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grading Results Modal -->
+  <div class="modal-overlay" id="gradeResultsModal">
+    <div class="modal grade-results-modal">
+      <div class="modal-header">
+        <h3>Resume Grade Results</h3>
+        <button class="close-btn" id="closeGradeResultsModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="grade-score" id="gradeScore">
+          <div class="score-circle">
+            <span class="score-number" id="scoreNumber">0</span>
+            <span class="score-label">/ 100</span>
+          </div>
+          <div class="score-description" id="scoreDescription">Loading...</div>
+        </div>
+        <div class="grade-feedback" id="gradeFeedback">
+          <!-- Detailed feedback will be inserted here -->
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-primary" id="closeGradeResults">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Job Edit Modal -->
+  <div class="modal-overlay" id="jobEditModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Edit Job Entry</h3>
+        <button class="close-btn" id="closeJobEditModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="editJobTitle">Job Title</label>
+          <input type="text" id="editJobTitle" placeholder="Enter job title">
+        </div>
+        <div class="form-group">
+          <label for="editJobCompany">Company</label>
+          <input type="text" id="editJobCompany" placeholder="Enter company name">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editJobStartDate">Start Date</label>
+            <input type="text" id="editJobStartDate" placeholder="e.g., June 2024">
+          </div>
+          <div class="form-group">
+            <label for="editJobEndDate">End Date</label>
+            <input type="text" id="editJobEndDate" placeholder="e.g., Current or Dec 2024">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="editJobLocation">Location</label>
+          <input type="text" id="editJobLocation" placeholder="Enter location">
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" id="cancelJobEdit">Cancel</button>
+          <button class="btn btn-primary" id="saveJobEdit">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Job Description Modal -->
   <div class="modal-overlay" id="jobDescriptionModal">
     <div class="modal">
       <div class="modal-header">
@@ -1756,9 +2079,9 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
         console.log('AI Configuration loaded from server:', AI_CONFIG);
       } catch (error) {
         console.error('Failed to load AI configuration:', error);
-        // Fallback configuration
+        // Fallback configuration (no API key - server must be running)
         AI_CONFIG = {
-          apiKey: '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',
+          apiKey: null, // No fallback API key for security
           model: 'gpt-4',
           maxTokens: 2000,
           temperature: 0.7
@@ -1784,6 +2107,7 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
     const downloadPdfBtn = document.getElementById('downloadPdfBtn');
     const downloadOcrPdfBtn = document.getElementById('downloadOcrPdfBtn');
     const downloadJsonBtn = document.getElementById('downloadJsonBtn');
+    const gradeResumeBtn = document.getElementById('gradeResumeBtn');
     const ocrLoadingBar = document.getElementById('ocrLoadingBar');
     const showSkillsCheckbox = document.getElementById('showSkillsCheckbox');
     const preview = document.getElementById('resumePreview');
@@ -1791,6 +2115,19 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
     const jsonModal = document.getElementById('jsonModal');
     const jsonInput = document.getElementById('jsonInput');
     const closeModal = document.getElementById('closeModal');
+    
+    // Grading Modal Elements
+    const gradeModal = document.getElementById('gradeModal');
+    const gradeResultsModal = document.getElementById('gradeResultsModal');
+    const gradeJobDescription = document.getElementById('gradeJobDescription');
+    const closeGradeModal = document.getElementById('closeGradeModal');
+    const closeGradeResultsModal = document.getElementById('closeGradeResultsModal');
+    const cancelGrade = document.getElementById('cancelGrade');
+    const startGrading = document.getElementById('startGrading');
+    const closeGradeResults = document.getElementById('closeGradeResults');
+    const scoreNumber = document.getElementById('scoreNumber');
+    const scoreDescription = document.getElementById('scoreDescription');
+    const gradeFeedback = document.getElementById('gradeFeedback');
     const ocrProgressSection = document.getElementById('ocrProgressSection');
     const ocrProgressFill = document.getElementById('ocrProgressFill');
     const ocrProgressText = document.getElementById('ocrProgressText');
@@ -1849,6 +2186,21 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
     const jobTitlesLoading = document.getElementById('jobTitlesLoading');
     const jobTitlesEmpty = document.getElementById('jobTitlesEmpty');
 
+    // Job Edit Modal Elements
+    const jobEditModal = document.getElementById('jobEditModal');
+    const closeJobEditModal = document.getElementById('closeJobEditModal');
+    const cancelJobEdit = document.getElementById('cancelJobEdit');
+    const saveJobEdit = document.getElementById('saveJobEdit');
+    const editJobTitle = document.getElementById('editJobTitle');
+    const editJobCompany = document.getElementById('editJobCompany');
+    const editJobStartDate = document.getElementById('editJobStartDate');
+    const editJobEndDate = document.getElementById('editJobEndDate');
+    const editJobLocation = document.getElementById('editJobLocation');
+
+    // Format Settings Elements
+    const formatSettingsToggle = document.getElementById('formatSettingsToggle');
+    const formatSettingsContent = document.getElementById('formatSettingsContent');
+
     // Education Elements
     const educationSection = document.getElementById('educationSection');
     const educationContainer = document.getElementById('educationContainer');
@@ -1875,9 +2227,71 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
       jsonInput.value = '';
     }
 
+    // Grading Modal Event Listeners
+    gradeResumeBtn.addEventListener('click', () => {
+      if (!resumeData || !resumeData.contact) {
+        alert('Please generate or import a resume first before grading.');
+        return;
+      }
+      gradeModal.classList.add('active');
+      gradeJobDescription.focus();
+    });
+
+    closeGradeModal.addEventListener('click', closeGradeModalFunc);
+    cancelGrade.addEventListener('click', closeGradeModalFunc);
+    closeGradeResultsModal.addEventListener('click', closeGradeResultsModalFunc);
+    closeGradeResults.addEventListener('click', closeGradeResultsModalFunc);
+
+    gradeModal.addEventListener('click', (e) => {
+      if (e.target === gradeModal) {
+        closeGradeModalFunc();
+      }
+    });
+
+    gradeResultsModal.addEventListener('click', (e) => {
+      if (e.target === gradeResultsModal) {
+        closeGradeResultsModalFunc();
+      }
+    });
+
+    startGrading.addEventListener('click', async () => {
+      const jobDescription = gradeJobDescription.value.trim();
+      if (!jobDescription) {
+        alert('Please enter a job description to grade your resume against.');
+        return;
+      }
+      
+      closeGradeModalFunc();
+      await gradeResume(jobDescription);
+    });
+
+    function closeGradeModalFunc() {
+      gradeModal.classList.remove('active');
+      gradeJobDescription.value = '';
+    }
+
+    function closeGradeResultsModalFunc() {
+      gradeResultsModal.classList.remove('active');
+    }
+
     // Skills checkbox listener
     showSkillsCheckbox.addEventListener('change', () => {
       renderResume();
+    });
+
+    // Format Settings Toggle
+    formatSettingsToggle.addEventListener('click', () => {
+      const isExpanded = formatSettingsContent.style.display !== 'none';
+      
+      if (isExpanded) {
+        formatSettingsContent.style.display = 'none';
+        formatSettingsToggle.classList.remove('expanded');
+        formatSettingsToggle.querySelector('span').textContent = 'Expand Menu';
+      } else {
+        formatSettingsContent.style.display = 'block';
+        formatSettingsToggle.classList.add('expanded');
+        formatSettingsToggle.querySelector('span').textContent = 'Collapse Menu';
+      }
     });
 
     // Import JSON Data
@@ -1904,6 +2318,9 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
           renderResume(resumeData);
         updatePreviewStatus('loaded', 'Data loaded successfully');
         downloadJsonBtn.disabled = false;
+        downloadJsonBtn.style.display = 'block';
+        gradeResumeBtn.disabled = false;
+        gradeResumeBtn.style.display = 'block';
         generatePDFandStore();
         closeJsonModal();
       } catch (err) {
@@ -1922,8 +2339,13 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
         </div>
       `;
       downloadJsonBtn.disabled = true;
+      downloadJsonBtn.style.display = 'none';
       downloadPdfBtn.disabled = true;
+      downloadPdfBtn.style.display = 'none';
       downloadOcrPdfBtn.disabled = true;
+      downloadOcrPdfBtn.style.display = 'none';
+      gradeResumeBtn.disabled = true;
+      gradeResumeBtn.style.display = 'none';
     }
 
     function updatePreviewStatus(type, message) {
@@ -2087,6 +2509,13 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
           - <span data-editable="contact.phone">${escapeHtml(phone)}</span>
     </div>
     <hr class="resume-divider">
+
+        ${data.summary ? `
+        <div class="section-title">Professional Summary</div>
+        <div class="summary-section">
+          <p data-editable="summary">${escapeHtml(data.summary)}</p>
+        </div>
+        ` : ''}
 
         <div class="section-title">Work Experience</div>
         ${sortedJobs.map((job, jobIndex) => `
@@ -2263,6 +2692,7 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
     // Generate LaTeX-based PDF
     async function generatePDFandStore() {
       downloadPdfBtn.disabled = true;
+      downloadPdfBtn.style.display = 'none';
       downloadOcrPdfBtn.disabled = true;
 
       if (pdfBlobUrl) {
@@ -2281,11 +2711,19 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
         pdfBlobUrl = URL.createObjectURL(blob);
         updatePreviewStatus('loaded', 'PDF ready (LaTeX/Server)');
         downloadPdfBtn.disabled = false;
+        downloadPdfBtn.style.display = 'block';
         downloadOcrPdfBtn.disabled = false;
+        gradeResumeBtn.disabled = false;
+        gradeResumeBtn.style.display = 'block';
       } catch (err) {
         console.error('Server compile failed:', err);
         updatePreviewStatus('error', 'Server failed to build PDF');
         alert('PDF build failed via server. Check console for details.');
+        downloadPdfBtn.disabled = true;
+        downloadPdfBtn.style.display = 'none';
+        downloadOcrPdfBtn.disabled = true;
+        gradeResumeBtn.disabled = true;
+        gradeResumeBtn.style.display = 'none';
       }
     }
 
@@ -3455,7 +3893,8 @@ function drawHiddenTextLayer(pageOut, words, canvasWpx, canvasHpx, pageWpts, pag
           resumeUrl: null,
           resumeFileName: null,
           resumeRef: null,
-          jobTitles: null
+          jobTitles: null,
+          education: null
         });
 
         hideResumePreview();
@@ -3535,6 +3974,7 @@ function drawHiddenTextLayer(pageOut, words, canvasWpx, canvasHpx, pageWpts, pag
     // Job Titles Extraction Functions
     let extractedJobData = [];
     let extractedEducationData = [];
+    let currentEditingJobIndex = -1;
 
     async function extractJobTitlesFromResume(file) {
       try {
@@ -3583,6 +4023,9 @@ function drawHiddenTextLayer(pageOut, words, canvasWpx, canvasHpx, pageWpts, pag
           displayEducation(educationData);
           await saveJobTitlesToFirebase(jobData);
           await saveEducationToFirebase(educationData);
+          
+          // Extract and save personal information
+          await extractPersonalInfoFromResume(file);
         } else {
           showJobTitlesEmpty();
           showEducationEmpty();
@@ -3741,7 +4184,7 @@ function drawHiddenTextLayer(pageOut, words, canvasWpx, canvasHpx, pageWpts, pag
     }
 
     function extractJobFromLine(line, allLines, currentIndex) {
-      const job = { title: '', company: '', dates: '' };
+      const job = { title: '', company: '', startDate: '', endDate: '', location: '', dates: '' };
 
       // Extract title and company
       const atMatch = line.match(/(.+?)\s+(?:at|@|,)\s+(.+)/i);
@@ -3757,6 +4200,34 @@ function drawHiddenTextLayer(pageOut, words, canvasWpx, canvasHpx, pageWpts, pag
               !isSectionHeader(nextLine) && nextLine.length > 2) {
             job.company = nextLine;
             break;
+          }
+        }
+      }
+
+      // Look for dates and location in the next few lines
+      for (let i = currentIndex + 1; i < Math.min(currentIndex + 5, allLines.length); i++) {
+        const nextLine = allLines[i];
+        if (nextLine && containsDates(nextLine)) {
+          // Extract dates
+          const dateMatch = nextLine.match(/(\w+\s+\d{4})\s*[-–—]\s*(\w+\s+\d{4}|current|present)/i);
+          if (dateMatch) {
+            job.startDate = dateMatch[1].trim();
+            job.endDate = dateMatch[2].trim();
+            job.dates = `${job.startDate} - ${job.endDate}`;
+          } else {
+            // Try to extract single date
+            const singleDateMatch = nextLine.match(/(\w+\s+\d{4})/i);
+            if (singleDateMatch) {
+              job.startDate = singleDateMatch[1].trim();
+              job.endDate = 'Current';
+              job.dates = `${job.startDate} - Current`;
+            }
+          }
+        } else if (nextLine && !isJobTitleLine(nextLine) && !isSectionHeader(nextLine) && 
+                   nextLine.length > 2 && !containsDates(nextLine)) {
+          // This might be location
+          if (!job.location) {
+            job.location = nextLine.trim();
           }
         }
       }
@@ -3803,20 +4274,27 @@ function drawHiddenTextLayer(pageOut, words, canvasWpx, canvasHpx, pageWpts, pag
       jobs.forEach((job, index) => {
         const jobElement = document.createElement('div');
         jobElement.className = 'job-title-item';
+        
+        // Parse dates if they exist
+        const startDate = job.startDate || '';
+        const endDate = job.endDate || '';
+        const location = job.location || '';
+        
         jobElement.innerHTML = `
           <div class="job-title-header">
-            <h4 class="job-title-name" data-field="title" data-index="${index}">${escapeHtml(job.title)}</h4>
+            <h4 class="job-title-name">${escapeHtml(job.title)}</h4>
+            <button class="edit-job-btn" data-index="${index}">
+              <i class="fas fa-edit"></i>
+            </button>
           </div>
-          <p class="job-company" data-field="company" data-index="${index}">${escapeHtml(job.company)}</p>
-          ${job.dates ? `<p class="job-dates" data-field="dates" data-index="${index}">${escapeHtml(job.dates)}</p>` : ''}
+          <p class="job-company">${escapeHtml(job.company)}</p>
+          <p class="job-dates">${startDate} ${endDate ? ' - ' + endDate : ''}</p>
+          ${location ? `<p class="job-location">${escapeHtml(location)}</p>` : ''}
         `;
         
-        // Add click listeners for editing
-        const editableFields = jobElement.querySelectorAll('[data-field]');
-        editableFields.forEach(field => {
-          field.style.cursor = 'pointer';
-          field.addEventListener('click', () => editJobField(field, index));
-        });
+        // Add click listener for edit button
+        const editBtn = jobElement.querySelector('.edit-job-btn');
+        editBtn.addEventListener('click', () => openJobEditModal(index));
         
         jobTitlesContainer.appendChild(jobElement);
       });
@@ -3847,6 +4325,200 @@ function drawHiddenTextLayer(pageOut, words, canvasWpx, canvasHpx, pageWpts, pag
       clearEducation();
     }
 
+    // Personal Information Extraction
+    async function extractPersonalInfoFromResume(file) {
+      try {
+        console.log('Extracting personal information from resume...');
+        
+        // Convert file to image for OCR
+        const imageUrl = await convertFileToImage(file);
+        
+        // Use ChatGPT Vision to extract personal information
+        const personalInfo = await extractPersonalInfoWithChatGPTVision(imageUrl);
+        
+        if (personalInfo) {
+          // Update the personal information form fields
+          if (personalInfo.name && personalName) {
+            personalName.value = personalInfo.name;
+          }
+          if (personalInfo.address && personalAddress) {
+            personalAddress.value = personalInfo.address;
+          }
+          if (personalInfo.email && personalEmail) {
+            personalEmail.value = personalInfo.email;
+          }
+          if (personalInfo.phone && personalPhone) {
+            personalPhone.value = personalInfo.phone;
+          }
+          
+          // Save to Firebase
+          await savePersonalInfoToFirebase({
+            name: personalInfo.name || '',
+            address: personalInfo.address || '',
+            email: personalInfo.email || '',
+            phone: personalInfo.phone || '',
+            lastUpdated: new Date().toISOString()
+          });
+          
+          console.log('Personal information extracted and saved:', personalInfo);
+        }
+      } catch (error) {
+        console.error('Failed to extract personal information:', error);
+        // Don't show error to user as this is a background process
+      }
+    }
+
+    async function extractPersonalInfoWithChatGPTVision(imageUrl) {
+      try {
+        if (!AI_CONFIG || !AI_CONFIG.apiKey) {
+          throw new Error('AI configuration not available');
+        }
+
+        // Convert data URL to base64
+        const base64Image = imageUrl.split(',')[1];
+        
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${AI_CONFIG.apiKey}`
+          },
+          body: JSON.stringify({
+            model: 'gpt-4o',
+            messages: [
+              {
+                role: 'system',
+                content: `You are an expert at extracting contact details from resumes. Extract the following information from the provided resume image and return it in JSON format:
+
+{
+  "name": "Full Name",
+  "address": "Complete Address", 
+  "email": "Email Address",
+  "phone": "Phone Number"
+}
+
+Rules:
+- Extract the person's full name (usually at the top of the resume)
+- Extract the complete address (street, city, state, zip)
+- Extract the email address
+- Extract the phone number
+- If any information is not found, use null for that field
+- Return ONLY the JSON object, no other text`
+              },
+              {
+                role: 'user',
+                content: [
+                  {
+                    type: 'text',
+                    text: 'Extract the name, email, and phone number from this resume.'
+                  },
+                  {
+                    type: 'image_url',
+                    image_url: {
+                      url: `data:image/png;base64,${base64Image}`
+                    }
+                  }
+                ]
+              }
+            ],
+            max_tokens: 500,
+            temperature: 0.1
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`OpenAI API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const content = data.choices[0].message.content;
+        
+        console.log('Personal info extraction response:', content);
+        
+        // Parse the JSON response
+        try {
+          const jsonMatch = content.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            return JSON.parse(jsonMatch[0]);
+          } else {
+            throw new Error('No valid JSON found in response');
+          }
+        } catch (parseError) {
+          console.error('JSON parsing error:', parseError);
+          throw new Error('Failed to parse personal information response');
+        }
+
+      } catch (error) {
+        console.error('Personal info extraction error:', error);
+        throw error;
+      }
+    }
+
+    // Job Edit Modal Functions
+    function openJobEditModal(jobIndex) {
+      currentEditingJobIndex = jobIndex;
+      const job = extractedJobData[jobIndex];
+      
+      // Populate form fields
+      editJobTitle.value = job.title || '';
+      editJobCompany.value = job.company || '';
+      editJobStartDate.value = job.startDate || '';
+      editJobEndDate.value = job.endDate || '';
+      editJobLocation.value = job.location || '';
+      
+      // Show modal
+      jobEditModal.classList.add('active');
+      editJobTitle.focus();
+    }
+
+    function closeJobEditModalFunc() {
+      jobEditModal.classList.remove('active');
+      currentEditingJobIndex = -1;
+    }
+
+    function saveJobEditData() {
+      if (currentEditingJobIndex === -1) return;
+      
+      const job = extractedJobData[currentEditingJobIndex];
+      
+      // Update job data
+      job.title = editJobTitle.value.trim();
+      job.company = editJobCompany.value.trim();
+      job.startDate = editJobStartDate.value.trim();
+      job.endDate = editJobEndDate.value.trim();
+      job.location = editJobLocation.value.trim();
+      
+      // Update the display
+      displayJobTitles(extractedJobData);
+      
+      // Save to Firebase
+      saveJobTitlesToFirebase(extractedJobData);
+      
+      // Close modal
+      closeJobEditModalFunc();
+    }
+
+    // Job Edit Modal Event Listeners
+    closeJobEditModal.addEventListener('click', closeJobEditModalFunc);
+    cancelJobEdit.addEventListener('click', closeJobEditModalFunc);
+    saveJobEdit.addEventListener('click', saveJobEditData);
+
+    jobEditModal.addEventListener('click', (e) => {
+      if (e.target === jobEditModal) {
+        closeJobEditModalFunc();
+      }
+    });
+
+    // Handle Enter key in form fields
+    [editJobTitle, editJobCompany, editJobStartDate, editJobEndDate, editJobLocation].forEach(input => {
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          saveJobEditData();
+        }
+      });
+    });
+
     async function saveJobTitlesToFirebase(jobData) {
       if (!currentUser) return;
 
@@ -3867,15 +4539,23 @@ function drawHiddenTextLayer(pageOut, words, canvasWpx, canvasHpx, pageWpts, pag
         const userDoc = await window.getDoc(window.doc(window.db, 'users', currentUser.uid));
         if (userDoc.exists()) {
           const userData = userDoc.data();
-          if (userData.jobTitles && userData.jobTitles.length > 0) {
+          // Only load job titles if there's a resume
+          if (userData.resumeUrl && userData.jobTitles && userData.jobTitles.length > 0) {
             extractedJobData = userData.jobTitles;
             displayJobTitles(userData.jobTitles);
             jobTitlesSection.style.display = 'block';
+          } else {
+            // Clear job titles if no resume
+            clearJobTitles();
           }
-          if (userData.education && userData.education.length > 0) {
+          // Only load education data if there's a resume
+          if (userData.resumeUrl && userData.education && userData.education.length > 0) {
             extractedEducationData = userData.education;
             displayEducation(userData.education);
             educationSection.style.display = 'block';
+          } else {
+            // Clear education data if no resume
+            clearEducation();
           }
         }
       } catch (error) {
@@ -4224,11 +4904,14 @@ function drawHiddenTextLayer(pageOut, words, canvasWpx, canvasHpx, pageWpts, pag
                 content: [
                   {
                     type: 'text',
-                    text: `Analyze this resume image and extract all job titles, companies, and employment dates. Return ONLY a JSON array in this exact format:
+                    text: `Analyze this resume image and extract all job titles, companies, employment dates, and locations. Return ONLY a JSON array in this exact format:
 [
   {
     "title": "Job Title",
-    "company": "Company Name", 
+    "company": "Company Name",
+    "startDate": "Start Date (e.g., June 2024)",
+    "endDate": "End Date (e.g., Current or December 2024)",
+    "location": "Location (e.g., San Francisco, CA)",
     "dates": "Start Date - End Date"
   }
 ]
@@ -4296,7 +4979,10 @@ Look for the Work Experience or Employment section and extract each job entry. I
   "jobs": [
     {
       "title": "Job Title",
-      "company": "Company Name", 
+      "company": "Company Name",
+      "startDate": "Start Date (e.g., June 2024)",
+      "endDate": "End Date (e.g., Current or December 2024)",
+      "location": "Location (e.g., San Francisco, CA)",
       "dates": "Start Date - End Date"
     }
   ],
@@ -4307,9 +4993,10 @@ Look for the Work Experience or Employment section and extract each job entry. I
   ]
 }
 
-For jobs: Look for Work Experience or Employment section and extract each job entry.
+For jobs: Look for Work Experience or Employment section and extract each job entry with title, company, start date, end date, and location.
 For education: Extract degrees, certifications, and training as simple one-liners. For degrees, use format "[Degree Name] from [Institution]". For certifications, just list the certification name.
 
+If any job information is missing (start date, end date, or location), use null for that field.
 If no information is found in a category, return an empty array for that category.`
                   },
                   {
@@ -4365,11 +5052,14 @@ If no information is found in a category, return an empty array for that categor
             messages: [
               {
                 role: 'system',
-                content: `You are a resume parser. Extract job titles, companies, and employment dates from the provided resume text. Return ONLY a JSON array in this exact format:
+                content: `You are a resume parser. Extract job titles, companies, employment dates, and locations from the provided resume text. Return ONLY a JSON array in this exact format:
 [
   {
     "title": "Job Title",
-    "company": "Company Name", 
+    "company": "Company Name",
+    "startDate": "Start Date (e.g., June 2024)",
+    "endDate": "End Date (e.g., Current or December 2024)",
+    "location": "Location (e.g., San Francisco, CA)",
     "dates": "Start Date - End Date"
   }
 ]
@@ -4429,7 +5119,8 @@ If no job information is found, return an empty array [].`
 - **MANDATORY: The jobs array must contain ALL jobs provided in the user data, not just a subset**
 
 ## OPTIMIZATION RULES (REWRITE THESE):
-- Write a professional summary that is 2-3 sentences long and mentions ALL job titles from the user's work history
+- **CRITICAL: Write a professional summary that is EXACTLY 3 sentences long - no more, no less. This is mandatory.**
+- The summary must mention ALL job titles from the user's work history
 - Show career progression by referencing each role in the summary
 - Rewrite job duties/responsibilities to highlight relevant technologies and outcomes
 - Optimize skills section using keywords from job description
@@ -4493,6 +5184,7 @@ Return ONLY a valid JSON object in this exact format:
     }
     // IMPORTANT: Include ALL jobs from user's history, not just a subset
   ],
+  "summary": "EXACTLY 3 sentences describing the candidate's experience and career progression, mentioning ALL job titles from their work history",
   "skills": {
     "Technical Skills": ["Skill 1", "Skill 2", "Skill 3"],
     "Soft Skills": ["Skill 1", "Skill 2", "Skill 3"]
@@ -4508,12 +5200,15 @@ Return ONLY a valid JSON object in this exact format:
 - All job titles, companies, and dates match the original resume exactly
 - ALL education/certificates from user's data are included
 - **VERIFIED: ALL jobs from user's history are included in the jobs array**
+- **CRITICAL: Professional summary is EXACTLY 3 sentences long - no more, no less**
 - No false information was added
 - Job duties rewritten to strongly align with target job description
 - Skills list covers critical technologies from posting
 - Resume is ATS-optimized and professional
 
 **CRITICAL: Generate resume using ALL job experiences from the user's existing job data. Do not skip or omit any jobs. Include ALL education/certificates. Make the resume compelling and perfectly tailored to the job description.
+
+**MANDATORY: The professional summary must be EXACTLY 3 sentences long. Count the sentences carefully. This is non-negotiable.**
 
 IMPORTANT: Return ONLY valid JSON. Do not include any text, explanations, or formatting outside the JSON object. No emojis, no "System" messages, no additional text. Just the JSON object.`;
 
@@ -4655,6 +5350,9 @@ IMPORTANT: Return ONLY valid JSON. Do not include any text, explanations, or for
         renderResume(resumeData);
         updatePreviewStatus('loaded', 'AI-generated resume loaded successfully');
         downloadJsonBtn.disabled = false;
+        downloadJsonBtn.style.display = 'block';
+        gradeResumeBtn.disabled = false;
+        gradeResumeBtn.style.display = 'block';
         
         updateAIProgress(100, 'Generating PDF...');
         generatePDFandStore();
@@ -4671,6 +5369,202 @@ IMPORTANT: Return ONLY valid JSON. Do not include any text, explanations, or for
         showPreviewError(`Failed to generate resume: ${error.message}`);
       }
     });
+
+    // Resume Grading Function
+    async function gradeResume(jobDescription) {
+      try {
+        if (!AI_CONFIG || !AI_CONFIG.apiKey) {
+          throw new Error('AI configuration not available. Please ensure the server is running.');
+        }
+
+        // Show loading state
+        gradeResultsModal.classList.add('active');
+        scoreNumber.textContent = '...';
+        scoreDescription.textContent = 'Analyzing your resume...';
+        gradeFeedback.innerHTML = '<div class="loading">Please wait while we analyze your resume...</div>';
+
+        // Prepare resume data for analysis
+        const resumeText = formatResumeForGrading(resumeData);
+        
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${AI_CONFIG.apiKey}`
+          },
+          body: JSON.stringify({
+            model: AI_CONFIG.model || 'gpt-4',
+            messages: [
+              {
+                role: 'system',
+                content: `You are an expert resume reviewer and career coach. Analyze the provided resume against the given job description and provide a comprehensive grade from 0-100.
+
+GRADING CRITERIA (weighted):
+- **Relevance & Match (30%)**: How well the resume matches the job requirements
+- **Experience Quality (25%)**: Depth and relevance of work experience
+- **Skills Alignment (20%)**: Technical and soft skills match
+- **Education & Certifications (10%)**: Educational background relevance
+- **Format & Presentation (10%)**: Professional formatting and structure
+- **Keywords & ATS Optimization (5%)**: Use of relevant industry keywords
+
+Provide your response in this EXACT JSON format:
+{
+  "score": 85,
+  "description": "Strong match with room for improvement",
+  "strengths": [
+    "Excellent technical skills alignment",
+    "Relevant work experience in similar role",
+    "Strong educational background"
+  ],
+  "improvements": [
+    "Add more quantifiable achievements",
+    "Include specific project examples",
+    "Optimize for ATS with more keywords"
+  ],
+  "detailed_feedback": "Your resume shows strong technical skills and relevant experience. The work history demonstrates progression and the skills section aligns well with the job requirements. However, adding more specific metrics and achievements would strengthen your candidacy. Consider including project examples that showcase your problem-solving abilities."
+}`
+              },
+              {
+                role: 'user',
+                content: `JOB DESCRIPTION:\n\n${jobDescription}\n\n\nRESUME TO ANALYZE:\n\n${resumeText}`
+              }
+            ],
+            max_tokens: 1500,
+            temperature: 0.3
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`OpenAI API error: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        const content = data.choices[0].message.content;
+        
+        console.log('Resume grading response:', content);
+        
+        // Parse the JSON response
+        let gradeData;
+        try {
+          // Extract JSON from the response
+          const jsonMatch = content.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            gradeData = JSON.parse(jsonMatch[0]);
+          } else {
+            throw new Error('No valid JSON found in response');
+          }
+        } catch (parseError) {
+          console.error('JSON parsing error:', parseError);
+          throw new Error('Failed to parse grading response');
+        }
+
+        // Display the results
+        displayGradeResults(gradeData);
+
+      } catch (error) {
+        console.error('Resume grading error:', error);
+        scoreNumber.textContent = 'Error';
+        scoreDescription.textContent = 'Failed to grade resume';
+        gradeFeedback.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+      }
+    }
+
+    function formatResumeForGrading(data) {
+      let resumeText = '';
+      
+      // Contact Information
+      if (data.contact) {
+        resumeText += `CONTACT INFORMATION:\n`;
+        resumeText += `Name: ${data.contact.name || 'Not provided'}\n`;
+        resumeText += `Email: ${data.contact.email || 'Not provided'}\n`;
+        resumeText += `Phone: ${data.contact.phone || 'Not provided'}\n`;
+        resumeText += `Address: ${data.contact.address || 'Not provided'}\n\n`;
+      }
+
+      // Professional Summary
+      if (data.summary) {
+        resumeText += `PROFESSIONAL SUMMARY:\n${data.summary}\n\n`;
+      }
+
+      // Work Experience
+      if (data.jobs && data.jobs.length > 0) {
+        resumeText += `WORK EXPERIENCE:\n`;
+        data.jobs.forEach((job, index) => {
+          resumeText += `${index + 1}. ${job.title || 'Title not specified'}\n`;
+          resumeText += `   Company: ${job.company || 'Company not specified'}\n`;
+          resumeText += `   Location: ${job.location || 'Location not specified'}\n`;
+          resumeText += `   Duration: ${job.startDate || 'Start date not specified'} - ${job.endDate || 'Present'}\n`;
+          if (job.responsibilities && job.responsibilities.length > 0) {
+            resumeText += `   Responsibilities:\n`;
+            job.responsibilities.forEach(resp => {
+              resumeText += `   - ${resp}\n`;
+            });
+          }
+          resumeText += `\n`;
+        });
+      }
+
+      // Skills
+      if (data.skills) {
+        resumeText += `SKILLS:\n`;
+        Object.entries(data.skills).forEach(([category, skills]) => {
+          resumeText += `${category}: ${skills.join(', ')}\n`;
+        });
+        resumeText += `\n`;
+      }
+
+      // Education & Certifications
+      if (data.certificates && data.certificates.length > 0) {
+        resumeText += `EDUCATION & CERTIFICATIONS:\n`;
+        data.certificates.forEach(cert => {
+          resumeText += `- ${typeof cert === 'string' ? cert : cert.name || cert}\n`;
+        });
+        resumeText += `\n`;
+      }
+
+      return resumeText;
+    }
+
+    function displayGradeResults(gradeData) {
+      // Update score display
+      scoreNumber.textContent = gradeData.score || 0;
+      scoreDescription.textContent = gradeData.description || 'Analysis complete';
+
+      // Update score circle color based on score
+      const scoreCircle = document.querySelector('.score-circle');
+      if (gradeData.score >= 80) {
+        scoreCircle.style.background = 'linear-gradient(135deg, #10b981, #059669)'; // Green
+      } else if (gradeData.score >= 60) {
+        scoreCircle.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)'; // Orange
+      } else {
+        scoreCircle.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)'; // Red
+      }
+
+      // Create feedback HTML
+      let feedbackHTML = '';
+      
+      if (gradeData.detailed_feedback) {
+        feedbackHTML += `<h4>Overall Assessment</h4><p>${gradeData.detailed_feedback}</p>`;
+      }
+
+      if (gradeData.strengths && gradeData.strengths.length > 0) {
+        feedbackHTML += `<h4 class="strengths">Strengths</h4><ul>`;
+        gradeData.strengths.forEach(strength => {
+          feedbackHTML += `<li>${strength}</li>`;
+        });
+        feedbackHTML += `</ul>`;
+      }
+
+      if (gradeData.improvements && gradeData.improvements.length > 0) {
+        feedbackHTML += `<h4 class="improvements">Areas for Improvement</h4><ul>`;
+        gradeData.improvements.forEach(improvement => {
+          feedbackHTML += `<li>${improvement}</li>`;
+        });
+        feedbackHTML += `</ul>`;
+      }
+
+      gradeFeedback.innerHTML = feedbackHTML;
+    }
 
     // Initialize authentication when page loads
     document.addEventListener('DOMContentLoaded', () => {
@@ -4735,6 +5629,12 @@ IMPORTANT: Return ONLY valid JSON. Do not include any text, explanations, or for
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && jsonModal.classList.contains('active')) {
         closeJsonModal();
+      } else if (e.key === 'Escape' && gradeModal.classList.contains('active')) {
+        closeGradeModalFunc();
+      } else if (e.key === 'Escape' && gradeResultsModal.classList.contains('active')) {
+        closeGradeResultsModalFunc();
+      } else if (e.key === 'Escape' && jobEditModal.classList.contains('active')) {
+        closeJobEditModalFunc();
       }
     });
   </script>
