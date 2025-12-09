@@ -2,7 +2,7 @@
 // Simple LaTeX → PDF compiler server using Tectonic (preferred) or pdflatex (fallback)
 
 import express from "express";
-import { spawn } from "child_process";
+import { spawn, exec } from "child_process";
 import fs from "fs";
 import path from "path";
 import os from "os";
@@ -151,5 +151,25 @@ app.post("/compile", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`LaTeX server running: http://localhost:${PORT}`);
+  const url = `http://localhost:${PORT}`;
+  console.log(`LaTeX server running: ${url}`);
+  console.log(`Opening browser...`);
+  
+  // Open browser automatically (cross-platform)
+  const platform = os.platform();
+  let command;
+  
+  if (platform === 'win32') {
+    command = `start "" "${url}"`;
+  } else if (platform === 'darwin') {
+    command = `open "${url}"`;
+  } else {
+    command = `xdg-open "${url}"`;
+  }
+  
+  exec(command, (error) => {
+    if (error) {
+      console.log(`Could not open browser automatically. Please navigate to: ${url}`);
+    }
+  });
 });

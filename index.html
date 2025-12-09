@@ -81,6 +81,397 @@
       font-weight: 400;
     }
 
+    /* Job Portfolio Section */
+    .job-portfolio-section {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+      width: 100%;
+      animation: fadeInDown 0.8s ease-out 0.1s both;
+    }
+
+    .job-portfolio-section h2 {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: var(--text-primary);
+      text-align: center;
+    }
+
+    .job-portfolio-content {
+      width: 100%;
+    }
+
+    .job-portfolio-entries {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .job-portfolio-entry {
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.5rem;
+      transition: all 0.2s ease;
+      overflow: hidden;
+    }
+
+    .job-portfolio-entry.status-accepted {
+      border-color: #22c55e;
+      border-width: 2px;
+    }
+
+    .job-portfolio-entry.status-rejected {
+      border-color: #ef4444;
+      border-width: 2px;
+    }
+
+    .job-portfolio-entry.status-pending {
+      border-color: var(--border);
+      border-width: 1px;
+    }
+
+    .job-portfolio-entry:hover {
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
+    }
+
+    .job-portfolio-entry.status-accepted:hover {
+      box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2);
+    }
+
+    .job-portfolio-entry.status-rejected:hover {
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+    }
+
+    .job-portfolio-entry.collapsed {
+      padding: 1rem 1.5rem;
+    }
+
+    .job-portfolio-entry.expanded {
+      padding: 1.5rem;
+    }
+
+    .job-portfolio-entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0;
+    }
+
+    .job-portfolio-entry.collapsed .job-portfolio-entry-header {
+      margin-bottom: 0;
+    }
+
+    .job-portfolio-entry.expanded .job-portfolio-entry-header {
+      margin-bottom: 1rem;
+    }
+
+    .job-portfolio-entry-preview {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      flex: 1;
+    }
+
+    .job-portfolio-entry-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0;
+    }
+
+    .job-portfolio-entry-due-date {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .job-portfolio-entry-actions {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .job-portfolio-entry-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+
+    .job-portfolio-entry-status select {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.5rem 0.75rem;
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      min-width: 120px;
+    }
+
+    .job-portfolio-entry-status select:hover {
+      border-color: var(--primary-color);
+    }
+
+    .job-portfolio-entry-status select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .job-portfolio-entry-edit {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .job-portfolio-entry-edit:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .job-portfolio-entry.expanded .job-portfolio-entry-edit {
+      background: var(--surface-light);
+      color: var(--text-primary);
+    }
+
+    .job-portfolio-entry.expanded .job-portfolio-entry-edit:hover {
+      background: var(--surface);
+    }
+
+    .job-portfolio-entry-resume {
+      background: var(--secondary-color);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .job-portfolio-entry-resume:hover {
+      background: var(--secondary-hover);
+      transform: translateY(-1px);
+    }
+
+    .job-portfolio-entry-resume-menu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, margin-top 0.3s ease, padding 0.3s ease;
+      margin-top: 0;
+      padding: 0;
+    }
+
+    .job-portfolio-entry.resume-open .job-portfolio-entry-resume-menu {
+      max-height: 2000px;
+      margin-top: 1rem;
+      padding: 1.5rem;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+
+    .resume-menu-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .resume-json-input {
+      width: 100%;
+      padding: 0.75rem;
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-primary);
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 0.875rem;
+      resize: vertical;
+      transition: all 0.2s ease;
+      min-height: 150px;
+    }
+
+    .resume-json-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .resume-preview-container {
+      margin-top: 1rem;
+      display: none;
+    }
+
+    .resume-preview-container.active {
+      display: block;
+    }
+
+    .resume-preview-iframe {
+      width: 100%;
+      height: 600px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: white;
+    }
+
+    /* Resume Loading Screen */
+    .resume-loading-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      min-height: 400px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin: 1rem 0;
+    }
+
+    .resume-loading-spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid var(--border);
+      border-top-color: var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1.5rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .resume-loading-text {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .resume-loading-subtext {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .job-portfolio-entry-download {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      border-radius: var(--radius);
+      padding: 0.5rem 0.75rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 40px;
+    }
+
+    .job-portfolio-entry-download:hover {
+      background: var(--surface-light);
+      color: var(--text-primary);
+      border-color: var(--border-light);
+    }
+
+    .job-portfolio-entry-remove {
+      background: transparent;
+      border: 1px solid #ef4444;
+      color: #ef4444;
+      border-radius: var(--radius);
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+    }
+
+    .job-portfolio-entry-remove:hover {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: #ef4444;
+    }
+
+    .job-portfolio-entry-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, margin-top 0.3s ease;
+      margin-top: 0;
+    }
+
+    .job-portfolio-entry.expanded .job-portfolio-entry-content {
+      max-height: 2000px;
+      margin-top: 1rem;
+    }
+
+    .job-portfolio-entry-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 0;
+    }
+
+    .job-portfolio-entry-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .job-portfolio-entry-field.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .job-portfolio-entry-field label {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .job-portfolio-entry-field input,
+    .job-portfolio-entry-field textarea {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.75rem;
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+
+    .job-portfolio-entry-field input:focus,
+    .job-portfolio-entry-field textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .job-portfolio-entry-field textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
     /* Main Content */
     .main-content {
       display: grid;
@@ -1623,6 +2014,14 @@
       .resume-preview {
         padding: 2rem;
       }
+      
+      .job-portfolio-entry-fields {
+        grid-template-columns: 1fr !important;
+      }
+      
+      .job-portfolio-section {
+        padding: 1.5rem;
+      }
     }
 
     @media print {
@@ -1644,7 +2043,6 @@
       <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
         <div>
       <h1>Resume Builder Pro</h1>
-      <p>Create professional resumes with ease</p>
         </div>
         <div class="user-info" id="userInfo" style="display: none;">
           <span class="user-email" id="userEmail"></span>
@@ -1656,11 +2054,27 @@
       </div>
     </div>
 
+    <!-- Job Portfolio Section -->
+    <div class="job-portfolio-section">
+        <h2>Job Portfolio</h2>
+      <div class="job-portfolio-content">
+        <div class="application-pending-section">
+          <div class="job-portfolio-entries" id="jobPortfolioEntries">
+            <!-- Job portfolio entries will be dynamically added here -->
+          </div>
+          <button class="btn btn-primary" id="addJobPortfolioEntryBtn">
+            <i class="fas fa-plus"></i>
+            Add New Entry
+          </button>
+        </div>
+      </div>
+    </div>
+      
     <!-- Main Content -->
     <div class="main-content">
       <!-- Controls Panel -->
       <div class="controls-panel">
-        <h2>Controls</h2>
+        <h2>Resume Settings</h2>
         <button class="btn btn-primary" id="generateResumeBtn">
           <i class="fas fa-magic"></i>
           Enter Job Description
@@ -1708,6 +2122,14 @@
               <input type="checkbox" id="showSummaryCheckbox" checked>
               <span class="checkmark"></span>
               Show Professional Summary
+            </label>
+          </div>
+          
+          <div class="setting-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="centerHeaderCheckbox">
+              <span class="checkmark"></span>
+              Center Headers
             </label>
           </div>
         </div>
@@ -2212,6 +2634,8 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
   <!-- OCR Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <!-- JSZip for creating zip files -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <!-- AI Configuration will be loaded dynamically from server -->
   
   
@@ -2306,6 +2730,7 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
     const ocrLoadingBar = document.getElementById('ocrLoadingBar');
     const showSkillsCheckbox = document.getElementById('showSkillsCheckbox');
     const showSummaryCheckbox = document.getElementById('showSummaryCheckbox');
+    const centerHeaderCheckbox = document.getElementById('centerHeaderCheckbox');
     const preview = document.getElementById('resumePreview');
     const previewStatus = document.getElementById('previewStatus');
     const jsonModal = document.getElementById('jsonModal');
@@ -2354,6 +2779,10 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
     const personalEmail = document.getElementById('personalEmail');
     const personalPhone = document.getElementById('personalPhone');
     const savePersonalInfoBtn = document.getElementById('savePersonalInfoBtn');
+
+    // Job Portfolio Elements
+    const jobPortfolioEntries = document.getElementById('jobPortfolioEntries');
+    const addJobPortfolioEntryBtn = document.getElementById('addJobPortfolioEntryBtn');
 
     // Job Description Elements
     const generateResumeBtn = document.getElementById('generateResumeBtn');
@@ -2478,12 +2907,26 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
 
     // Skills checkbox listener
     showSkillsCheckbox.addEventListener('change', () => {
-      renderResume();
+      if (resumeData) {
+        renderResume(resumeData);
+      }
+      saveDisplayPreferencesToFirebase();
     });
     
     // Summary checkbox listener
     showSummaryCheckbox.addEventListener('change', () => {
-      renderResume();
+      if (resumeData) {
+        renderResume(resumeData);
+      }
+      saveDisplayPreferencesToFirebase();
+    });
+    
+    // Center header checkbox listener
+    centerHeaderCheckbox.addEventListener('change', () => {
+      if (resumeData) {
+        renderResume(resumeData);
+      }
+      saveDisplayPreferencesToFirebase();
     });
 
     // Format Settings Toggle
@@ -2594,6 +3037,16 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
         URL.revokeObjectURL(pdfBlobUrl); // optional cleanup
         pdfBlobUrl = null;
       }, 0);
+
+      // Also export LaTeX source alongside the PDF download
+      try {
+        if (typeof generateLatexResume === 'function' && typeof downloadLatexSource === 'function' && resumeData) {
+          const latex = generateLatexResume(resumeData);
+          downloadLatexSource(latex);
+        }
+      } catch (e) {
+        console.error('Failed to export LaTeX alongside PDF:', e);
+      }
     });
 
     // OCR PDF Download
@@ -2776,6 +3229,11 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
 
       // Add click event listeners for editable elements
       addEditListeners();
+      
+      // Regenerate PDF when resume is rendered (e.g., when display options change)
+      if (resumeData) {
+        generatePDFandStore();
+      }
     }
 
     // Add event listeners for editable elements
@@ -3017,7 +3475,7 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
 % --- Basics ---
 \\usepackage[utf8]{inputenc}
 \\usepackage[T1]{fontenc}
-\\usepackage[margin=1in,top=0.57in,bottom=0.57in]{geometry}
+\\usepackage[margin=1in,top=0.5in,bottom=0.5in]{geometry}
 \\usepackage{helvet}
 \\renewcommand{\\familydefault}{\\sfdefault}
 \\usepackage{microtype}
@@ -3078,12 +3536,17 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
 
       // Professional Summary
       if (data.summary && showSummaryCheckbox.checked) {
-        latex += `\n\n% =========================\n% PROFESSIONAL SUMMARY\n% =========================\n\\sectiontitle{Professional Summary}\n\\vspace{4pt}\n${escapeLatex(data.summary)}\n`;
+        latex += `\n\n\\sectiontitle{Professional Summary}\n\\vspace{4pt}\n\\noindent\\parbox{\\textwidth}{\n${escapeLatex(data.summary)}\n}\n`;
       }
 
       // Work Experience
       if (data.jobs && data.jobs.length > 0) {
-        latex += `\n\n\\vspace{10pt} % <-- add space here\n% =========================\n% WORK EXPERIENCE\n% =========================\n\\sectiontitle{Work Experience}\n`;
+        const headerFormat = centerHeaderCheckbox.checked ? 
+          `{\\centering\\sectiontitle{Work Experience}\\par}` : 
+          `\\sectiontitle{Work Experience}`;
+
+          latex += `\\vspace{4pt}\n`; // Add space before work experience
+        latex += `\n\n% =========================\n% WORK EXPERIENCE\n% =========================\n${headerFormat}\n`;
         
         data.jobs.forEach((job, index) => {
           const location = job.location || 'Location';
@@ -3097,7 +3560,7 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
           // Use needspace to prevent page breaks
           latex += `\n\\needspace{${spaceNeeded}}\n`;
           latex += `\\nopagebreak[4]\n`; // Strong penalty against page breaks
-          latex += `\\vspace{6pt}\n`; // Add space before job entry
+          
           
           // Use samepage environment to keep job entry together
           latex += `\\begin{samepage}\n`;
@@ -3119,10 +3582,25 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
 
       // Skills
       if (data.skills && showSkillsCheckbox.checked) {
-        latex += `\n\n\\vspace{10pt} % <-- add space here\n% =========================\n% SKILLS\n% =========================\n\\sectiontitle{Skills}\n`;
+        const headerFormat = centerHeaderCheckbox.checked ? 
+          `{\\centering\\sectiontitle{Skills}\\par}` : 
+          `\\sectiontitle{Skills}`;
+        latex += `\n\n% =========================\n% SKILLS\n% =========================\n${headerFormat}\n`;
         
         const skillCategories = Object.keys(data.skills);
         if (skillCategories.length > 0) {
+          // Calculate space needed for skills section
+          const categoryCount = skillCategories.length;
+          const estimatedLines = Math.ceil(categoryCount / 2) * 3 + 4; // More conservative estimate for two-column layout + header + spacing
+          const spaceNeeded = `${Math.max(estimatedLines * 1.5, 10)}em`; // More aggressive spacing
+          
+          // Use needspace to prevent page breaks
+          latex += `\n\\needspace{${spaceNeeded}}\n`;
+          latex += `\\nopagebreak[4]\n`; // Strong penalty against page breaks
+          
+          // Use samepage environment to keep skills section together
+          latex += `\\begin{samepage}\n`;
+          latex += `\\nopagebreak[4]\n`; // Additional page break prevention
           latex += `\\begin{tabularx}{\\textwidth}{@{} >{\\raggedright\\arraybackslash}X >{\\raggedright\\arraybackslash}X @{}}\n`;
           
           // Process skills in pairs
@@ -3133,17 +3611,19 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
             const leftSkills = Array.isArray(data.skills[leftCategory]) ? data.skills[leftCategory].join(', ') : '';
             const rightSkills = rightCategory && Array.isArray(data.skills[rightCategory]) ? data.skills[rightCategory].join(', ') : '';
             
-            latex += `\\textbf{${escapeLatex(leftCategory)}:} ${escapeLatex(leftSkills)}`;
+            // Add page break prevention for each row
+            latex += `\\nopagebreak[3]\n`;
+            latex += `\\vspace{5pt}\\textbf{${escapeLatex(leftCategory)}:} ${escapeLatex(leftSkills)}`;
             latex += `\n&\n`;
-            latex += `\\textbf{${escapeLatex(rightCategory || '')}:} ${escapeLatex(rightSkills || '')}`;
+            latex += `\\vspace{5pt}\\textbf{${escapeLatex(rightCategory || '')}:} ${escapeLatex(rightSkills || '')}`;
             latex += ` \\\\[4pt]\n\n`;
             
-            if (i === 0) {
-              latex += `\\vspace{5pt}\n`;
-            }
+           
           }
           
           latex += `\\end{tabularx}\n`;
+          latex += `\\end{samepage}\n`;
+          latex += `\\vspace{8pt}\n`; // Add space after skills section
         }
       }
 
@@ -3156,7 +3636,10 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
         // Use needspace and page break prevention for education section
         latex += `\n\n\\needspace{${spaceNeeded}}\n`;
         latex += `\\nopagebreak[4]\n`; // Strong penalty against page breaks
-        latex += `\\vspace{10pt} % <-- add space here\n% =========================\n% EDUCATION & CERTIFICATIONS\n% =========================\n\\sectiontitle{Education \\& Certifications}\n`;
+        const headerFormat = centerHeaderCheckbox.checked ? 
+          `{\\centering\\sectiontitle{Education \\& Certifications}\\par}` : 
+          `\\sectiontitle{Education \\& Certifications}`;
+        latex += `\\vspace{5pt}\n% =========================\n% EDUCATION & CERTIFICATIONS\n% =========================\n${headerFormat}\n`;
         latex += `\\begin{samepage}\n`;
         latex += `\\begin{itemize}\n`;
         
@@ -3752,10 +4235,12 @@ function drawHiddenTextLayer(pageOut, words, canvasWpx, canvasHpx, pageWpts, pag
       userInfo.style.display = 'flex';
       userEmail.textContent = user.email;
       
-      // Load user's resume, job titles, and personal info
+      // Load user's resume, job titles, personal info, display preferences, and job portfolio
       loadUserResume();
       loadJobTitlesFromFirebase();
       loadPersonalInfoFromFirebase();
+      loadDisplayPreferencesFromFirebase();
+      loadJobPortfolioFromFirebase();
       
       // Hide auth modal
       hideAuthModal();
@@ -4038,6 +4523,852 @@ function drawHiddenTextLayer(pageOut, words, canvasWpx, canvasHpx, pageWpts, pag
         
       } catch (error) {
         console.log('No personal info found in Firestore (this is normal for new users):', error.message);
+      }
+    }
+
+    // Job Portfolio Functions
+    let jobPortfolioData = [];
+    let expandedEntries = new Set(); // Track which entries are expanded
+    let resumeOpenEntries = new Set(); // Track which entries have resume menu open
+    let resumeEditModeEntries = new Set(); // Track which entries are in edit mode (JSON input shown below preview)
+
+    // Initialize job portfolio event listeners
+    function initializeJobPortfolio() {
+      if (addJobPortfolioEntryBtn) {
+        addJobPortfolioEntryBtn.addEventListener('click', addJobPortfolioEntry);
+      }
+    }
+
+    // Add a new job portfolio entry
+    function addJobPortfolioEntry() {
+      const entryId = Date.now().toString();
+      const entry = {
+        id: entryId,
+        jobTitle: '',
+        jobDescription: '',
+        dueDate: '',
+        jobLink: '',
+        status: 'pending', // Default status
+        resumeJson: '' // Resume JSON for this entry
+      };
+      
+      jobPortfolioData.push(entry);
+      // New entries start expanded so user can fill them in
+      expandedEntries.add(entryId);
+      // Sort entries (new entries without due dates will go to bottom)
+      sortJobPortfolioEntries();
+      renderJobPortfolioEntries();
+      saveJobPortfolioToFirebase();
+    }
+
+    // Toggle resume menu
+    function toggleResumeMenu(entryId) {
+      if (resumeOpenEntries.has(entryId)) {
+        resumeOpenEntries.delete(entryId);
+      } else {
+        resumeOpenEntries.add(entryId);
+      }
+      renderJobPortfolioEntries();
+    }
+
+    // Generate resume PDF for a specific entry
+    async function generateResumePDFForEntry(entryId, resumeData, previewContainer) {
+      try {
+        // Hide loading screen if it exists
+        const loadingScreen = document.getElementById(`resumeLoading_${entryId}`);
+        if (loadingScreen) {
+          loadingScreen.style.display = 'none';
+        }
+        
+        // Generate LaTeX from resume data
+        const latex = generateLatexResume(resumeData);
+        
+        // Compile to PDF
+        const pdfBlob = await compileLatexToPDF(latex);
+        const pdfUrl = URL.createObjectURL(pdfBlob);
+        
+        // Show preview
+        const iframe = previewContainer.querySelector('.resume-preview-iframe');
+        if (iframe) {
+          iframe.src = pdfUrl;
+          previewContainer.style.display = 'block';
+          previewContainer.classList.add('active');
+        }
+        
+        // Store PDF URL for download
+        const entry = jobPortfolioData.find(e => e.id === entryId);
+        if (entry) {
+          entry._pdfBlobUrl = pdfUrl;
+        }
+      } catch (error) {
+        console.error('Error generating PDF preview:', error);
+        previewContainer.style.display = 'none';
+        previewContainer.classList.remove('active');
+        // Hide loading screen on error too
+        const loadingScreen = document.getElementById(`resumeLoading_${entryId}`);
+        if (loadingScreen) {
+          loadingScreen.style.display = 'none';
+        }
+      }
+    }
+
+    // Download resume PDF for a specific entry
+    async function downloadResumePDFForEntry(entryId, resumeData) {
+      try {
+        // Get the entry to access job title
+        const entry = jobPortfolioData.find(e => e.id === entryId);
+        const jobTitle = entry?.jobTitle || 'Resume';
+        
+        // Clean job title for filename (remove special characters, replace spaces with hyphens)
+        const cleanJobTitle = jobTitle.replace(/[^a-zA-Z0-9\s-]/g, '').replace(/\s+/g, '-') || 'Resume';
+        
+        // Generate LaTeX from resume data
+        const latex = generateLatexResume(resumeData);
+        
+        // Compile to PDF
+        const pdfBlob = await compileLatexToPDF(latex);
+        const pdfUrl = URL.createObjectURL(pdfBlob);
+        
+        // Download PDF
+        const pdfLink = document.createElement('a');
+        pdfLink.href = pdfUrl;
+        pdfLink.download = `${cleanJobTitle}.pdf`;
+        document.body.appendChild(pdfLink);
+        pdfLink.click();
+        setTimeout(() => {
+          document.body.removeChild(pdfLink);
+          URL.revokeObjectURL(pdfUrl);
+        }, 100);
+        
+        // Create and download LaTeX .txt file
+        const latexBlob = new Blob([latex], { type: 'text/plain' });
+        const latexUrl = URL.createObjectURL(latexBlob);
+        const latexLink = document.createElement('a');
+        latexLink.href = latexUrl;
+        latexLink.download = `${cleanJobTitle}.txt`;
+        document.body.appendChild(latexLink);
+        latexLink.click();
+        setTimeout(() => {
+          document.body.removeChild(latexLink);
+          URL.revokeObjectURL(latexUrl);
+        }, 100);
+      } catch (error) {
+        console.error('Error downloading PDF:', error);
+        throw error;
+      }
+    }
+
+    // Download zip file with resume PDF, job description, and master prompt
+    async function downloadJobApplicationZip(entryId) {
+      try {
+        // Check if JSZip is available
+        if (typeof JSZip === 'undefined') {
+          alert('JSZip library not loaded. Please refresh the page and try again.');
+          return;
+        }
+
+        const entry = jobPortfolioData.find(e => e.id === entryId);
+        if (!entry) {
+          alert('Entry not found');
+          return;
+        }
+
+        const jobTitle = entry?.jobTitle || 'Resume';
+        const cleanJobTitle = jobTitle.replace(/[^a-zA-Z0-9\s-]/g, '').replace(/\s+/g, '-') || 'Resume';
+
+        // Master prompt text
+        const masterPrompt = `You are a resume and government job application writing assistant. Your goal is to write responses that are clear, direct, technically confident, and easy for a tired human reviewer to read. Avoid long sentences, corporate filler, vague claims, or buzzword padding. Every response must follow this structure:
+
+EXPERIENCE → KNOWLEDGE → SKILLS/APPLICATION
+
+- EXPERIENCE: Identify specific relevant experience by role, organization, and environment.
+
+- KNOWLEDGE: Explain what technical or operational understanding was gained from that experience.
+
+- SKILLS/APPLICATION: Show exactly how that knowledge is applied using concrete actions, tools, and outcomes.
+
+STYLE REQUIREMENTS:
+
+- Write in short, readable sentences.
+
+- Use plain professional language.
+
+- Show competence through examples, not adjectives.
+
+- Use technical keywords relevant to the job description for ATS optimization.
+
+- Use bullet points only when they improve readability.
+
+- Avoid fluff, repetition, or unnecessary storytelling.
+
+- End each response by reinforcing capability relevant to the question.
+
+TONE:
+
+- Confident but not arrogant.
+
+- Skilled but not exaggerated.
+
+- Government professional tone.
+
+- No word salad. No filler.
+
+DO NOT:
+
+- Do not use long paragraphs of more than 4 lines.
+
+- Do not write generic statements like "I am passionate" or "I have strong communication skills."
+
+- Do not restate the question.
+
+- Do not talk about unrelated experience.
+
+- Do not overuse adjectives like "excellent," "highly," or "strong."
+
+PRIMARY GOAL:
+
+Produce responses that clearly show: I have this experience → it taught me this knowledge → I used it to apply these skills to solve real problems.`;
+
+        const zip = new JSZip();
+
+        // Add resume PDF if it exists
+        if (entry.resumeJson && entry.resumeJson.trim()) {
+          try {
+            const resumeData = JSON.parse(entry.resumeJson);
+            const latex = generateLatexResume(resumeData);
+            const pdfBlob = await compileLatexToPDF(latex);
+            zip.file(`${cleanJobTitle}-Resume.pdf`, pdfBlob);
+          } catch (error) {
+            console.error('Error generating PDF for zip:', error);
+            // Continue without PDF if generation fails
+          }
+        }
+
+        // Add job description
+        if (entry.jobDescription && entry.jobDescription.trim()) {
+          zip.file(`${cleanJobTitle}-JobDescription.txt`, entry.jobDescription);
+        }
+
+        // Add master prompt
+        zip.file('Master-Prompt.txt', masterPrompt);
+
+        // Generate zip file
+        const zipBlob = await zip.generateAsync({ type: 'blob' });
+        const zipUrl = URL.createObjectURL(zipBlob);
+
+        // Download zip
+        const zipLink = document.createElement('a');
+        zipLink.href = zipUrl;
+        zipLink.download = `${cleanJobTitle}-Application.zip`;
+        document.body.appendChild(zipLink);
+        zipLink.click();
+        setTimeout(() => {
+          document.body.removeChild(zipLink);
+          URL.revokeObjectURL(zipUrl);
+        }, 100);
+      } catch (error) {
+        console.error('Error creating zip file:', error);
+        alert('Error creating zip file. Please try again.');
+      }
+    }
+
+    // Toggle entry expansion
+    function toggleEntryExpansion(entryId) {
+      if (expandedEntries.has(entryId)) {
+        expandedEntries.delete(entryId);
+      } else {
+        expandedEntries.add(entryId);
+      }
+      renderJobPortfolioEntries();
+    }
+
+    // Format date for display
+    function formatDateForDisplay(dateString) {
+      if (!dateString) return '';
+      try {
+        const date = new Date(dateString + 'T00:00:00'); // Add time to avoid timezone issues
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      } catch (e) {
+        return dateString;
+      }
+    }
+
+    // Remove a job portfolio entry
+    function removeJobPortfolioEntry(entryId) {
+      jobPortfolioData = jobPortfolioData.filter(entry => entry.id !== entryId);
+      expandedEntries.delete(entryId); // Remove from expanded set
+      renderJobPortfolioEntries();
+      saveJobPortfolioToFirebase();
+    }
+
+    // Update a job portfolio entry
+    function updateJobPortfolioEntry(entryId, field, value) {
+      const entry = jobPortfolioData.find(e => e.id === entryId);
+      if (entry) {
+        entry[field] = value;
+        // Re-sort and re-render if due date or status changed
+        if (field === 'dueDate' || field === 'status') {
+          sortJobPortfolioEntries();
+          renderJobPortfolioEntries();
+        } else {
+          saveJobPortfolioToFirebase();
+        }
+      }
+    }
+
+    // Sort job portfolio entries by due date (nearest first), with rejected entries at the bottom
+    function sortJobPortfolioEntries() {
+      jobPortfolioData.sort((a, b) => {
+        const statusA = a.status || 'pending';
+        const statusB = b.status || 'pending';
+        const aIsRejected = statusA === 'rejected';
+        const bIsRejected = statusB === 'rejected';
+        
+        // Rejected entries always go to the very bottom
+        if (aIsRejected && !bIsRejected) return 1; // a (rejected) goes after b
+        if (!aIsRejected && bIsRejected) return -1; // a goes before b (rejected)
+        if (aIsRejected && bIsRejected) {
+          // Both rejected - sort by due date among rejected entries
+          if (!a.dueDate && !b.dueDate) return 0;
+          if (!a.dueDate) return 1;
+          if (!b.dueDate) return -1;
+          const dateA = new Date(a.dueDate);
+          const dateB = new Date(b.dueDate);
+          if (isNaN(dateA.getTime()) && isNaN(dateB.getTime())) return 0;
+          if (isNaN(dateA.getTime())) return 1;
+          if (isNaN(dateB.getTime())) return -1;
+          return dateA - dateB;
+        }
+        
+        // Neither is rejected - sort by due date (nearest first)
+        // Entries without due dates go to the bottom (but above rejected)
+        if (!a.dueDate && !b.dueDate) return 0;
+        if (!a.dueDate) return 1; // a goes after b (to bottom)
+        if (!b.dueDate) return -1; // a goes before b (to top)
+        
+        // Compare dates (nearest first - ascending order)
+        const dateA = new Date(a.dueDate);
+        const dateB = new Date(b.dueDate);
+        
+        // Check for invalid dates
+        if (isNaN(dateA.getTime()) && isNaN(dateB.getTime())) return 0;
+        if (isNaN(dateA.getTime())) return 1; // Invalid date goes to bottom
+        if (isNaN(dateB.getTime())) return -1; // Valid date goes to top
+        
+        return dateA - dateB; // Ascending order (earliest dates first)
+      });
+    }
+
+    // Render all job portfolio entries
+    async function renderJobPortfolioEntries() {
+      if (!jobPortfolioEntries) return;
+      
+      jobPortfolioEntries.innerHTML = '';
+      
+      if (jobPortfolioData.length === 0) {
+        const emptyState = document.createElement('div');
+        emptyState.className = 'job-portfolio-empty';
+        emptyState.style.cssText = 'text-align: center; padding: 2rem; color: var(--text-muted);';
+        emptyState.innerHTML = '<i class="fas fa-briefcase" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i><p>No job applications yet. Click "Add New Entry" to get started.</p>';
+        jobPortfolioEntries.appendChild(emptyState);
+        return;
+      }
+      
+      // Sort entries by due date before rendering
+      sortJobPortfolioEntries();
+      
+      jobPortfolioData.forEach(entry => {
+        const isExpanded = expandedEntries.has(entry.id);
+        const status = entry.status || 'pending'; // Default to pending if not set
+        const entryElement = document.createElement('div');
+        const isResumeOpen = resumeOpenEntries.has(entry.id);
+        entryElement.className = `job-portfolio-entry ${isExpanded ? 'expanded' : 'collapsed'} ${isResumeOpen ? 'resume-open' : ''} status-${status}`;
+        
+        // Create header with preview info
+        const header = document.createElement('div');
+        header.className = 'job-portfolio-entry-header';
+        
+        const preview = document.createElement('div');
+        preview.className = 'job-portfolio-entry-preview';
+        
+        const title = document.createElement('div');
+        title.className = 'job-portfolio-entry-title';
+        title.textContent = entry.jobTitle || 'Untitled Entry';
+        preview.appendChild(title);
+        
+        const dueDate = document.createElement('div');
+        dueDate.className = 'job-portfolio-entry-due-date';
+        dueDate.textContent = entry.dueDate ? formatDateForDisplay(entry.dueDate) : 'No due date';
+        preview.appendChild(dueDate);
+        
+        header.appendChild(preview);
+        
+        // Create actions container
+        const actions = document.createElement('div');
+        actions.className = 'job-portfolio-entry-actions';
+        
+        // Download zip button (icon only, grey colored) - to the left of status dropdown
+        const downloadZipHeaderBtn = document.createElement('button');
+        downloadZipHeaderBtn.className = 'job-portfolio-entry-download';
+        downloadZipHeaderBtn.innerHTML = '<i class="fas fa-download"></i>';
+        downloadZipHeaderBtn.setAttribute('data-entry-id', entry.id);
+        downloadZipHeaderBtn.title = 'Download Application Package (PDF, Job Description, Master Prompt)';
+        downloadZipHeaderBtn.addEventListener('click', async () => {
+          const entryId = downloadZipHeaderBtn.getAttribute('data-entry-id');
+          await downloadJobApplicationZip(entryId);
+        });
+        actions.appendChild(downloadZipHeaderBtn);
+        
+        // Status dropdown (without label)
+        const statusContainer = document.createElement('div');
+        statusContainer.className = 'job-portfolio-entry-status';
+        const statusSelect = document.createElement('select');
+        statusSelect.id = `status_${entry.id}`;
+        statusSelect.setAttribute('data-entry-id', entry.id);
+        statusSelect.setAttribute('data-field', 'status');
+        
+        // Create options
+        const options = [
+          { value: 'pending', text: 'Pending' },
+          { value: 'accepted', text: 'Accepted' },
+          { value: 'rejected', text: 'Rejected' }
+        ];
+        
+        options.forEach(option => {
+          const optionElement = document.createElement('option');
+          optionElement.value = option.value;
+          optionElement.textContent = option.text;
+          if (option.value === status) {
+            optionElement.selected = true;
+          }
+          statusSelect.appendChild(optionElement);
+        });
+        
+        statusSelect.addEventListener('change', (e) => {
+          const entryId = e.target.getAttribute('data-entry-id');
+          const newStatus = e.target.value;
+          updateJobPortfolioEntry(entryId, 'status', newStatus);
+          // Re-render to update border color
+          renderJobPortfolioEntries();
+        });
+        
+        statusContainer.appendChild(statusSelect);
+        actions.appendChild(statusContainer);
+        
+        // Resume button (to the left of Edit)
+        const resumeBtn = document.createElement('button');
+        resumeBtn.className = 'job-portfolio-entry-resume';
+        resumeBtn.innerHTML = isResumeOpen 
+          ? '<i class="fas fa-chevron-up"></i> Close Resume' 
+          : '<i class="fas fa-file-alt"></i> Resume';
+        resumeBtn.addEventListener('click', () => toggleResumeMenu(entry.id));
+        actions.appendChild(resumeBtn);
+        
+        // Edit button
+        const editBtn = document.createElement('button');
+        editBtn.className = 'job-portfolio-entry-edit';
+        editBtn.innerHTML = isExpanded 
+          ? '<i class="fas fa-chevron-up"></i> Close' 
+          : '<i class="fas fa-edit"></i> Edit';
+        editBtn.addEventListener('click', () => toggleEntryExpansion(entry.id));
+        actions.appendChild(editBtn);
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'job-portfolio-entry-remove';
+        removeBtn.innerHTML = '<i class="fas fa-trash"></i> Remove';
+        removeBtn.addEventListener('click', () => removeJobPortfolioEntry(entry.id));
+        actions.appendChild(removeBtn);
+        
+        header.appendChild(actions);
+        entryElement.appendChild(header);
+        
+        // Create collapsible content container
+        const content = document.createElement('div');
+        content.className = 'job-portfolio-entry-content';
+        
+        // Create fields container
+        const fieldsContainer = document.createElement('div');
+        fieldsContainer.className = 'job-portfolio-entry-fields';
+        
+        // Job Title field
+        const jobTitleField = document.createElement('div');
+        jobTitleField.className = 'job-portfolio-entry-field';
+        const jobTitleLabel = document.createElement('label');
+        jobTitleLabel.setAttribute('for', `jobTitle_${entry.id}`);
+        jobTitleLabel.textContent = 'Job Title';
+        const jobTitleInput = document.createElement('input');
+        jobTitleInput.type = 'text';
+        jobTitleInput.id = `jobTitle_${entry.id}`;
+        jobTitleInput.placeholder = 'Enter job title';
+        jobTitleInput.value = entry.jobTitle || '';
+        jobTitleInput.setAttribute('data-entry-id', entry.id);
+        jobTitleInput.setAttribute('data-field', 'jobTitle');
+        jobTitleField.appendChild(jobTitleLabel);
+        jobTitleField.appendChild(jobTitleInput);
+        fieldsContainer.appendChild(jobTitleField);
+        
+        // Due Date field
+        const dueDateField = document.createElement('div');
+        dueDateField.className = 'job-portfolio-entry-field';
+        const dueDateLabel = document.createElement('label');
+        dueDateLabel.setAttribute('for', `dueDate_${entry.id}`);
+        dueDateLabel.textContent = 'Due Date';
+        const dueDateInput = document.createElement('input');
+        dueDateInput.type = 'date';
+        dueDateInput.id = `dueDate_${entry.id}`;
+        dueDateInput.value = entry.dueDate || '';
+        dueDateInput.setAttribute('data-entry-id', entry.id);
+        dueDateInput.setAttribute('data-field', 'dueDate');
+        dueDateField.appendChild(dueDateLabel);
+        dueDateField.appendChild(dueDateInput);
+        fieldsContainer.appendChild(dueDateField);
+        
+        // Job Description field (full width)
+        const jobDescField = document.createElement('div');
+        jobDescField.className = 'job-portfolio-entry-field full-width';
+        const jobDescLabel = document.createElement('label');
+        jobDescLabel.setAttribute('for', `jobDescription_${entry.id}`);
+        jobDescLabel.textContent = 'Job Description';
+        const jobDescTextarea = document.createElement('textarea');
+        jobDescTextarea.id = `jobDescription_${entry.id}`;
+        jobDescTextarea.placeholder = 'Enter job description (as long as you want)';
+        jobDescTextarea.textContent = entry.jobDescription || '';
+        jobDescTextarea.setAttribute('data-entry-id', entry.id);
+        jobDescTextarea.setAttribute('data-field', 'jobDescription');
+        jobDescField.appendChild(jobDescLabel);
+        jobDescField.appendChild(jobDescTextarea);
+        fieldsContainer.appendChild(jobDescField);
+        
+        // Job Link field (full width)
+        const jobLinkField = document.createElement('div');
+        jobLinkField.className = 'job-portfolio-entry-field full-width';
+        const jobLinkLabel = document.createElement('label');
+        jobLinkLabel.setAttribute('for', `jobLink_${entry.id}`);
+        jobLinkLabel.textContent = 'Job Link';
+        const jobLinkInput = document.createElement('input');
+        jobLinkInput.type = 'url';
+        jobLinkInput.id = `jobLink_${entry.id}`;
+        jobLinkInput.placeholder = 'Enter job application link';
+        jobLinkInput.value = entry.jobLink || '';
+        jobLinkInput.setAttribute('data-entry-id', entry.id);
+        jobLinkInput.setAttribute('data-field', 'jobLink');
+        jobLinkField.appendChild(jobLinkLabel);
+        jobLinkField.appendChild(jobLinkInput);
+        fieldsContainer.appendChild(jobLinkField);
+        
+        content.appendChild(fieldsContainer);
+        entryElement.appendChild(content);
+        
+        // Create resume menu section
+        const resumeMenu = document.createElement('div');
+        resumeMenu.className = 'job-portfolio-entry-resume-menu';
+        
+        const resumeMenuContent = document.createElement('div');
+        resumeMenuContent.className = 'resume-menu-content';
+        
+        // Check if entry has existing resume JSON data
+        const hasExistingResumeJson = entry.resumeJson && entry.resumeJson.trim();
+        const isEditMode = resumeEditModeEntries.has(entry.id);
+        
+        // Resume JSON input section (wrapper for conditional display)
+        const resumeJsonSection = document.createElement('div');
+        resumeJsonSection.className = 'resume-json-section';
+        
+        const resumeJsonLabel = document.createElement('label');
+        resumeJsonLabel.setAttribute('for', `resumeJson_${entry.id}`);
+        resumeJsonLabel.textContent = 'Resume JSON';
+        resumeJsonLabel.style.cssText = 'font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 0.5rem; display: block;';
+        
+        const resumeJsonInput = document.createElement('textarea');
+        resumeJsonInput.id = `resumeJson_${entry.id}`;
+        resumeJsonInput.className = 'resume-json-input';
+        resumeJsonInput.placeholder = 'Paste your resume JSON here...';
+        resumeJsonInput.value = entry.resumeJson || '';
+        resumeJsonInput.setAttribute('data-entry-id', entry.id);
+        
+        resumeJsonInput.addEventListener('input', async (e) => {
+          const entryId = e.target.getAttribute('data-entry-id');
+          const jsonValue = e.target.value;
+          updateJobPortfolioEntry(entryId, 'resumeJson', jsonValue);
+          
+          // Try to parse and generate PDF preview
+          if (jsonValue.trim()) {
+            try {
+              const resumeData = JSON.parse(jsonValue);
+              await generateResumePDFForEntry(entryId, resumeData, resumePreviewContainer);
+            } catch (error) {
+              console.error('Invalid JSON:', error);
+              resumePreviewContainer.style.display = 'none';
+              resumePreviewContainer.classList.remove('active');
+            }
+          } else {
+            resumePreviewContainer.style.display = 'none';
+            resumePreviewContainer.classList.remove('active');
+          }
+        });
+        
+        resumeJsonSection.appendChild(resumeJsonLabel);
+        resumeJsonSection.appendChild(resumeJsonInput);
+        
+        // Resume PDF preview container
+        const resumePreviewContainer = document.createElement('div');
+        resumePreviewContainer.className = 'resume-preview-container';
+        resumePreviewContainer.id = `resumePreview_${entry.id}`;
+        
+        const resumePreviewIframe = document.createElement('iframe');
+        resumePreviewIframe.className = 'resume-preview-iframe';
+        resumePreviewIframe.id = `resumePreviewIframe_${entry.id}`;
+        
+        const downloadResumeBtn = document.createElement('button');
+        downloadResumeBtn.className = 'btn btn-secondary';
+        downloadResumeBtn.style.cssText = 'margin-top: 1rem;';
+        downloadResumeBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Download PDF';
+        downloadResumeBtn.setAttribute('data-entry-id', entry.id);
+        downloadResumeBtn.addEventListener('click', async () => {
+          const entryId = downloadResumeBtn.getAttribute('data-entry-id');
+          const entry = jobPortfolioData.find(e => e.id === entryId);
+          if (entry && entry.resumeJson) {
+            try {
+              const resumeData = JSON.parse(entry.resumeJson);
+              await downloadResumePDFForEntry(entryId, resumeData);
+            } catch (error) {
+              console.error('Error downloading PDF:', error);
+              alert('Error generating PDF. Please check your JSON format.');
+            }
+          }
+        });
+        
+        // Edit Resume button (only shown when there's existing JSON and not in edit mode)
+        const editResumeBtn = document.createElement('button');
+        editResumeBtn.className = 'btn btn-secondary';
+        editResumeBtn.style.cssText = 'margin-top: 0.5rem; margin-left: 0;';
+        editResumeBtn.innerHTML = '<i class="fas fa-edit"></i> Edit Resume';
+        editResumeBtn.setAttribute('data-entry-id', entry.id);
+        editResumeBtn.addEventListener('click', () => {
+          const entryId = editResumeBtn.getAttribute('data-entry-id');
+          resumeEditModeEntries.add(entryId);
+          renderJobPortfolioEntries();
+        });
+        
+        // Done Editing button (only shown when in edit mode)
+        const doneEditingBtn = document.createElement('button');
+        doneEditingBtn.className = 'btn btn-primary';
+        doneEditingBtn.style.cssText = 'margin-top: 0.5rem; margin-left: 0;';
+        doneEditingBtn.innerHTML = '<i class="fas fa-check"></i> Done Editing';
+        doneEditingBtn.setAttribute('data-entry-id', entry.id);
+        doneEditingBtn.addEventListener('click', () => {
+          const entryId = doneEditingBtn.getAttribute('data-entry-id');
+          resumeEditModeEntries.delete(entryId);
+          renderJobPortfolioEntries();
+        });
+        
+        // Button container
+        const buttonContainer = document.createElement('div');
+        buttonContainer.style.cssText = 'display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;';
+        buttonContainer.appendChild(downloadResumeBtn);
+        if (hasExistingResumeJson && !isEditMode) {
+          buttonContainer.appendChild(editResumeBtn);
+        } else if (isEditMode) {
+          buttonContainer.appendChild(doneEditingBtn);
+        }
+        
+        resumePreviewContainer.appendChild(resumePreviewIframe);
+        resumePreviewContainer.appendChild(buttonContainer);
+        
+        // Loading screen (only shown when there's existing JSON and PDF is being generated)
+        const loadingScreen = document.createElement('div');
+        loadingScreen.className = 'resume-loading-screen';
+        loadingScreen.id = `resumeLoading_${entry.id}`;
+        loadingScreen.innerHTML = `
+          <div class="resume-loading-spinner"></div>
+          <div class="resume-loading-text">Generating Resume Preview</div>
+          <div class="resume-loading-subtext">This may take a few moments...</div>
+        `;
+        
+        // Determine layout based on whether entry has existing JSON
+        if (hasExistingResumeJson) {
+          // Entry has existing JSON: show loading screen first, then preview, then JSON input below if in edit mode
+          if (!isEditMode) {
+            // Not in edit mode: hide JSON input initially
+            resumeJsonSection.style.display = 'none';
+          }
+          // Show loading screen initially
+          resumeMenuContent.appendChild(loadingScreen);
+          resumeMenuContent.appendChild(resumePreviewContainer);
+          // JSON input goes below preview when in edit mode
+          if (isEditMode) {
+            resumeMenuContent.appendChild(resumeJsonSection);
+          }
+        } else {
+          // No existing JSON: show JSON input above preview (normal flow)
+          resumeMenuContent.appendChild(resumeJsonSection);
+          resumeMenuContent.appendChild(resumePreviewContainer);
+        }
+        
+        // Load existing resume JSON and generate preview if available
+        if (hasExistingResumeJson) {
+          (async () => {
+            try {
+              const resumeData = JSON.parse(entry.resumeJson);
+              await generateResumePDFForEntry(entry.id, resumeData, resumePreviewContainer);
+              // Hide loading screen and show preview once PDF is ready
+              loadingScreen.style.display = 'none';
+            } catch (error) {
+              console.error('Error loading resume preview:', error);
+              loadingScreen.style.display = 'none';
+            }
+          })();
+        }
+        
+        resumeMenu.appendChild(resumeMenuContent);
+        entryElement.appendChild(resumeMenu);
+        
+        jobPortfolioEntries.appendChild(entryElement);
+        
+        // Add event listeners for inputs
+        const inputs = entryElement.querySelectorAll('input, textarea');
+        inputs.forEach(input => {
+          input.addEventListener('input', () => {
+            const entryId = input.getAttribute('data-entry-id');
+            const field = input.getAttribute('data-field');
+            const value = input.value;
+            updateJobPortfolioEntry(entryId, field, value);
+            
+            // Update preview if job title or due date changed
+            if (field === 'jobTitle') {
+              title.textContent = value || 'Untitled Entry';
+            } else if (field === 'dueDate') {
+              dueDate.textContent = value ? formatDateForDisplay(value) : 'No due date';
+            }
+          });
+        });
+      });
+    }
+
+
+    // Save job portfolio to Firebase
+    async function saveJobPortfolioToFirebase() {
+      if (!currentUser) {
+        console.log('No authenticated user - cannot save job portfolio');
+        return;
+      }
+      
+      try {
+        const portfolioData = {
+          entries: jobPortfolioData,
+          lastUpdated: new Date().toISOString()
+        };
+        
+        console.log('Job portfolio to save:', portfolioData);
+        
+        const portfolioRef = doc(db, 'users', currentUser.uid, 'jobPortfolio', 'data');
+        await setDoc(portfolioRef, portfolioData);
+        console.log('✅ Job portfolio saved to Firestore successfully!');
+        
+      } catch (error) {
+        console.error('❌ Error saving job portfolio to Firebase:', error);
+      }
+    }
+
+    // Load job portfolio from Firebase
+    async function loadJobPortfolioFromFirebase() {
+      if (!currentUser) {
+        console.log('No authenticated user - cannot load job portfolio');
+        return;
+      }
+      
+      try {
+        const portfolioRef = doc(db, 'users', currentUser.uid, 'jobPortfolio', 'data');
+        const portfolioDoc = await getDoc(portfolioRef);
+        
+        if (portfolioDoc.exists()) {
+          const portfolioData = portfolioDoc.data();
+          console.log('Job portfolio loaded:', portfolioData);
+          
+          if (portfolioData.entries && Array.isArray(portfolioData.entries)) {
+            jobPortfolioData = portfolioData.entries;
+            // Ensure all entries have a status (default to 'pending' if missing) and resumeJson
+            jobPortfolioData.forEach(entry => {
+              if (!entry.status) {
+                entry.status = 'pending';
+              }
+              if (!entry.resumeJson) {
+                entry.resumeJson = '';
+              }
+            });
+            // Sort entries by due date when loading
+            sortJobPortfolioEntries();
+            renderJobPortfolioEntries();
+            console.log('✅ Job portfolio loaded from Firestore successfully!');
+          }
+        } else {
+          console.log('No job portfolio found in Firestore (this is normal for new users)');
+        }
+        
+      } catch (error) {
+        console.log('No job portfolio found in Firestore (this is normal for new users):', error.message);
+      }
+    }
+
+    // Save display preferences to Firebase
+    async function saveDisplayPreferencesToFirebase() {
+      if (!currentUser) {
+        console.log('No authenticated user - cannot save display preferences');
+        return;
+      }
+      
+      try {
+        const displayPreferences = {
+          showSkills: showSkillsCheckbox ? showSkillsCheckbox.checked : true,
+          showSummary: showSummaryCheckbox ? showSummaryCheckbox.checked : true,
+          centerHeaders: centerHeaderCheckbox ? centerHeaderCheckbox.checked : false,
+          lastUpdated: new Date().toISOString()
+        };
+        
+        console.log('Display preferences to save:', displayPreferences);
+        
+        const preferencesRef = doc(db, 'users', currentUser.uid, 'displayPreferences', 'data');
+        await setDoc(preferencesRef, displayPreferences);
+        console.log('✅ Display preferences saved to Firestore successfully!');
+        
+      } catch (error) {
+        console.error('❌ Error saving display preferences to Firebase:', error);
+      }
+    }
+
+    // Load display preferences from Firebase
+    async function loadDisplayPreferencesFromFirebase() {
+      if (!currentUser) {
+        console.log('No authenticated user - cannot load display preferences');
+        return;
+      }
+      
+      try {
+        const preferencesRef = doc(db, 'users', currentUser.uid, 'displayPreferences', 'data');
+        const preferencesDoc = await getDoc(preferencesRef);
+        
+        if (preferencesDoc.exists()) {
+          const preferences = preferencesDoc.data();
+          console.log('Display preferences loaded:', preferences);
+          
+          // Apply loaded preferences to checkboxes
+          if (showSkillsCheckbox) {
+            showSkillsCheckbox.checked = preferences.showSkills !== undefined ? preferences.showSkills : true;
+          }
+          if (showSummaryCheckbox) {
+            showSummaryCheckbox.checked = preferences.showSummary !== undefined ? preferences.showSummary : true;
+          }
+          if (centerHeaderCheckbox) {
+            centerHeaderCheckbox.checked = preferences.centerHeaders !== undefined ? preferences.centerHeaders : false;
+          }
+          
+          console.log('✅ Display preferences loaded from Firestore successfully!');
+        } else {
+          console.log('No display preferences found in Firestore (using defaults)');
+        }
+        
+      } catch (error) {
+        console.log('No display preferences found in Firestore (this is normal for new users):', error.message);
       }
     }
 
@@ -5831,6 +7162,9 @@ Provide your response in this EXACT JSON format:
       
       // Initialize personal info listeners
       addPersonalInfoListeners();
+      
+      // Initialize job portfolio
+      initializeJobPortfolio();
     });
 
     // Settings functionality

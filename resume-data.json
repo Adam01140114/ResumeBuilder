@@ -1,18 +1,11 @@
 {
   "contact": {
     "name": "Adam Chaabane",
-    "address": "921 Sloat Drive Salinas CA",
+    "address": "921 Sloat Drive, Salinas, CA",
     "email": "adam@rdr-gp.com",
     "phone": "831-760-6958"
   },
-  "certificates": [
-    { "name": "University of Santa Cruz B.S. Degree in Computer Science (certified graduation date May 2024)" },
-    { "name": "California Law Enforcement Telecommunications System (CLETS) Certification" },
-    { "name": "CRYSTAL REPORTS for SAP BUSINESS ONE MASTERY (UDEMY training certification)" },
-    { "name": "SQL QUERY FOR SAP BUSINESS ONE (UDEMY training certification)" },
-    { "name": "Water Distributor Operator Grade 2 Certification" },
-    { "name": "Water Treatment Operator Grade 2 Certification" }
-  ],
+  "summary": "Data Engineer and Full‑Stack Developer experienced in building secure, scalable systems for government and enterprise use. Strong in relational data modeling, API/microservices integration, and analytics with Power BI, Tableau, and Crystal Reports. Adept at turning complex requirements into intuitive UIs and automated, auditable data workflows aligned with GDPR/CCPA.",
   "jobs": [
     {
       "title": "Senior Data Engineer & Full-Stack Web Developer",
@@ -21,14 +14,13 @@
       "startDate": "June 2024",
       "endDate": "Current",
       "duties": [
-        "Developed secure, scalable applications to manage sensitive government data, adhering to General Data Protection Regulation (GDPR) and California Consumer Privacy Act (CCPA) regulations while using Personally Identifiable Information (PII) to track user data.",
-        "Designed and optimized relational databases, ensuring performance, security, and data integrity across multiple platforms.",
-        "Integrated APIs and microservices, streamlining workflows between on-premises and cloud-hosted services, with initial stages often relying on exporting data to Excel for analysis, testing, and rapid prototyping.",
-        "Utilized data dumps to Excel as part of various applications, providing real-time reporting and allowing users to efficiently handle and analyze large datasets before moving them into more advanced data processing systems.",
-        "Programmed using Python, JavaScript, and HTML to create customized software solutions, frequently requiring seamless data exports to Excel for client reporting and validation purposes.",
-        "Created intelligent dashboards using Power BI, Tableau, and SAP Crystal Reports, driving enhanced reporting and data visualization capabilities.",
-        "Interfaced with clients to gather requirements and developed intuitive Graphical User Interfaces (GUIs) to enhance efficiency based on user feedback.",
-        "Collaborated with cross-functional teams to deliver tailored solutions, improving process efficiency and system adoption."
+        "Developed secure, scalable applications handling PII in alignment with GDPR and CCPA.",
+        "Designed and optimized relational databases for performance, security, and integrity.",
+        "Integrated APIs and microservices across on‑prem and cloud services with staged Excel export workflows for rapid analysis and prototyping.",
+        "Built automated Excel data export/reporting pipelines for validation and client deliverables.",
+        "Developed solutions with Python, JavaScript, and HTML; created dashboards in Power BI, Tableau, and SAP Crystal Reports.",
+        "Gathered requirements with clients and delivered intuitive GUIs to improve efficiency.",
+        "Collaborated cross‑functionally to deliver tailored solutions improving processes and adoption."
       ]
     },
     {
@@ -38,13 +30,13 @@
       "startDate": "November 2023",
       "endDate": "June 2024",
       "duties": [
-        "Managed enterprise databases both on-premises and in the cloud, ensuring seamless operations and data integrity across platforms.",
-        "Created complex SQL queries and scripts for optimized data processing to support the Adult and Juvenile Divisions with state and local reporting compliance, as well as public records requests.",
-        "Utilized Power BI to develop interactive dashboards, providing real-time insights and improving the visibility of key performance indicators (KPIs) across departments.",
-        "Provided ongoing support for user-facing systems, training staff and improving system adoption and efficiency, including but not limited to proprietary institutional inmate door systems, central control, and backup response and contingency planning.",
-        "Administered and maintained on-premises applications and cloud-based platforms, ensuring seamless integrations, supporting administrative tasks such as form creation and document storage and retrieval.",
-        "Coordinated with IT and internal/external business teams to deliver system upgrades, resolving technical issues and optimizing performance.",
-        "Led a team of analysts, producing technical business requirements documentation and implementing process improvements."
+        "Administered on‑prem and cloud enterprise databases ensuring integrity and uptime.",
+        "Created complex SQL for reporting and compliance across Adult and Juvenile Divisions.",
+        "Built Power BI dashboards to surface real‑time KPIs and improve visibility.",
+        "Supported and trained users on critical systems including institutional control systems and contingency procedures.",
+        "Maintained and integrated on‑prem and SaaS platforms for forms, storage, and retrieval.",
+        "Coordinated upgrades with IT and business teams; resolved technical issues and optimized performance.",
+        "Led analysts, authored technical requirements, and implemented process improvements."
       ]
     },
     {
@@ -54,12 +46,12 @@
       "startDate": "September 2019",
       "endDate": "February 2021",
       "duties": [
-        "Designed and implemented SCADA systems, automating the monitoring and control of water treatment operations.",
-        "Integrated SCADA data with relational databases, providing real-time insights for decision-making and reporting.",
-        "Automated data processing using Python and SQL, significantly reducing manual tasks and improving operational efficiency.",
-        "Collaborated with engineering teams to develop custom solutions based on project requirements, ensuring on-time delivery.",
-        "Developed and customized client-facing reports and dashboards, ensuring that real-time SCADA data and performance metrics were easily accessible and tailored to meet specific reporting criteria.",
-        "Produced detailed technical documentation and user manuals for SCADA systems, facilitating user training and support."
+        "Designed and implemented SCADA systems for water treatment operations automation.",
+        "Integrated SCADA data with relational databases for real‑time insights and reporting.",
+        "Automated processing using Python and SQL to reduce manual tasks.",
+        "Partnered with engineering to deliver custom solutions on time.",
+        "Developed client‑facing reports and dashboards for real‑time metrics.",
+        "Produced technical documentation and user manuals to streamline training and support."
       ]
     },
     {
@@ -69,11 +61,57 @@
       "startDate": "May 2018",
       "endDate": "June 2019",
       "duties": [
-        "Programmed and installed SCADA systems to improve real-time data collection for water system management.",
-        "Automated SCADA data integrations with databases, reducing manual intervention and streamlining reporting.",
-        "Managed multiple SCADA system projects, working closely with teams to meet deadlines and project specifications.",
-        "Created comprehensive technical documentation and user guides for system operations and maintenance."
+        "Programmed and installed SCADA systems to improve real‑time data collection.",
+        "Automated SCADA‑to‑database integrations and streamlined reporting.",
+        "Managed multiple SCADA projects to meet specifications and deadlines.",
+        "Created technical documentation and user guides for operations and maintenance."
       ]
     }
+  ],
+  "skills": {
+    "Data Engineering": [
+      "Relational Data Modeling",
+      "ETL/ELT Pipelines",
+      "SQL Performance Tuning",
+      "Data Governance (GDPR/CCPA)"
+    ],
+    "Programming": [
+      "Python",
+      "JavaScript",
+      "HTML/CSS",
+      "REST APIs",
+      "Microservices"
+    ],
+    "Analytics & BI": [
+      "Power BI",
+      "Tableau",
+      "SAP Crystal Reports",
+      "Excel Automation"
+    ],
+    "DevOps & Platforms": [
+      "On‑prem and Cloud Integrations",
+      "Version Control (Git)"
+    ],
+    "SCADA & Industrial": [
+      "SCADA Integrations",
+      "Realtime Data Acquisition"
+    ],
+    "Soft Skills": [
+      "Client Requirements Gathering",
+      "Cross‑functional Collaboration",
+      "Technical Documentation",
+      "Training & Support"
+    ]
+  },
+  "education": [
+    "B.S. in Computer Science, University of California, Santa Cruz (May 2024)"
+  ],
+  "certificates": [
+    "University of Santa Cruz B.S. Degree in Computer Science (certified graduation date May 2024)",
+    "California Law Enforcement Telecommunications System (CLETS) Certification",
+    "CRYSTAL REPORTS for SAP BUSINESS ONE MASTERY (Udemy)",
+    "SQL QUERY FOR SAP BUSINESS ONE (Udemy)",
+    "Water Distributor Operator Grade 2 Certification",
+    "Water Treatment Operator Grade 2 Certification"
   ]
-} 
+}
