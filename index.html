@@ -330,7 +330,7 @@
 
     .resume-preview-iframe {
       width: 100%;
-      height: 600px;
+      height: 720px;
       border: 1px solid var(--border);
       border-radius: var(--radius);
       background: white;
@@ -374,6 +374,171 @@
     .resume-loading-subtext {
       color: var(--text-muted);
       font-size: 0.875rem;
+    }
+
+    /* AI Building Loading Screen */
+    .ai-building-screen {
+      background: linear-gradient(135deg, var(--surface) 0%, rgba(99, 102, 241, 0.05) 100%);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+    }
+
+    .ai-building-animation {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      margin-bottom: 1.5rem;
+    }
+
+    .ai-building-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulse-glow 2s ease-in-out infinite;
+      box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+    }
+
+    .ai-building-icon i {
+      font-size: 1.75rem;
+      color: white;
+      animation: robot-bounce 1s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.4), 0 0 40px rgba(99, 102, 241, 0.2);
+        transform: translate(-50%, -50%) scale(1);
+      }
+      50% {
+        box-shadow: 0 0 30px rgba(99, 102, 241, 0.6), 0 0 60px rgba(99, 102, 241, 0.3);
+        transform: translate(-50%, -50%) scale(1.05);
+      }
+    }
+
+    @keyframes robot-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+
+    .ai-building-particles {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+    }
+
+    .ai-building-particles span {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      border-radius: 50%;
+      animation: orbit 3s linear infinite;
+    }
+
+    .ai-building-particles span:nth-child(1) { animation-delay: 0s; }
+    .ai-building-particles span:nth-child(2) { animation-delay: 0.6s; }
+    .ai-building-particles span:nth-child(3) { animation-delay: 1.2s; }
+    .ai-building-particles span:nth-child(4) { animation-delay: 1.8s; }
+    .ai-building-particles span:nth-child(5) { animation-delay: 2.4s; }
+
+    @keyframes orbit {
+      0% {
+        top: 50%;
+        left: 0%;
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+      }
+      25% {
+        top: 0%;
+        left: 50%;
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      50% {
+        top: 50%;
+        left: 100%;
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      75% {
+        top: 100%;
+        left: 50%;
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      100% {
+        top: 50%;
+        left: 0%;
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+      }
+    }
+
+    .ai-building-text {
+      color: #6366f1;
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .ai-progress-dots {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .ai-progress-dots .dot {
+      width: 10px;
+      height: 10px;
+      background: #6366f1;
+      border-radius: 50%;
+      animation: dot-pulse 1.4s ease-in-out infinite;
+    }
+
+    .ai-progress-dots .dot:nth-child(1) { animation-delay: 0s; }
+    .ai-progress-dots .dot:nth-child(2) { animation-delay: 0.2s; }
+    .ai-progress-dots .dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes dot-pulse {
+      0%, 80%, 100% {
+        transform: scale(0.6);
+        opacity: 0.4;
+      }
+      40% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Create Resume Button */
+    .create-resume-btn {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      border: none;
+      color: white;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .create-resume-btn:hover:not(:disabled) {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    }
+
+    .create-resume-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
     }
 
     .job-portfolio-entry-download {
@@ -2701,9 +2866,9 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
         // Fallback configuration (no API key - server must be running)
         AI_CONFIG = {
           apiKey: null, // No fallback API key for security
-          model: 'gpt-4',
-          maxTokens: 2000,
-          temperature: 0.7
+          model: 'gpt-4o',
+          maxTokens: 4000,
+          temperature: 0.5
         };
         console.log('Using fallback AI configuration');
       }
@@ -4810,9 +4975,9 @@ Produce responses that clearly show: I have this experience → it taught me thi
         if (field === 'dueDate' || field === 'status') {
           sortJobPortfolioEntries();
           renderJobPortfolioEntries();
-        } else {
-          saveJobPortfolioToFirebase();
         }
+        // Always save to Firebase
+        saveJobPortfolioToFirebase();
       }
     }
 
@@ -5110,6 +5275,101 @@ Produce responses that clearly show: I have this experience → it taught me thi
         resumeJsonSection.appendChild(resumeJsonLabel);
         resumeJsonSection.appendChild(resumeJsonInput);
         
+        // Create Resume button (uses AI to generate resume from job description)
+        const createResumeBtn = document.createElement('button');
+        createResumeBtn.className = 'btn btn-primary create-resume-btn';
+        createResumeBtn.id = `createResumeBtn_${entry.id}`;
+        createResumeBtn.innerHTML = '<i class="fas fa-magic"></i> Create Resume';
+        createResumeBtn.style.cssText = 'margin-top: 1rem; width: 100%;';
+        createResumeBtn.setAttribute('data-entry-id', entry.id);
+        
+        createResumeBtn.addEventListener('click', async () => {
+          const entryId = createResumeBtn.getAttribute('data-entry-id');
+          const currentEntry = jobPortfolioData.find(e => e.id === entryId);
+          
+          if (!currentEntry || !currentEntry.jobDescription || !currentEntry.jobDescription.trim()) {
+            alert('Please enter a job description first before creating a resume.');
+            return;
+          }
+          
+          // Show AI building loading screen
+          const aiLoadingScreen = document.getElementById(`resumeAILoading_${entryId}`);
+          const jsonInput = document.getElementById(`resumeJson_${entryId}`);
+          const previewContainer = document.getElementById(`resumePreview_${entryId}`);
+          const loadingScreen = document.getElementById(`resumeLoading_${entryId}`);
+          const resumeJsonSectionEl = jsonInput ? jsonInput.closest('.resume-json-section') : null;
+          
+          // Hide the Resume JSON section (textarea + button)
+          if (resumeJsonSectionEl) {
+            resumeJsonSectionEl.style.display = 'none';
+          }
+          if (aiLoadingScreen) {
+            aiLoadingScreen.style.display = 'flex';
+          }
+          if (previewContainer) {
+            previewContainer.style.display = 'none';
+          }
+          createResumeBtn.disabled = true;
+          createResumeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Building...';
+          
+          try {
+            // Generate resume with AI using the entry's job description
+            const generatedResume = await generateResumeWithAI(
+              currentEntry.jobDescription, 
+              extractedJobData, 
+              extractedEducationData
+            );
+            
+            // Convert to JSON string
+            const resumeJsonString = JSON.stringify(generatedResume, null, 2);
+            
+            // Update the textarea value
+            if (jsonInput) {
+              jsonInput.value = resumeJsonString;
+            }
+            
+            // Update the entry data
+            updateJobPortfolioEntry(entryId, 'resumeJson', resumeJsonString);
+            
+            // Save to Firebase
+            await saveJobPortfolioToFirebase();
+            
+            // Hide AI loading screen, show regular loading screen for PDF generation
+            if (aiLoadingScreen) {
+              aiLoadingScreen.style.display = 'none';
+            }
+            if (loadingScreen) {
+              loadingScreen.style.display = 'flex';
+            }
+            
+            // Generate PDF preview
+            if (previewContainer) {
+              await generateResumePDFForEntry(entryId, generatedResume, previewContainer);
+            }
+            
+            // Hide loading screen once PDF is ready
+            if (loadingScreen) {
+              loadingScreen.style.display = 'none';
+            }
+            
+          } catch (error) {
+            console.error('Error creating resume:', error);
+            alert('Failed to generate resume. Please check your API key and try again.');
+            if (aiLoadingScreen) {
+              aiLoadingScreen.style.display = 'none';
+            }
+            // Show the Resume JSON section again on error
+            if (resumeJsonSectionEl) {
+              resumeJsonSectionEl.style.display = 'block';
+            }
+          } finally {
+            createResumeBtn.disabled = false;
+            createResumeBtn.innerHTML = '<i class="fas fa-magic"></i> Create Resume';
+          }
+        });
+        
+        resumeJsonSection.appendChild(createResumeBtn);
+        
         // Resume PDF preview container
         const resumePreviewContainer = document.createElement('div');
         resumePreviewContainer.className = 'resume-preview-container';
@@ -5179,10 +5439,34 @@ Produce responses that clearly show: I have this experience → it taught me thi
         const loadingScreen = document.createElement('div');
         loadingScreen.className = 'resume-loading-screen';
         loadingScreen.id = `resumeLoading_${entry.id}`;
+        loadingScreen.style.display = hasExistingResumeJson ? 'flex' : 'none'; // Hide initially if no existing JSON
         loadingScreen.innerHTML = `
           <div class="resume-loading-spinner"></div>
           <div class="resume-loading-text">Generating Resume Preview</div>
           <div class="resume-loading-subtext">This may take a few moments...</div>
+        `;
+        
+        // AI Loading screen (shown when AI is building the resume)
+        const aiLoadingScreen = document.createElement('div');
+        aiLoadingScreen.className = 'resume-loading-screen ai-building-screen';
+        aiLoadingScreen.id = `resumeAILoading_${entry.id}`;
+        aiLoadingScreen.style.display = 'none';
+        aiLoadingScreen.innerHTML = `
+          <div class="ai-building-animation">
+            <div class="ai-building-icon">
+              <i class="fas fa-robot"></i>
+            </div>
+            <div class="ai-building-particles">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+          </div>
+          <div class="resume-loading-text ai-building-text">Building custom-tailored resume</div>
+          <div class="resume-loading-subtext">AI is analyzing job requirements and optimizing your resume...</div>
+          <div class="ai-progress-dots">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
         `;
         
         // Determine layout based on whether entry has existing JSON
@@ -5193,6 +5477,7 @@ Produce responses that clearly show: I have this experience → it taught me thi
             resumeJsonSection.style.display = 'none';
           }
           // Show loading screen initially
+          resumeMenuContent.appendChild(aiLoadingScreen);
           resumeMenuContent.appendChild(loadingScreen);
           resumeMenuContent.appendChild(resumePreviewContainer);
           // JSON input goes below preview when in edit mode
@@ -5202,6 +5487,8 @@ Produce responses that clearly show: I have this experience → it taught me thi
         } else {
           // No existing JSON: show JSON input above preview (normal flow)
           resumeMenuContent.appendChild(resumeJsonSection);
+          resumeMenuContent.appendChild(aiLoadingScreen);
+          resumeMenuContent.appendChild(loadingScreen);
           resumeMenuContent.appendChild(resumePreviewContainer);
         }
         
@@ -6705,6 +6992,7 @@ If no job information is found, return an empty array [].`
 - The summary must mention ALL job titles from the user's work history
 - Show career progression by referencing each role in the summary
 - Rewrite job duties/responsibilities to highlight relevant technologies and outcomes
+- **MANDATORY: Each job MUST have AT LEAST 4 bullet points (duties) - generate more if the user provided fewer**
 - Optimize skills section using keywords from job description
 - Use strong action verbs ("Led," "Developed," "Integrated," "Implemented")
 - Make each bullet point results-oriented with quantifiable achievements
@@ -6762,9 +7050,10 @@ Return ONLY a valid JSON object in this exact format:
       "location": "City, State",
       "startDate": "EXACT start date from user's history",
       "endDate": "EXACT end date from user's history",
-      "duties": ["Optimized duty 1", "Optimized duty 2", "Optimized duty 3"]
+      "duties": ["Optimized duty 1", "Optimized duty 2", "Optimized duty 3", "Optimized duty 4"]
     }
     // IMPORTANT: Include ALL jobs from user's history, not just a subset
+    // IMPORTANT: Each job MUST have AT LEAST 4 bullet points (duties)
   ],
   "summary": "EXACTLY 3 sentences describing the candidate's experience and career progression, mentioning ALL job titles from their work history. It is very important that you include no more than 3 sentences max. ",
   "skills": {
@@ -6783,6 +7072,7 @@ Return ONLY a valid JSON object in this exact format:
 - ALL education/certificates from user's data are included
 - **VERIFIED: ALL jobs from user's history are included in the jobs array**
 - **CRITICAL: Professional summary is EXACTLY 3 sentences long - no more, no less**
+- **CRITICAL: Each job MUST have AT LEAST 4 bullet points (duties) - no exceptions**
 - No false information was added
 - Job duties rewritten to strongly align with target job description
 - Skills list covers critical technologies from posting

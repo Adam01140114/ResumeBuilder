@@ -28,9 +28,9 @@ app.use(express.static(__dirname));
 app.get("/api/ai-config", (req, res) => {
   res.json({
     apiKey: process.env.OPENAI_API_KEY,
-    model: 'gpt-4',
-    maxTokens: 2000,
-    temperature: 0.7
+    model: 'gpt-4o',
+    maxTokens: 4000,
+    temperature: 0.5
   });
 });
 
@@ -43,7 +43,12 @@ async function hasCmd(cmd, args = ["--version"]) {
   });
 }
 
+// Check for local tectonic.exe first, then system-wide
+const localTectonic = path.join(__dirname, "tectonic.exe");
+
 async function pickEngine() {
+  // Check for local tectonic.exe first
+  if (fs.existsSync(localTectonic)) return "local-tectonic";
   if (await hasCmd("tectonic")) return "tectonic";
   if (await hasCmd("pdflatex")) return "pdflatex";
   return null;
@@ -60,14 +65,22 @@ function rmrf(p) {
   try { fs.rmSync(p, { recursive: true, force: true }); } catch {}
 }
 
-function runTectonic(root, main) {
+function runTectonic(root, main, useLocal = false) {
   return new Promise((resolve) => {
     // Tectonic: compile into the same temp dir
     const args = ["-X", "compile", main, "--outdir", root, "--keep-logs"];
-    const proc = spawn("tectonic", args, { cwd: root });
+    const tectonicCmd = useLocal ? localTectonic : "tectonic";
+    const proc = spawn(tectonicCmd, args, { cwd: root });
     let out = "", err = "";
     proc.stdout.on("data", d => out += d.toString());
     proc.stderr.on("data", d => err += d.toString());
+    proc.on("error", (error) => {
+      resolve({
+        code: 1,
+        log: `Tectonic spawn error: ${error.message}`,
+        pdfPath: path.join(root, "main.pdf")
+      });
+    });
     proc.on("close", (code) => {
       resolve({
         code,
@@ -89,6 +102,7 @@ function runPdfLaTeX(root, main) {
       let o = "", e = "";
       proc.stdout.on("data", d => o += d.toString());
       proc.stderr.on("data", d => e += d.toString());
+      proc.on("error", (error) => res({ code: 1, o: "", e: `pdflatex spawn error: ${error.message}` }));
       proc.on("close", (code) => res({ code, o, e }));
     });
 
@@ -126,8 +140,8 @@ app.post("/compile", async (req, res) => {
   const { root, main } = writeTempTree(tex);
 
   try {
-    const result = engine === "tectonic"
-      ? await runTectonic(root, main)
+    const result = (engine === "tectonic" || engine === "local-tectonic")
+      ? await runTectonic(root, main, engine === "local-tectonic")
       : await runPdfLaTeX(root, main);
 
     const ok = result.code === 0 && fs.existsSync(result.pdfPath);
