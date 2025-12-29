@@ -43,12 +43,16 @@ async function hasCmd(cmd, args = ["--version"]) {
   });
 }
 
-// Check for local tectonic.exe first, then system-wide
-const localTectonic = path.join(__dirname, "tectonic.exe");
+// Platform-aware tectonic detection
+const isWindows = os.platform() === 'win32';
+const localTectonic = isWindows ? path.join(__dirname, "tectonic.exe") : null;
 
 async function pickEngine() {
-  // Check for local tectonic.exe first
-  if (fs.existsSync(localTectonic)) return "local-tectonic";
+  // On Windows: check for local tectonic.exe first, then system-wide
+  // On macOS/Linux: only check for system-wide tectonic
+  if (isWindows && localTectonic && fs.existsSync(localTectonic)) {
+    return "local-tectonic";
+  }
   if (await hasCmd("tectonic")) return "tectonic";
   if (await hasCmd("pdflatex")) return "pdflatex";
   return null;
@@ -69,7 +73,10 @@ function runTectonic(root, main, useLocal = false) {
   return new Promise((resolve) => {
     // Tectonic: compile into the same temp dir
     const args = ["-X", "compile", main, "--outdir", root, "--keep-logs"];
-    const tectonicCmd = useLocal ? localTectonic : "tectonic";
+    // Platform-aware command selection
+    // On Windows with local-tectonic: use localTectonic path
+    // Otherwise: use system-wide "tectonic" command
+    const tectonicCmd = (useLocal && isWindows && localTectonic) ? localTectonic : "tectonic";
     const proc = spawn(tectonicCmd, args, { cwd: root });
     let out = "", err = "";
     proc.stdout.on("data", d => out += d.toString());

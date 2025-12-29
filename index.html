@@ -293,6 +293,98 @@
       border: 1px solid var(--border);
     }
 
+    .questions-empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .question-entry {
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .question-entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .question-entry-title-input {
+      flex: 1;
+      padding: 0.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .question-entry-title-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .question-entry-remove-btn {
+      background: var(--danger);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      padding: 0.5rem 0.75rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: background 0.2s ease;
+    }
+
+    .question-entry-remove-btn:hover {
+      background: #dc2626;
+    }
+
+    .question-entry-answer {
+      width: 100%;
+      padding: 0.75rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.9rem;
+      resize: vertical;
+      min-height: 120px;
+      transition: all 0.2s ease;
+    }
+
+    .question-entry-answer:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .add-question-btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: background 0.2s ease;
+      margin-top: 0.5rem;
+    }
+
+    .add-question-btn:hover {
+      background: var(--primary-hover);
+    }
+
     .resume-menu-content {
       display: flex;
       flex-direction: column;
@@ -3638,11 +3730,14 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
       let latex = `\\documentclass[10.5pt,a4paper]{article}
 
 % --- Basics ---
-\\usepackage[utf8]{inputenc}
-\\usepackage[T1]{fontenc}
-\\usepackage[margin=1in,top=0.5in,bottom=0.5in]{geometry}
-\\usepackage{helvet}
+\\usepackage{fontspec}
+\\defaultfontfeatures{Ligatures=TeX}
+% Explicitly set sans-serif font to avoid font loading errors
+% Use Latin Modern Sans which should be in Tectonic's bundle
+\\setsansfont{Latin Modern Sans}
+\\setmainfont{Latin Modern Sans}
 \\renewcommand{\\familydefault}{\\sfdefault}
+\\usepackage[margin=1in,top=0.5in,bottom=0.5in]{geometry}
 \\usepackage{microtype}
 \\usepackage{enumitem}
 \\usepackage{xcolor}
@@ -4714,7 +4809,8 @@ function drawHiddenTextLayer(pageOut, words, canvasWpx, canvasHpx, pageWpts, pag
         dueDate: '',
         jobLink: '',
         status: 'pending', // Default status
-        resumeJson: '' // Resume JSON for this entry
+        resumeJson: '', // Resume JSON for this entry
+        questions: [] // Questions array for this entry
       };
       
       jobPortfolioData.push(entry);
@@ -4735,6 +4831,7 @@ function drawHiddenTextLayer(pageOut, words, canvasWpx, canvasHpx, pageWpts, pag
       }
       renderJobPortfolioEntries();
     }
+
 
     // Generate resume PDF for a specific entry
     async function generateResumePDFForEntry(entryId, resumeData, previewContainer) {
@@ -4981,6 +5078,78 @@ Produce responses that clearly show: I have this experience → it taught me thi
       }
     }
 
+    // Create a question entry element
+    function createQuestionEntry(entryId, questionIndex, question) {
+      const questionEntry = document.createElement('div');
+      questionEntry.className = 'question-entry';
+      questionEntry.id = `questionEntry_${entryId}_${questionIndex}`;
+      
+      // Question entry header
+      const questionHeader = document.createElement('div');
+      questionHeader.className = 'question-entry-header';
+      
+      // Question title input
+      const questionTitleInput = document.createElement('input');
+      questionTitleInput.type = 'text';
+      questionTitleInput.className = 'question-entry-title-input';
+      questionTitleInput.placeholder = 'Enter question title';
+      questionTitleInput.value = question.title || '';
+      questionTitleInput.setAttribute('data-entry-id', entryId);
+      questionTitleInput.setAttribute('data-question-index', questionIndex);
+      questionTitleInput.setAttribute('data-field', 'title');
+      
+      // Remove question button
+      const removeQuestionBtn = document.createElement('button');
+      removeQuestionBtn.className = 'question-entry-remove-btn';
+      removeQuestionBtn.innerHTML = '<i class="fas fa-trash"></i> Remove';
+      removeQuestionBtn.addEventListener('click', () => {
+        const entry = jobPortfolioData.find(e => e.id === entryId);
+        if (entry && entry.questions) {
+          entry.questions.splice(questionIndex, 1);
+          // Re-render to update indices
+          renderJobPortfolioEntries();
+          // Save to Firebase
+          saveJobPortfolioToFirebase();
+        }
+      });
+      
+      questionHeader.appendChild(questionTitleInput);
+      questionHeader.appendChild(removeQuestionBtn);
+      
+      // Question answer textarea
+      const questionAnswerTextarea = document.createElement('textarea');
+      questionAnswerTextarea.className = 'question-entry-answer';
+      questionAnswerTextarea.placeholder = 'Enter your answer...';
+      questionAnswerTextarea.value = question.answer || '';
+      questionAnswerTextarea.setAttribute('data-entry-id', entryId);
+      questionAnswerTextarea.setAttribute('data-question-index', questionIndex);
+      questionAnswerTextarea.setAttribute('data-field', 'answer');
+      
+      // Add event listeners for saving
+      questionTitleInput.addEventListener('input', () => {
+        updateQuestionField(entryId, questionIndex, 'title', questionTitleInput.value);
+      });
+      
+      questionAnswerTextarea.addEventListener('input', () => {
+        updateQuestionField(entryId, questionIndex, 'answer', questionAnswerTextarea.value);
+      });
+      
+      questionEntry.appendChild(questionHeader);
+      questionEntry.appendChild(questionAnswerTextarea);
+      
+      return questionEntry;
+    }
+    
+    // Update a question field
+    function updateQuestionField(entryId, questionIndex, field, value) {
+      const entry = jobPortfolioData.find(e => e.id === entryId);
+      if (entry && entry.questions && entry.questions[questionIndex]) {
+        entry.questions[questionIndex][field] = value;
+        // Save to Firebase
+        saveJobPortfolioToFirebase();
+      }
+    }
+
     // Sort job portfolio entries by due date (nearest first), with rejected entries at the bottom
     function sortJobPortfolioEntries() {
       jobPortfolioData.sort((a, b) => {
@@ -5220,6 +5389,76 @@ Produce responses that clearly show: I have this experience → it taught me thi
         jobLinkField.appendChild(jobLinkLabel);
         jobLinkField.appendChild(jobLinkInput);
         fieldsContainer.appendChild(jobLinkField);
+        
+        // Questions section (full width)
+        const questionsSection = document.createElement('div');
+        questionsSection.className = 'job-portfolio-entry-field full-width';
+        questionsSection.style.cssText = 'margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);';
+        
+        const questionsLabel = document.createElement('label');
+        questionsLabel.textContent = 'Questions';
+        questionsLabel.style.cssText = 'font-size: 1rem; font-weight: 500; color: var(--text-primary); margin-bottom: 1rem; display: block;';
+        
+        // Initialize questions array if it doesn't exist
+        if (!entry.questions) {
+          entry.questions = [];
+        }
+        
+        // Questions container
+        const questionsContainer = document.createElement('div');
+        questionsContainer.className = 'questions-container';
+        questionsContainer.id = `questionsContainer_${entry.id}`;
+        
+        // Empty state
+        const questionsEmptyState = document.createElement('div');
+        questionsEmptyState.className = 'questions-empty-state';
+        questionsEmptyState.id = `questionsEmptyState_${entry.id}`;
+        questionsEmptyState.textContent = 'You currently have no questions for this entry';
+        questionsEmptyState.style.display = entry.questions.length === 0 ? 'block' : 'none';
+        
+        // Render existing questions
+        entry.questions.forEach((question, questionIndex) => {
+          const questionEntry = createQuestionEntry(entry.id, questionIndex, question);
+          questionsContainer.appendChild(questionEntry);
+        });
+        
+        // Add question button
+        const addQuestionBtn = document.createElement('button');
+        addQuestionBtn.className = 'add-question-btn';
+        addQuestionBtn.textContent = 'Add question';
+        addQuestionBtn.addEventListener('click', () => {
+          // Add new question to entry
+          if (!entry.questions) {
+            entry.questions = [];
+          }
+          const newQuestion = {
+            title: '',
+            answer: ''
+          };
+          entry.questions.push(newQuestion);
+          
+          // Update empty state
+          const emptyState = document.getElementById(`questionsEmptyState_${entry.id}`);
+          if (emptyState) {
+            emptyState.style.display = 'none';
+          }
+          
+          // Create and add question entry
+          const questionEntry = createQuestionEntry(entry.id, entry.questions.length - 1, newQuestion);
+          const container = document.getElementById(`questionsContainer_${entry.id}`);
+          if (container) {
+            container.appendChild(questionEntry);
+          }
+          
+          // Save to Firebase
+          saveJobPortfolioToFirebase();
+        });
+        
+        questionsSection.appendChild(questionsLabel);
+        questionsSection.appendChild(questionsEmptyState);
+        questionsSection.appendChild(questionsContainer);
+        questionsSection.appendChild(addQuestionBtn);
+        fieldsContainer.appendChild(questionsSection);
         
         content.appendChild(fieldsContainer);
         entryElement.appendChild(content);
@@ -5574,13 +5813,16 @@ Produce responses that clearly show: I have this experience → it taught me thi
           
           if (portfolioData.entries && Array.isArray(portfolioData.entries)) {
             jobPortfolioData = portfolioData.entries;
-            // Ensure all entries have a status (default to 'pending' if missing) and resumeJson
+            // Ensure all entries have a status (default to 'pending' if missing), resumeJson, and questions
             jobPortfolioData.forEach(entry => {
               if (!entry.status) {
                 entry.status = 'pending';
               }
               if (!entry.resumeJson) {
                 entry.resumeJson = '';
+              }
+              if (!entry.questions) {
+                entry.questions = [];
               }
             });
             // Sort entries by due date when loading
