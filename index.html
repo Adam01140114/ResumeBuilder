@@ -136,6 +136,11 @@
       border-width: 1px;
     }
 
+    .job-portfolio-entry.status-applied {
+      border-color: #f97316;
+      border-width: 2px;
+    }
+
     .job-portfolio-entry:hover {
       box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
     }
@@ -146,6 +151,10 @@
 
     .job-portfolio-entry.status-rejected:hover {
       box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+    }
+
+    .job-portfolio-entry.status-applied:hover {
+      box-shadow: 0 2px 8px rgba(249, 115, 22, 0.2);
     }
 
     .job-portfolio-entry.collapsed {
@@ -318,19 +327,28 @@
 
     .question-entry-title-input {
       flex: 1;
-      padding: 0.5rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
+      padding: 0.75rem;
+      background: var(--background);
+      border: 2px solid var(--primary-color);
       border-radius: var(--radius);
       color: var(--text-primary);
-      font-size: 0.9rem;
-      font-weight: 500;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.4;
+      resize: none;
+      overflow: hidden;
+      box-sizing: border-box;
+      height: auto;
+      max-height: 300px;
+      transition: all 0.2s ease;
     }
 
     .question-entry-title-input:focus {
       outline: none;
       border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+      background: var(--surface);
     }
 
     .question-entry-remove-btn {
@@ -357,8 +375,11 @@
       color: var(--text-primary);
       font-family: inherit;
       font-size: 0.9rem;
-      resize: vertical;
-      min-height: 120px;
+      font-weight: 400;
+      resize: none;
+      overflow: hidden;
+      height: auto;
+      max-height: 500px;
       transition: all 0.2s ease;
     }
 
@@ -366,6 +387,15 @@
       outline: none;
       border-color: var(--primary-color);
       box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .question-entry-title-input.copied-indicator,
+    .question-entry-answer.copied-indicator {
+      background: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+      transition: all 0.3s ease;
     }
 
     .add-question-btn {
@@ -722,6 +752,15 @@
       outline: none;
       border-color: var(--primary-color);
       box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .job-portfolio-entry-field input.copied-indicator,
+    .job-portfolio-entry-field textarea.copied-indicator {
+      background: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+      transition: all 0.3s ease;
     }
 
     .job-portfolio-entry-field textarea {
@@ -3650,18 +3689,18 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
     }
 
     // Download LaTeX source as text file
-    function downloadLatexSource(latexContent) {
+    function downloadLatexSource(latexContent, filename = 'resume.tex') {
       try {
         const blob = new Blob([latexContent], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'resume.tex';
+        a.download = filename;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        console.log('LaTeX source downloaded as resume.tex');
+        console.log(`LaTeX source downloaded as ${filename}`);
       } catch (error) {
         console.error('Error downloading LaTeX source:', error);
       }
@@ -3732,10 +3771,8 @@ We are looking for a Senior Software Engineer with 5+ years of experience in ful
 % --- Basics ---
 \\usepackage{fontspec}
 \\defaultfontfeatures{Ligatures=TeX}
-% Explicitly set sans-serif font to avoid font loading errors
-% Use Latin Modern Sans which should be in Tectonic's bundle
-\\setsansfont{Latin Modern Sans}
-\\setmainfont{Latin Modern Sans}
+% Use system fonts that are available - don't specify font name to use defaults
+% This avoids font loading errors with Tectonic
 \\renewcommand{\\familydefault}{\\sfdefault}
 \\usepackage[margin=1in,top=0.5in,bottom=0.5in]{geometry}
 \\usepackage{microtype}
@@ -4828,6 +4865,8 @@ function drawHiddenTextLayer(pageOut, words, canvasWpx, canvasHpx, pageWpts, pag
         resumeOpenEntries.delete(entryId);
       } else {
         resumeOpenEntries.add(entryId);
+        // Close edit menu when opening resume menu
+        expandedEntries.delete(entryId);
       }
       renderJobPortfolioEntries();
     }
@@ -4996,7 +5035,7 @@ Produce responses that clearly show: I have this experience → it taught me thi
         // Add resume PDF if it exists
         if (entry.resumeJson && entry.resumeJson.trim()) {
           try {
-            const resumeData = JSON.parse(entry.resumeJson);
+            const resumeData = safeJsonParse(entry.resumeJson);
             const latex = generateLatexResume(resumeData);
             const pdfBlob = await compileLatexToPDF(latex);
             zip.file(`${cleanJobTitle}-Resume.pdf`, pdfBlob);
@@ -5040,6 +5079,8 @@ Produce responses that clearly show: I have this experience → it taught me thi
         expandedEntries.delete(entryId);
       } else {
         expandedEntries.add(entryId);
+        // Close resume menu when opening edit menu
+        resumeOpenEntries.delete(entryId);
       }
       renderJobPortfolioEntries();
     }
@@ -5063,6 +5104,87 @@ Produce responses that clearly show: I have this experience → it taught me thi
       saveJobPortfolioToFirebase();
     }
 
+    // Sanitize JSON by fixing common control character issues
+    function sanitizeJson(jsonString) {
+      if (!jsonString || !jsonString.trim()) return jsonString;
+      
+      try {
+        // First, try to parse as-is - if it works, return it
+        JSON.parse(jsonString);
+        return jsonString;
+      } catch (e) {
+        // If parsing fails, try to fix common issues
+        let fixed = jsonString;
+        
+        // Fix the specific case where there's a newline between quote and closing quote
+        // Pattern: "value\n" where \n is a literal newline (not escaped)
+        // This handles cases like: "email": "value\n",
+        fixed = fixed.replace(/"([^"]*?)\r?\n\s*"/gm, (match, content) => {
+          // Remove trailing whitespace - the newline is outside the string, so we just remove it
+          return `"${content.trim()}"`;
+        });
+        
+        // Fix unescaped control characters within string values
+        // Process string values character by character to handle escaped sequences properly
+        let result = '';
+        let inString = false;
+        let escapeNext = false;
+        
+        for (let i = 0; i < fixed.length; i++) {
+          const char = fixed[i];
+          
+          if (escapeNext) {
+            result += char;
+            escapeNext = false;
+            continue;
+          }
+          
+          if (char === '\\') {
+            result += char;
+            escapeNext = true;
+            continue;
+          }
+          
+          if (char === '"') {
+            inString = !inString;
+            result += char;
+            continue;
+          }
+          
+          if (inString) {
+            // Inside a string - escape control characters
+            if (char === '\n') result += '\\n';
+            else if (char === '\r') result += '\\r';
+            else if (char === '\t') result += '\\t';
+            else if (char === '\f') result += '\\f';
+            else if (char === '\b') result += '\\b';
+            else result += char;
+          } else {
+            result += char;
+          }
+        }
+        
+        return result;
+      }
+    }
+    
+    // Safe JSON parse that tries to sanitize first
+    function safeJsonParse(jsonString) {
+      if (!jsonString || !jsonString.trim()) return null;
+      
+      try {
+        return JSON.parse(jsonString);
+      } catch (e) {
+        // Try sanitizing and parsing again
+        try {
+          const sanitized = sanitizeJson(jsonString);
+          return JSON.parse(sanitized);
+        } catch (e2) {
+          throw e; // Throw original error if sanitization doesn't help
+        }
+      }
+    }
+
     // Update a job portfolio entry
     function updateJobPortfolioEntry(entryId, field, value) {
       const entry = jobPortfolioData.find(e => e.id === entryId);
@@ -5078,6 +5200,15 @@ Produce responses that clearly show: I have this experience → it taught me thi
       }
     }
 
+    // Auto-grow function for textareas
+    function autoGrowTextarea(textarea) {
+      // Reset height to auto to get the correct scrollHeight
+      textarea.style.height = 'auto';
+      // Set height to scrollHeight (CSS min/max will handle constraints)
+      const newHeight = textarea.scrollHeight;
+      textarea.style.height = newHeight + 'px';
+    }
+
     // Create a question entry element
     function createQuestionEntry(entryId, questionIndex, question) {
       const questionEntry = document.createElement('div');
@@ -5088,15 +5219,20 @@ Produce responses that clearly show: I have this experience → it taught me thi
       const questionHeader = document.createElement('div');
       questionHeader.className = 'question-entry-header';
       
-      // Question title input
-      const questionTitleInput = document.createElement('input');
-      questionTitleInput.type = 'text';
+      // Question title input (converted to textarea for auto-grow)
+      const questionTitleInput = document.createElement('textarea');
       questionTitleInput.className = 'question-entry-title-input';
       questionTitleInput.placeholder = 'Enter question title';
       questionTitleInput.value = question.title || '';
       questionTitleInput.setAttribute('data-entry-id', entryId);
       questionTitleInput.setAttribute('data-question-index', questionIndex);
       questionTitleInput.setAttribute('data-field', 'title');
+      // Set small initial height for empty fields (10% taller)
+      if (!question.title || question.title.trim() === '') {
+        questionTitleInput.style.height = '2.486rem';
+        questionTitleInput.style.minHeight = '2.486rem';
+        questionTitleInput.style.maxHeight = '2.486rem';
+      }
       
       // Remove question button
       const removeQuestionBtn = document.createElement('button');
@@ -5124,15 +5260,84 @@ Produce responses that clearly show: I have this experience → it taught me thi
       questionAnswerTextarea.setAttribute('data-entry-id', entryId);
       questionAnswerTextarea.setAttribute('data-question-index', questionIndex);
       questionAnswerTextarea.setAttribute('data-field', 'answer');
+      // Set small initial height for empty fields (10% taller)
+      if (!question.answer || question.answer.trim() === '') {
+        // Padding top + bottom (0.75rem each = 1.5rem) + line-height for one line
+        questionAnswerTextarea.style.height = '3.036rem';
+        questionAnswerTextarea.style.minHeight = '3.036rem';
+      }
       
-      // Add event listeners for saving
+      // Auto-grow on focus and input for title
+      questionTitleInput.addEventListener('focus', () => {
+        // Remove max-height constraint when focused
+        questionTitleInput.style.maxHeight = '300px';
+        autoGrowTextarea(questionTitleInput);
+      });
       questionTitleInput.addEventListener('input', () => {
+        // Remove max-height constraint when typing
+        questionTitleInput.style.maxHeight = '300px';
+        autoGrowTextarea(questionTitleInput);
         updateQuestionField(entryId, questionIndex, 'title', questionTitleInput.value);
       });
       
+      // Auto-grow on focus and input for answer
+      questionAnswerTextarea.addEventListener('focus', () => {
+        autoGrowTextarea(questionAnswerTextarea);
+      });
       questionAnswerTextarea.addEventListener('input', () => {
+        autoGrowTextarea(questionAnswerTextarea);
         updateQuestionField(entryId, questionIndex, 'answer', questionAnswerTextarea.value);
       });
+      
+      // Add double-click to copy functionality for question title
+      questionTitleInput.addEventListener('dblclick', async () => {
+        const textToCopy = questionTitleInput.value;
+        if (textToCopy && textToCopy.trim()) {
+          try {
+            await navigator.clipboard.writeText(textToCopy);
+            
+            // Visual indicator - add a class temporarily
+            questionTitleInput.classList.add('copied-indicator');
+            
+            // Remove the indicator after 1 second
+            setTimeout(() => {
+              questionTitleInput.classList.remove('copied-indicator');
+            }, 1000);
+          } catch (err) {
+            console.error('Failed to copy:', err);
+          }
+        }
+      });
+      
+      // Add double-click to copy functionality for question answer
+      questionAnswerTextarea.addEventListener('dblclick', async () => {
+        const textToCopy = questionAnswerTextarea.value;
+        if (textToCopy && textToCopy.trim()) {
+          try {
+            await navigator.clipboard.writeText(textToCopy);
+            
+            // Visual indicator - add a class temporarily
+            questionAnswerTextarea.classList.add('copied-indicator');
+            
+            // Remove the indicator after 1 second
+            setTimeout(() => {
+              questionAnswerTextarea.classList.remove('copied-indicator');
+            }, 1000);
+          } catch (err) {
+            console.error('Failed to copy:', err);
+          }
+        }
+      });
+      
+      // Auto-grow for fields with existing content
+      setTimeout(() => {
+        if (questionTitleInput.value.trim() !== '') {
+          autoGrowTextarea(questionTitleInput);
+        }
+        if (questionAnswerTextarea.value.trim() !== '') {
+          autoGrowTextarea(questionAnswerTextarea);
+        }
+      }, 0);
       
       questionEntry.appendChild(questionHeader);
       questionEntry.appendChild(questionAnswerTextarea);
@@ -5150,32 +5355,31 @@ Produce responses that clearly show: I have this experience → it taught me thi
       }
     }
 
-    // Sort job portfolio entries by due date (nearest first), with rejected entries at the bottom
+    // Sort job portfolio entries by status priority, then by due date
+    // Priority order: Accepted > Pending > Applied > Rejected
     function sortJobPortfolioEntries() {
       jobPortfolioData.sort((a, b) => {
         const statusA = a.status || 'pending';
         const statusB = b.status || 'pending';
-        const aIsRejected = statusA === 'rejected';
-        const bIsRejected = statusB === 'rejected';
         
-        // Rejected entries always go to the very bottom
-        if (aIsRejected && !bIsRejected) return 1; // a (rejected) goes after b
-        if (!aIsRejected && bIsRejected) return -1; // a goes before b (rejected)
-        if (aIsRejected && bIsRejected) {
-          // Both rejected - sort by due date among rejected entries
-          if (!a.dueDate && !b.dueDate) return 0;
-          if (!a.dueDate) return 1;
-          if (!b.dueDate) return -1;
-          const dateA = new Date(a.dueDate);
-          const dateB = new Date(b.dueDate);
-          if (isNaN(dateA.getTime()) && isNaN(dateB.getTime())) return 0;
-          if (isNaN(dateA.getTime())) return 1;
-          if (isNaN(dateB.getTime())) return -1;
-          return dateA - dateB;
+        // Define status priority (lower number = higher priority)
+        const statusPriority = {
+          'accepted': 1,
+          'pending': 2,
+          'applied': 3,
+          'rejected': 4
+        };
+        
+        const priorityA = statusPriority[statusA] || 2;
+        const priorityB = statusPriority[statusB] || 2;
+        
+        // First, sort by status priority
+        if (priorityA !== priorityB) {
+          return priorityA - priorityB;
         }
         
-        // Neither is rejected - sort by due date (nearest first)
-        // Entries without due dates go to the bottom (but above rejected)
+        // Same status - sort by due date (nearest first)
+        // Entries without due dates go to the bottom within their status group
         if (!a.dueDate && !b.dueDate) return 0;
         if (!a.dueDate) return 1; // a goes after b (to bottom)
         if (!b.dueDate) return -1; // a goes before b (to top)
@@ -5264,6 +5468,7 @@ Produce responses that clearly show: I have this experience → it taught me thi
         // Create options
         const options = [
           { value: 'pending', text: 'Pending' },
+          { value: 'applied', text: 'Applied' },
           { value: 'accepted', text: 'Accepted' },
           { value: 'rejected', text: 'Rejected' }
         ];
@@ -5369,6 +5574,27 @@ Produce responses that clearly show: I have this experience → it taught me thi
         jobDescTextarea.textContent = entry.jobDescription || '';
         jobDescTextarea.setAttribute('data-entry-id', entry.id);
         jobDescTextarea.setAttribute('data-field', 'jobDescription');
+        
+        // Add double-click to copy functionality
+        jobDescTextarea.addEventListener('dblclick', async () => {
+          const textToCopy = jobDescTextarea.value;
+          if (textToCopy && textToCopy.trim()) {
+            try {
+              await navigator.clipboard.writeText(textToCopy);
+              
+              // Visual indicator - add a class temporarily
+              jobDescTextarea.classList.add('copied-indicator');
+              
+              // Remove the indicator after 1 second
+              setTimeout(() => {
+                jobDescTextarea.classList.remove('copied-indicator');
+              }, 1000);
+            } catch (err) {
+              console.error('Failed to copy:', err);
+            }
+          }
+        });
+        
         jobDescField.appendChild(jobDescLabel);
         jobDescField.appendChild(jobDescTextarea);
         fieldsContainer.appendChild(jobDescField);
@@ -5386,6 +5612,52 @@ Produce responses that clearly show: I have this experience → it taught me thi
         jobLinkInput.value = entry.jobLink || '';
         jobLinkInput.setAttribute('data-entry-id', entry.id);
         jobLinkInput.setAttribute('data-field', 'jobLink');
+        
+        // Add double-click to copy functionality
+        jobLinkInput.addEventListener('dblclick', async () => {
+          const textToCopy = jobLinkInput.value;
+          if (textToCopy && textToCopy.trim()) {
+            try {
+              await navigator.clipboard.writeText(textToCopy);
+              
+              // Visual indicator - add a class temporarily
+              jobLinkInput.classList.add('copied-indicator');
+              
+              // Remove the indicator after 1 second
+              setTimeout(() => {
+                jobLinkInput.classList.remove('copied-indicator');
+              }, 1000);
+            } catch (err) {
+              console.error('Failed to copy:', err);
+            }
+          }
+        });
+        
+        // Add triple-click to open link in new tab
+        let clickCount = 0;
+        let clickTimer = null;
+        jobLinkInput.addEventListener('mousedown', (e) => {
+          clickCount++;
+          if (clickTimer) {
+            clearTimeout(clickTimer);
+          }
+          clickTimer = setTimeout(() => {
+            if (clickCount === 3) {
+              e.preventDefault(); // Prevent text selection
+              const linkUrl = jobLinkInput.value.trim();
+              if (linkUrl) {
+                // Ensure URL has protocol
+                let urlToOpen = linkUrl;
+                if (!urlToOpen.startsWith('http://') && !urlToOpen.startsWith('https://')) {
+                  urlToOpen = 'https://' + urlToOpen;
+                }
+                window.open(urlToOpen, '_blank');
+              }
+            }
+            clickCount = 0;
+          }, 400);
+        });
+        
         jobLinkField.appendChild(jobLinkLabel);
         jobLinkField.appendChild(jobLinkInput);
         fieldsContainer.appendChild(jobLinkField);
@@ -5420,6 +5692,12 @@ Produce responses that clearly show: I have this experience → it taught me thi
         entry.questions.forEach((question, questionIndex) => {
           const questionEntry = createQuestionEntry(entry.id, questionIndex, question);
           questionsContainer.appendChild(questionEntry);
+          
+          // Add one line break after each question answer except the last one
+          if (questionIndex < entry.questions.length - 1) {
+            const br = document.createElement('br');
+            questionsContainer.appendChild(br);
+          }
         });
         
         // Add question button
@@ -5447,6 +5725,17 @@ Produce responses that clearly show: I have this experience → it taught me thi
           const questionEntry = createQuestionEntry(entry.id, entry.questions.length - 1, newQuestion);
           const container = document.getElementById(`questionsContainer_${entry.id}`);
           if (container) {
+            // If there were previous questions, find the last question entry and add breaks after it
+            if (entry.questions.length > 1) {
+              // Find the previous last question entry (before we added the new one, it was the last)
+              const previousLastIndex = entry.questions.length - 2;
+              const previousLastEntry = container.querySelector(`#questionEntry_${entry.id}_${previousLastIndex}`);
+              if (previousLastEntry) {
+                // Add one line break after the previous last question
+                const br = document.createElement('br');
+                previousLastEntry.after(br);
+              }
+            }
             container.appendChild(questionEntry);
           }
           
@@ -5490,31 +5779,18 @@ Produce responses that clearly show: I have this experience → it taught me thi
         resumeJsonInput.value = entry.resumeJson || '';
         resumeJsonInput.setAttribute('data-entry-id', entry.id);
         
-        resumeJsonInput.addEventListener('input', async (e) => {
+        resumeJsonInput.addEventListener('input', (e) => {
           const entryId = e.target.getAttribute('data-entry-id');
           const jsonValue = e.target.value;
+          // Only save to Firebase, don't generate preview automatically
           updateJobPortfolioEntry(entryId, 'resumeJson', jsonValue);
-          
-          // Try to parse and generate PDF preview
-          if (jsonValue.trim()) {
-            try {
-              const resumeData = JSON.parse(jsonValue);
-              await generateResumePDFForEntry(entryId, resumeData, resumePreviewContainer);
-            } catch (error) {
-              console.error('Invalid JSON:', error);
-              resumePreviewContainer.style.display = 'none';
-              resumePreviewContainer.classList.remove('active');
-            }
-          } else {
-            resumePreviewContainer.style.display = 'none';
-            resumePreviewContainer.classList.remove('active');
-          }
         });
         
         resumeJsonSection.appendChild(resumeJsonLabel);
         resumeJsonSection.appendChild(resumeJsonInput);
         
         // Create Resume button (uses AI to generate resume from job description)
+        // Only show when there's NO existing JSON (mutually exclusive with Edit Resume button)
         const createResumeBtn = document.createElement('button');
         createResumeBtn.className = 'btn btn-primary create-resume-btn';
         createResumeBtn.id = `createResumeBtn_${entry.id}`;
@@ -5522,21 +5798,97 @@ Produce responses that clearly show: I have this experience → it taught me thi
         createResumeBtn.style.cssText = 'margin-top: 1rem; width: 100%;';
         createResumeBtn.setAttribute('data-entry-id', entry.id);
         
+        // Edit Resume button (shown when there's existing JSON, toggles edit mode)
+        // Position changes based on edit mode:
+        // - When NOT in edit mode: in button container below Download LaTeX
+        // - When IN edit mode: below JSON input
+        const editResumeBtn = document.createElement('button');
+        editResumeBtn.className = 'btn btn-secondary';
+        // Style will be set based on where it's placed
+        editResumeBtn.innerHTML = isEditMode ? '<i class="fas fa-check"></i> Done Editing' : '<i class="fas fa-edit"></i> Edit Resume';
+        editResumeBtn.setAttribute('data-entry-id', entry.id);
+        editResumeBtn.addEventListener('click', () => {
+          const entryId = editResumeBtn.getAttribute('data-entry-id');
+          if (isEditMode) {
+            // Exit edit mode
+            resumeEditModeEntries.delete(entryId);
+          } else {
+            // Enter edit mode
+            resumeEditModeEntries.add(entryId);
+          }
+          renderJobPortfolioEntries();
+        });
+        
+        // Only append Create Resume button if there's no existing JSON
+        if (!hasExistingResumeJson) {
+          resumeJsonSection.appendChild(createResumeBtn);
+        } else if (isEditMode) {
+          // When in edit mode, append Edit Resume button below JSON input with full width styling
+          editResumeBtn.style.cssText = 'margin-top: 0.5rem; margin-left: 0; width: 100%;';
+          resumeJsonSection.appendChild(editResumeBtn);
+        }
+        
         createResumeBtn.addEventListener('click', async () => {
           const entryId = createResumeBtn.getAttribute('data-entry-id');
           const currentEntry = jobPortfolioData.find(e => e.id === entryId);
           
+          const jsonInput = document.getElementById(`resumeJson_${entryId}`);
+          const previewContainer = document.getElementById(`resumePreview_${entryId}`);
+          const loadingScreen = document.getElementById(`resumeLoading_${entryId}`);
+          const aiLoadingScreen = document.getElementById(`resumeAILoading_${entryId}`);
+          const resumeJsonSectionEl = jsonInput ? jsonInput.closest('.resume-json-section') : null;
+          
+          // Check if there's existing JSON in the textarea
+          let existingJson = null;
+          if (jsonInput && jsonInput.value && jsonInput.value.trim()) {
+            try {
+              existingJson = safeJsonParse(jsonInput.value.trim());
+              // Validate it's a proper resume object
+              if (existingJson && (existingJson.contact || existingJson.jobs || existingJson.summary)) {
+                // Valid JSON exists, use it directly
+                createResumeBtn.disabled = true;
+                createResumeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Building...';
+                
+                // Hide the Resume JSON section
+                if (resumeJsonSectionEl) {
+                  resumeJsonSectionEl.style.display = 'none';
+                }
+                if (previewContainer) {
+                  previewContainer.style.display = 'none';
+                }
+                if (loadingScreen) {
+                  loadingScreen.style.display = 'flex';
+                }
+                
+                // Update the entry data
+                updateJobPortfolioEntry(entryId, 'resumeJson', jsonInput.value.trim());
+                
+                // Save to Firebase
+                await saveJobPortfolioToFirebase();
+                
+                // Generate PDF preview using existing JSON
+                await generateResumePDFForEntry(entryId, existingJson, previewContainer);
+                
+                // Hide loading screen once PDF is ready
+                if (loadingScreen) {
+                  loadingScreen.style.display = 'none';
+                }
+                
+                createResumeBtn.disabled = false;
+                createResumeBtn.innerHTML = '<i class="fas fa-magic"></i> Create Resume';
+                return; // Exit early, we're done
+              }
+            } catch (parseError) {
+              // Invalid JSON, fall through to AI generation
+              console.log('Existing JSON is invalid, generating new resume with AI');
+            }
+          }
+          
+          // No valid JSON found, proceed with AI generation
           if (!currentEntry || !currentEntry.jobDescription || !currentEntry.jobDescription.trim()) {
             alert('Please enter a job description first before creating a resume.');
             return;
           }
-          
-          // Show AI building loading screen
-          const aiLoadingScreen = document.getElementById(`resumeAILoading_${entryId}`);
-          const jsonInput = document.getElementById(`resumeJson_${entryId}`);
-          const previewContainer = document.getElementById(`resumePreview_${entryId}`);
-          const loadingScreen = document.getElementById(`resumeLoading_${entryId}`);
-          const resumeJsonSectionEl = jsonInput ? jsonInput.closest('.resume-json-section') : null;
           
           // Hide the Resume JSON section (textarea + button)
           if (resumeJsonSectionEl) {
@@ -5607,8 +5959,6 @@ Produce responses that clearly show: I have this experience → it taught me thi
           }
         });
         
-        resumeJsonSection.appendChild(createResumeBtn);
-        
         // Resume PDF preview container
         const resumePreviewContainer = document.createElement('div');
         resumePreviewContainer.className = 'resume-preview-container';
@@ -5628,7 +5978,7 @@ Produce responses that clearly show: I have this experience → it taught me thi
           const entry = jobPortfolioData.find(e => e.id === entryId);
           if (entry && entry.resumeJson) {
             try {
-              const resumeData = JSON.parse(entry.resumeJson);
+              const resumeData = safeJsonParse(entry.resumeJson);
               await downloadResumePDFForEntry(entryId, resumeData);
             } catch (error) {
               console.error('Error downloading PDF:', error);
@@ -5637,38 +5987,47 @@ Produce responses that clearly show: I have this experience → it taught me thi
           }
         });
         
-        // Edit Resume button (only shown when there's existing JSON and not in edit mode)
-        const editResumeBtn = document.createElement('button');
-        editResumeBtn.className = 'btn btn-secondary';
-        editResumeBtn.style.cssText = 'margin-top: 0.5rem; margin-left: 0;';
-        editResumeBtn.innerHTML = '<i class="fas fa-edit"></i> Edit Resume';
-        editResumeBtn.setAttribute('data-entry-id', entry.id);
-        editResumeBtn.addEventListener('click', () => {
-          const entryId = editResumeBtn.getAttribute('data-entry-id');
-          resumeEditModeEntries.add(entryId);
-          renderJobPortfolioEntries();
-        });
-        
-        // Done Editing button (only shown when in edit mode)
-        const doneEditingBtn = document.createElement('button');
-        doneEditingBtn.className = 'btn btn-primary';
-        doneEditingBtn.style.cssText = 'margin-top: 0.5rem; margin-left: 0;';
-        doneEditingBtn.innerHTML = '<i class="fas fa-check"></i> Done Editing';
-        doneEditingBtn.setAttribute('data-entry-id', entry.id);
-        doneEditingBtn.addEventListener('click', () => {
-          const entryId = doneEditingBtn.getAttribute('data-entry-id');
-          resumeEditModeEntries.delete(entryId);
-          renderJobPortfolioEntries();
+        // Download LaTeX button
+        const downloadLatexBtn = document.createElement('button');
+        downloadLatexBtn.className = 'btn btn-secondary';
+        downloadLatexBtn.style.cssText = 'margin-top: 0.5rem;';
+        downloadLatexBtn.innerHTML = '<i class="fas fa-file-code"></i> Download LaTeX';
+        downloadLatexBtn.setAttribute('data-entry-id', entry.id);
+        downloadLatexBtn.addEventListener('click', () => {
+          const entryId = downloadLatexBtn.getAttribute('data-entry-id');
+          const entry = jobPortfolioData.find(e => e.id === entryId);
+          if (entry && entry.resumeJson) {
+            try {
+              const resumeData = safeJsonParse(entry.resumeJson);
+              const jobTitle = entry.jobTitle || 'Resume';
+              const cleanJobTitle = jobTitle.replace(/[^a-zA-Z0-9\s-]/g, '').replace(/\s+/g, '-') || 'Resume';
+              
+              // Generate LaTeX from resume data
+              const latex = generateLatexResume(resumeData);
+              
+              // Download LaTeX file
+              downloadLatexSource(latex, `${cleanJobTitle}.tex`);
+            } catch (error) {
+              console.error('Error downloading LaTeX:', error);
+              alert('Error generating LaTeX. Please check your JSON format.');
+            }
+          }
         });
         
         // Button container
         const buttonContainer = document.createElement('div');
         buttonContainer.style.cssText = 'display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;';
-        buttonContainer.appendChild(downloadResumeBtn);
-        if (hasExistingResumeJson && !isEditMode) {
-          buttonContainer.appendChild(editResumeBtn);
-        } else if (isEditMode) {
-          buttonContainer.appendChild(doneEditingBtn);
+        
+        // Only show Download PDF and LaTeX buttons when NOT in edit mode
+        if (!isEditMode) {
+          buttonContainer.appendChild(downloadResumeBtn);
+          buttonContainer.appendChild(downloadLatexBtn);
+          
+          // Show Edit Resume button when there's existing JSON and NOT in edit mode (positioned below Download LaTeX)
+          if (hasExistingResumeJson) {
+            editResumeBtn.style.cssText = 'margin-top: 0.5rem; margin-left: 0;';
+            buttonContainer.appendChild(editResumeBtn);
+          }
         }
         
         resumePreviewContainer.appendChild(resumePreviewIframe);
@@ -5708,9 +6067,21 @@ Produce responses that clearly show: I have this experience → it taught me thi
           </div>
         `;
         
-        // Determine layout based on whether entry has existing JSON
+        // Check if JSON is valid before deciding layout
+        let isValidJson = false;
         if (hasExistingResumeJson) {
-          // Entry has existing JSON: show loading screen first, then preview, then JSON input below if in edit mode
+          try {
+            safeJsonParse(entry.resumeJson);
+            isValidJson = true;
+          } catch (e) {
+            isValidJson = false;
+            console.warn('Invalid JSON detected, will show textarea for editing');
+          }
+        }
+        
+        // Determine layout based on whether entry has existing JSON
+        if (hasExistingResumeJson && isValidJson) {
+          // Entry has valid existing JSON: show loading screen first, then preview, then JSON input below if in edit mode
           if (!isEditMode) {
             // Not in edit mode: hide JSON input initially
             resumeJsonSection.style.display = 'none';
@@ -5722,26 +6093,37 @@ Produce responses that clearly show: I have this experience → it taught me thi
           // JSON input goes below preview when in edit mode
           if (isEditMode) {
             resumeMenuContent.appendChild(resumeJsonSection);
+          } else {
+            // Still append it to DOM but hidden, so it can be shown if needed
+            resumeMenuContent.appendChild(resumeJsonSection);
           }
         } else {
-          // No existing JSON: show JSON input above preview (normal flow)
+          // No existing JSON or invalid JSON: show JSON input above preview (normal flow)
           resumeMenuContent.appendChild(resumeJsonSection);
           resumeMenuContent.appendChild(aiLoadingScreen);
           resumeMenuContent.appendChild(loadingScreen);
           resumeMenuContent.appendChild(resumePreviewContainer);
+          // If invalid JSON, show it immediately and don't try to generate preview
+          if (hasExistingResumeJson && !isValidJson) {
+            loadingScreen.style.display = 'none';
+            aiLoadingScreen.style.display = 'none';
+          }
         }
         
-        // Load existing resume JSON and generate preview if available
-        if (hasExistingResumeJson) {
+        // Load existing resume JSON and generate preview if available and valid
+        if (hasExistingResumeJson && isValidJson) {
           (async () => {
             try {
-              const resumeData = JSON.parse(entry.resumeJson);
+              const resumeData = safeJsonParse(entry.resumeJson);
+              // Valid JSON - generate preview
               await generateResumePDFForEntry(entry.id, resumeData, resumePreviewContainer);
               // Hide loading screen and show preview once PDF is ready
               loadingScreen.style.display = 'none';
             } catch (error) {
               console.error('Error loading resume preview:', error);
               loadingScreen.style.display = 'none';
+              // Show the JSON section so user can edit it
+              resumeJsonSection.style.display = 'block';
             }
           })();
         }
